@@ -4,24 +4,6 @@ import Router from "router";
 let db = new DataBase();
 db.connectDataBase();
 const updatePost = Router();
-
-function getMySQLDateTime() {
-    const now = new Date();
-    
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-    const day = String(now.getDate()).padStart(2, '0');
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-
-    const mysqlDate = `${year}-${month}-${day}`;
-    const mysqlTime = `${hours}:${minutes}:${seconds}`;
-    const mysqlDateTime = `${mysqlDate} ${mysqlTime}`;
-    
-    return mysqlDateTime;
-}
-
 updatePost.patch("/updatePost",
     async (req, res) => {
         const { userName, content, postID } = req.body;
@@ -35,13 +17,10 @@ updatePost.patch("/updatePost",
                     userID: userID,
                     postID: postID,
                     content: content,
-                    time: getMySQLDateTime(),
                 };
-                console.log(post.time);
-                // console.log(userID);
 
-                let updatePostQuery = "UPDATE posts SET content = ?, time = ? WHERE postID = ?";
-                await db.executeQuery(updatePostQuery, [post.content, post.time, post.postID]);
+                let updatePostQuery = "UPDATE posts SET content = ? WHERE postID = ?";
+                await db.executeQuery(updatePostQuery, [post.content, post.postID]);
 
                 let getPostQuery = "SELECT *,DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') as time FROM posts WHERE userID = ?";
                 const posts = await db.executeQuery(getPostQuery, [post.userID]);
