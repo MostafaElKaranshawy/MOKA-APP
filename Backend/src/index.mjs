@@ -27,8 +27,8 @@ app.use(express.json());
 // app.use(updateComment);
 // app.use(deleteComment);
 
-import authRouter from './routes/authRouter.mjs';
-import postRouter from './routes/postRouter.mjs';
+import authRouter from './routers/authRouter.mjs';
+import postRouter from './routers/postRouter.mjs';
 
 app.use(authRouter);
 app.use(postRouter);

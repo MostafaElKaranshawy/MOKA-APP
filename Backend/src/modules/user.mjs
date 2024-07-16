@@ -15,10 +15,11 @@ class User{
         }
     }
     static async getUserID(userName){
-        const q = `SELECT * FROM users WHERE userName = ?`;
+        const q = `SELECT userID FROM users WHERE userName = ?`;
         const values = [userName];
         try{
             const result = await db.executeQuery(q, values);
+            // console.log("user id : "+ result[0].userID);
             return result[0].userID;
         }
         catch(err){
