@@ -10,7 +10,6 @@ class User{
             await db.executeQuery(q, values);
         }
         catch(err){
-            // console.log(err);
             return err;
         }
     }
@@ -19,7 +18,6 @@ class User{
         const values = [userName];
         try{
             const result = await db.executeQuery(q, values);
-            // console.log("user id : "+ result[0].userID);
             return result[0].userID;
         }
         catch(err){

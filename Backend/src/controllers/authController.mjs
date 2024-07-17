@@ -13,7 +13,6 @@ class AuthController {
             password: hashedPassword,
             bio: req.body.bio || ''
         }
-        // console.log(user);
         try{
             await AuthService.signUp(user.userName, user.email);
             await User.addUser(user);

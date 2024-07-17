@@ -15,7 +15,6 @@ class DataBase {
                 password: process.env.DBpassword,
                 database: process.env.DB
             });
-            // console.log('Connected to MySQL database!');
         } catch (error) {
             console.error('Error connecting to MySQL database:', error);
         }
@@ -35,7 +34,6 @@ class DataBase {
         try {
             if (this.connection) {
                 await this.connection.end();
-                console.log('Database connection closed.');
             }
         } catch (error) {
             console.error('Error closing the database connection:', error);

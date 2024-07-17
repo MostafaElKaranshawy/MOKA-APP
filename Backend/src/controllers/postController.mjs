@@ -7,7 +7,6 @@ class PostController{
             const post = await PostService.createPost(req.body.userName, req.body.content);
             await Post.addPost(post);
             const posts = await Post.getPosts(post.userID);
-            console.log(posts);
             return res.status(200).send(posts);
         }
         catch(err){
@@ -35,11 +34,8 @@ class PostController{
     }
     static async getPosts(req, res){
         try {
-            console.log(req.body.userName)
             const userID = await User.getUserID(req.body.userName);
-            console.log(userID)
             const posts = await Post.getPosts(userID);
-            console.log(posts);
             return res.status(200).send(posts);
         }
         catch(err){

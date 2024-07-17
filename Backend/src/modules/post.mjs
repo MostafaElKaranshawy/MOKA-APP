@@ -9,7 +9,9 @@ class Post {
         catch (error) {throw new Error("Error adding post");}
     }
     static async getPosts(userID){
-        console.log(userID);
+        const userQ = `SELECT * FROM users WHERE userID = ?`;
+        const user = await db.executeQuery(userQ, [userID]);
+        if(user == null || user.length == 0){throw new Error("User Not Found");}
         const q = `SELECT *,DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') as time FROM posts WHERE userID = ? ORDER BY time DESC`;
         try {return await db.executeQuery(q, [userID]);}
         catch (error) {throw new Error("Error getting posts");}
