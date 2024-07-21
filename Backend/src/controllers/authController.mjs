@@ -5,6 +5,8 @@ const saltRounds = 10;
 
 class AuthController {
     static async signUp(req, res) {
+        console.log(req.body);
+        
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const user = {
             name: req.body.name,
