@@ -4,8 +4,8 @@ class FriendShipController {
     static async addFriend(req, res){
         try{
             const friendShip = {
-                userID: req.body.userID,
-                friendID: req.body.friendID
+                userID: req.params.userID,
+                friendID: req.params.friendID
             }
             await FriendShipService.addFriend(friendShip);
             res.status(200).send("Friend Added");
@@ -17,8 +17,8 @@ class FriendShipController {
     static async acceptFriend(req, res){
         try{
             const friendShip = {
-                userID: req.body.userID,
-                friendID: req.body.friendID
+                userID: req.params.userID,
+                friendID: req.params.friendID
             }
             await FriendShipService.acceptFriend(friendShip);
             res.status(200).send("Friend Accepted");
@@ -31,8 +31,8 @@ class FriendShipController {
     static async removeFriend(req, res){
         try{
             const friendShip = {
-                userID: req.body.userID,
-                friendID: req.body.friendID
+                userID: req.params.userID,
+                friendID: req.params.friendID
             }
             await FriendShipService.removeFriend(friendShip);
             res.status(200).send("Friend Removed");
@@ -43,7 +43,7 @@ class FriendShipController {
     }
     static async getFriends(req, res){
         try{
-            let friends = await FriendShipService.getFriends(req.body.userID);
+            let friends = await FriendShipService.getFriends(req.params.userID);
             res.status(200).send(friends);
         }
         catch(err){
@@ -52,7 +52,7 @@ class FriendShipController {
     }
     static async getFriendFriends(req, res){
         try{
-            let friends = await FriendShipService.getFriendFriends(req.body.friendID);
+            let friends = await FriendShipService.getFriendFriends(req.params.friendID);
             res.status(200).send(friends);
         }
         catch(err){

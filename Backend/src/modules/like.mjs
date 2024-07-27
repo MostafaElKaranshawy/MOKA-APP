@@ -7,14 +7,14 @@ class Like{
         console.log(like);
         if(like.commentID != null){
             console.log("comment");
-            const q = `INSERT INTO likes(commentID, userID, type) VALUES(?,?,?)`;
-            try{await db.executeQuery(q, [like.commentID, like.userID, like.type]);}
+            const q = `INSERT INTO likes(commentID, userID) VALUES(?,?)`;
+            try{await db.executeQuery(q, [like.commentID, like.userID]);}
             catch(error) {throw new Error("Cannot find comment")};
         }
         else if(like.postID != null){
             console.log("post");
-            const q = `INSERT INTO likes(postID, userID, type) VALUES(?,?,?)`;
-            try{await db.executeQuery(q,[ like.postID, like.userID, like.type]);}
+            const q = `INSERT INTO likes(postID, userID) VALUES(?,?)`;
+            try{await db.executeQuery(q,[ like.postID, like.userID]);}
             catch(error) {throw new Error("Cannot find post")};
         }
     }
@@ -48,6 +48,11 @@ class Like{
         catch(err){
             throw new Error("comment Not Found");
         }
+    }
+    static async deletePostLikes(postID){
+        const q = `DELETE FROM likes WHERE postID = ? || commentID IN (SELECT commentID FROM comments WHERE postID = ?)`;
+        try {return await db.executeQuery(q, [postID]);}
+        catch(err) {throw new Error("Error deleting");}
     }
 }
 export default Like;

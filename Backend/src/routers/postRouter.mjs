@@ -7,6 +7,6 @@ const postRouter = Router();
 
 postRouter.post("/addPost", PostController.addPost);
 postRouter.get("/getPosts", PostController.getPosts);
-postRouter.delete("/deletePost", PostController.deletePost);
-postRouter.patch("/updatePost", PostController.updatePost);
+postRouter.delete("/deletePost/:postID", PostController.deletePost);
+postRouter.patch("/updatePost/:postID", PostController.updatePost);
 export default postRouter;

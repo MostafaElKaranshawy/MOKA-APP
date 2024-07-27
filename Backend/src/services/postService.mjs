@@ -1,6 +1,7 @@
 import User from "../modules/user.mjs";
 import Post from "../modules/post.mjs";
-
+import Comment from "../modules/comment.mjs";
+import Like from "../modules/like.mjs";
 class PostService {
     static async createPost(userName, content) {
         const userID = await User.getUserID(userName);
@@ -18,6 +19,8 @@ class PostService {
     static async deletePost(userName, postID) {
         const userID = await User.getUserID(userName);
         if(userID != null) {
+            await Like.deletePostLikes(postID);
+            await Comment.deletePostComments(postID);
             await Post.deletePost(postID);
             const posts = await Post.getPosts(userID);
             if(posts != null) return posts;

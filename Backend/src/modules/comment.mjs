@@ -39,5 +39,10 @@ class Comment {
         try {return await db.executeQuery(q, [commentID]);}
         catch (error) {throw new Error("Error getting comments");}
     }
+    static async deletePostComments(postID){
+        const q = `DELETE FROM comments WHERE postID = ?`;
+        try {return await db.executeQuery(q, [postID]);}
+        catch(err) {throw new Error("Error deleting");}
+    }
 }
 export default Comment;

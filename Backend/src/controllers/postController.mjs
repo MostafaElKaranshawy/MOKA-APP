@@ -15,7 +15,8 @@ class PostController{
     }
     static async deletePost(req, res){
         try{
-            const posts = await PostService.deletePost(req.body.userName, req.body.postID);
+            console.log(req.params.postID);
+            const posts = await PostService.deletePost(req.body.userName, req.params.postID);
             return res.status(200).send(posts);
         }
         catch(err){
@@ -25,7 +26,7 @@ class PostController{
     }
     static async updatePost(req, res){
         try{
-            const posts = await PostService.updatePost(req.body.userName, req.body.postID, req.body.content);
+            const posts = await PostService.updatePost(req.body.userName, req.params.postID, req.body.content);
             return res.status(200).send(posts);
         }
         catch(err){
