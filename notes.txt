@@ -1,19 +1,20 @@
-DONE    1- postId, commentId, etc are stored in request params or request body?
-2- app.use(middleWare to verify user to avoid duplicates)
-3- photos, pdf, etc are on disk with db include path
+DONE - postId, commentId, etc are stored in request params or request body?
+DONE - app.use(middleWare to verify user to avoid duplicates)
 
-4- token is sent in Authorization header{
+Done without making database
+- token is sent in Authorization header{
     decoding => take userId
     compare wwith record in db (check for expiracy) 
-    update expairy with each request
+    update expiry with each request
     refresh token{
         expriy in years
         refreshes the access token whenever expired //// quite advanced (between two backends)
-    }
-
-5- pagination -> limit, offset -> mapped to pages (page No - 1) * limit = offset
+    }   
 }
 
+############################################
+
+Q: Why not just using th ejwt sign and verify functions?
 sessions:
     session id primary key of table
     user_id
@@ -21,3 +22,7 @@ sessions:
     created_at
     updated_at
     expired_at
+
+- photos, pdf, etc are on disk with db include path
+
+- pagination -> limit, offset -> mapped to pages (page No - 1) * limit = offset
