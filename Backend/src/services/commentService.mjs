@@ -1,4 +1,3 @@
-import User from "../modules/user.mjs";
 import Comment from "../modules/comment.mjs";
 
 class commentService {

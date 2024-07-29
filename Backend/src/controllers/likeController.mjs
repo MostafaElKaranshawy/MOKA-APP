@@ -4,7 +4,7 @@ class likeController {
     static async addPostLike(req, res) {
         const like = {
             postID : req.params.postID,
-            userID : req.params.userID,
+            userID : req.user.userID,
         }
         try{
             const likes = await likeService.addLike(like);
@@ -17,7 +17,7 @@ class likeController {
     static async addCommentLike(req, res) {
         const like = {
             commentID : req.params.postID,
-            userID : req.params.userID,
+            userID : req.user.userID,
         }
         try{
             const likes = await likeService.addLike(like);
@@ -31,7 +31,7 @@ class likeController {
         const like = {
             likeID : req.params.likeID,
             postID : req.params.postID,
-            userID : req.params.userID,
+            userID : req.user.userID,
         }
         try{
             const likes = await likeService.removeLike(like)
@@ -45,7 +45,7 @@ class likeController {
         const like = {
             likeID : req.params.likeID,
             commentID : req.params.commentID,
-            userID : req.params.userID,
+            userID : req.user.userID,
         }
         try{
             const likes = await likeService.removeLike(like)

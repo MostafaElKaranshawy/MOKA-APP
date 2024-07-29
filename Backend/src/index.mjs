@@ -5,12 +5,14 @@ const app  = express();
 app.use(express.json());
 app.use(cors());
 import authRouter from './routers/authRouter.mjs';
+import CheckUser from './middleWares/checkUser.mjs';
 import postRouter from './routers/postRouter.mjs';
 import commentRouter from './routers/commentRouter.mjs';
 import likeRouter from './routers/likeRouter.mjs';
 import friendShipRouter from './routers/friendShipRouter.mjs';
 
 app.use(authRouter);
+app.use(CheckUser)
 app.use(postRouter);
 app.use(commentRouter);
 app.use(likeRouter);

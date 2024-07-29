@@ -1,4 +1,4 @@
-1- postId, commentId, etc are stored in request params or request body?
+DONE    1- postId, commentId, etc are stored in request params or request body?
 2- app.use(middleWare to verify user to avoid duplicates)
 3- photos, pdf, etc are on disk with db include path
 

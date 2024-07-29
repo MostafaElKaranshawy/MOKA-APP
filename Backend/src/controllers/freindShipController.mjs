@@ -4,7 +4,7 @@ class FriendShipController {
     static async addFriend(req, res){
         try{
             const friendShip = {
-                userID: req.params.userID,
+                userID: req.user.userID,
                 friendID: req.params.friendID
             }
             await FriendShipService.addFriend(friendShip);
@@ -17,7 +17,7 @@ class FriendShipController {
     static async acceptFriend(req, res){
         try{
             const friendShip = {
-                userID: req.params.userID,
+                userID: req.user.userID,
                 friendID: req.params.friendID
             }
             await FriendShipService.acceptFriend(friendShip);
@@ -31,7 +31,7 @@ class FriendShipController {
     static async removeFriend(req, res){
         try{
             const friendShip = {
-                userID: req.params.userID,
+                userID: req.user.userID,
                 friendID: req.params.friendID
             }
             await FriendShipService.removeFriend(friendShip);
@@ -43,7 +43,7 @@ class FriendShipController {
     }
     static async getFriends(req, res){
         try{
-            let friends = await FriendShipService.getFriends(req.params.userID);
+            let friends = await FriendShipService.getFriends(req.user.userID);
             res.status(200).send(friends);
         }
         catch(err){

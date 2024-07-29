@@ -20,7 +20,6 @@ class likeService {
         }
     }
     static async removeLike(like){
-        // console.log(like.likeID);
         try{
             await Like.removeLike(like);
             if(like.postID != null){

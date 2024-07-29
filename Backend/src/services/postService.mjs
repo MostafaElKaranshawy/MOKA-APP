@@ -3,8 +3,7 @@ import Post from "../modules/post.mjs";
 import Comment from "../modules/comment.mjs";
 import Like from "../modules/like.mjs";
 class PostService {
-    static async createPost(userName, content) {
-        const userID = await User.getUserID(userName);
+    static async createPost(userID, content) {
         if(userID != null) {
             const post = {
                 userID : userID,
@@ -16,8 +15,7 @@ class PostService {
             throw new Error("User Not Found");
         }
     }
-    static async deletePost(userName, postID) {
-        const userID = await User.getUserID(userName);
+    static async deletePost(userID, postID) {
         if(userID != null) {
             await Like.deletePostLikes(postID);
             await Comment.deletePostComments(postID);
@@ -30,10 +28,8 @@ class PostService {
             throw new Error("User Not Found");
         }
     }
-    static async updatePost(userName, postID, newContent){
-        const userID = await User.getUserID(userName);
+    static async updatePost(userID, postID, newContent){
         if(userID != null) {
-            
             await Post.updatePost(postID, newContent);
             const posts = await Post.getPosts(userID);
             if(posts != null) return posts;

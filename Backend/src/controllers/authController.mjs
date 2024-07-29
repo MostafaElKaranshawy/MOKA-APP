@@ -1,12 +1,19 @@
 import AuthService from "../services/authService.mjs";
 import User from "../modules/user.mjs";
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import dotenv from 'dotenv';
+import DataBase from "../modules/dataBase.mjs";
+
+const db = new DataBase();
+db.connectDataBase();
+dotenv.config();
+
 const saltRounds = 10;
 
 class AuthController {
     static async signUp(req, res) {
         console.log(req.body);
-        
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const user = {
             name: req.body.name,
@@ -25,17 +32,19 @@ class AuthController {
         }
     }
     static async signIn(req, res) {
-        const user = {
-            email: req.body.email,
-            password: req.body.password
-        }
+        let user = null
         try{
-            const result = await AuthService.signIn(user.email, user.password);
-            res.status(200).send(result);
+            user = await AuthService.signIn(req.body.email, req.body.password);
         }
         catch(err){
             res.status(500).send(err.message);
         }
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3d'});
+        res.status(200).send({
+            msg : "Signed in successfully",
+            userData: user,
+            token: accessToken
+        });
     }
 }
 

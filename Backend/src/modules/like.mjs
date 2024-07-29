@@ -51,7 +51,12 @@ class Like{
     }
     static async deletePostLikes(postID){
         const q = `DELETE FROM likes WHERE postID = ? || commentID IN (SELECT commentID FROM comments WHERE postID = ?)`;
-        try {return await db.executeQuery(q, [postID]);}
+        try {return await db.executeQuery(q, [postID, postID]);}
+        catch(err) {throw new Error("Error deleting");}
+    }
+    static async deleteCommentLikes(commentID){
+        const q = `DELETE FROM likes WHERE commentID = ?`;
+        try {return await db.executeQuery(q, [commentID]);}
         catch(err) {throw new Error("Error deleting");}
     }
 }

@@ -4,10 +4,10 @@ import Router from "router";
 
 const friendShipRouter = new Router();
 
-friendShipRouter.post("/addFriend/:userID/:friendID", FriendShipController.addFriend);
-friendShipRouter.delete("/removeFriend/:userID/:friendID", FriendShipController.removeFriend);
-friendShipRouter.get("/getFriends/:userID", FriendShipController.getFriends);
+friendShipRouter.post("/addFriend/:friendID", FriendShipController.addFriend);
+friendShipRouter.delete("/removeFriend/:friendID", FriendShipController.removeFriend);
+friendShipRouter.get("/getFriends/", FriendShipController.getFriends);
 friendShipRouter.get("/getFriendFriends/:friendID", FriendShipController.getFriendFriends);
-friendShipRouter.patch("/acceptFriend/:userID/:friendID", FriendShipController.acceptFriend);
+friendShipRouter.patch("/acceptFriend/:friendID", FriendShipController.acceptFriend);
 
 export default friendShipRouter;
