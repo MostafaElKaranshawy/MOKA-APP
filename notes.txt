@@ -1,6 +1,6 @@
 DONE - postId, commentId, etc are stored in request params or request body?
 DONE - app.use(middleWare to verify user to avoid duplicates)
-
+DONE - restful routes names standards.
 Done without making database
 - token is sent in Authorization header{
     decoding => take userId
