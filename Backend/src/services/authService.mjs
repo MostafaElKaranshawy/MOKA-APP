@@ -1,5 +1,7 @@
 import DataBase from "../modules/dataBase.mjs";
 import bcrypt from 'bcrypt';
+import Session from "../modules/session.mjs";
+import jwt from 'jsonwebtoken';
 
 const db = new DataBase();
 db.connectDataBase();
@@ -32,7 +34,19 @@ class AuthService {
         if (!match) {
             throw new Error("Password is Incorrect");
         }
-        return result[0];
+        const user = result[0];
+        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3d'});
+        try {
+            Session.createSession(user.userID, accessToken);
+        }
+        catch (err){
+            throw new Error(err.message);
+        }
+        return {
+            accessToken: accessToken,
+            user: user,
+            msg: "User Logged In Successfully!"
+        };
     }
 }
 

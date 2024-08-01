@@ -32,19 +32,14 @@ class AuthController {
         }
     }
     static async signIn(req, res) {
-        let user = null
+        let result = null
         try{
-            user = await AuthService.signIn(req.body.email, req.body.password);
+            result = await AuthService.signIn(req.body.email, req.body.password);
         }
         catch(err){
-            res.status(500).send(err.message);
+            return res.status(500).send(err.message);
         }
-        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3d'});
-        res.status(200).send({
-            msg : "Signed in successfully",
-            userData: user,
-            token: accessToken
-        });
+        return res.status(200).send(result);
     }
 }
 

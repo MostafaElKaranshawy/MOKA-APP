@@ -5,8 +5,8 @@ import PostController from "../controllers/postController.mjs";
 
 const postRouter = Router();
 
-postRouter.post("/post", PostController.addPost);
-postRouter.get("/post", PostController.getPosts);
-postRouter.delete("/post/:postID", PostController.deletePost);
-postRouter.patch("/post/:postID", PostController.updatePost);
+postRouter.post("/posts", PostController.addPost);              // Add a post
+postRouter.get("/posts", PostController.getPosts);              // Get a post
+postRouter.delete("/posts/:postID", PostController.deletePost); // Delete a post
+postRouter.patch("/posts/:postID", PostController.updatePost);  // Update a post
 export default postRouter;
