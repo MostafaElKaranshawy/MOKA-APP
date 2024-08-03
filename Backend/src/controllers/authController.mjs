@@ -1,9 +1,9 @@
 import AuthService from "../services/authService.mjs";
 import User from "../modules/user.mjs";
 import bcrypt from 'bcrypt';
-import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import DataBase from "../modules/dataBase.mjs";
+import { body, validationResult } from 'express-validator';
 
 const db = new DataBase();
 db.connectDataBase();
@@ -12,7 +12,7 @@ dotenv.config();
 const saltRounds = 10;
 
 class AuthController {
-    static async signUp(req, res) {
+    static async signUp(req, res){
         console.log(req.body);
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const user = {
