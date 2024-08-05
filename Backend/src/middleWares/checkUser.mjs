@@ -11,18 +11,19 @@ const CheckUser = async (req, res, next) => {
     console.log(token);
     if(token == null)return res.sendStatus(401);
 
+    
     try{
-        await Session.checkSession(token);
+        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
+            if(err)throw new Error("Token not found or expired");
+            req.user = user;
+            console.log(user);
+        })
+        await Session.checkSession(req.user.userID);
     }
     catch(err){
-        return res.status(404).send("Session Not Allowed")
+        return res.status(403).send(err.message);
     }
-
-    jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-        if(err)return res.status(403).send("Session Not Found");
-        req.user = user;
-        next();
-    })
+    next();
 }
 
 export default CheckUser;

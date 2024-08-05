@@ -35,9 +35,13 @@ class AuthService {
             throw new Error("Password is Incorrect");
         }
         const user = result[0];
-        const accessToken = jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {expiresIn: '3d'});
+        const userToken = {
+            userID: user.userID
+        };
+        const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
+        console.log(accessToken);
         try {
-            Session.createSession(user.userID, accessToken);
+            await Session.createSession(user.userID, accessToken);
         }
         catch (err){
             throw new Error(err.message);

@@ -5,7 +5,7 @@ import AuthValidator from '../middleWares/authValidation.mjs';
 const authRouter = express.Router();
 
 authRouter.post(
-    '/signUp',
+    '/auth/signUp',
     AuthValidator.emailValidation,
     AuthValidator.passwordValidation,
     AuthValidator.nameValidation,
@@ -15,7 +15,7 @@ authRouter.post(
 );
 
 authRouter.get(
-    '/signIn',
+    '/auth/signIn',
     AuthValidator.emailValidation,
     AuthValidator.passwordValidation,
     AuthValidator.validate,

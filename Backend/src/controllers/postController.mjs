@@ -3,10 +3,12 @@ import PostService from '../services/postService.mjs';
 import User from '../modules/user.mjs';
 class PostController{
     static async addPost(req, res){
+        console.log("post controller added")
         try{
             const post = await PostService.createPost(req.user.userID, req.body.content);
             await Post.addPost(post);
             const posts = await Post.getPosts(post.userID);
+            console.log(posts);
             return res.status(200).send(posts);
         }
         catch(err){

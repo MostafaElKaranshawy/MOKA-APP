@@ -33,6 +33,7 @@ class AuthController {
     }
     static async signIn(req, res) {
         let result = null
+        console.log(req.body);
         try{
             result = await AuthService.signIn(req.body.email, req.body.password);
         }
