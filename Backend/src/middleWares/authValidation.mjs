@@ -21,7 +21,7 @@ const nameValidation = body('name')
     .isLength({ min: 5, max: 30 })
     .withMessage('Name must be between 5 and 30 characters');
 
-const userNameValidation = body('username')
+const userNameValidation = body('userName')
     .isString()
     .notEmpty()
     .withMessage('Username must not be empty')

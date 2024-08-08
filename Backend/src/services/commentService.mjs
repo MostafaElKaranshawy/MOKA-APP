@@ -6,7 +6,8 @@ class commentService {
             postID: postID,
             content: content
         }
-        return comment;
+        await Comment.addComment(comment);
+        return await Comment.getComments(postID);
     }
     static async deleteComment(commentID, postID) {
         await Comment.deleteComment(commentID);

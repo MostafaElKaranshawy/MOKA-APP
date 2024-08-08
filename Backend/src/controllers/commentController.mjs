@@ -4,9 +4,7 @@ import User from '../modules/user.mjs';
 class commentController{
     static async addComment(req, res){
         try{
-            const comment = await commentService.createComment(req.params.postID, req.params.content);
-            await Comment.addComment(comment);
-            const comments = await Comment.getComments(comment.postID);
+            const comments = await commentService.createComment(req.params.postID, req.body.content);
             return res.status(200).send(comments);
         }
         catch(err){
@@ -34,7 +32,7 @@ class commentController{
     }
     static async getComments(req, res){
         try {
-            const comments = await Comment.getComments(req.body.postID);
+            const comments = await Comment.getComments(req.params.postID);
             return res.status(200).send(comments);
         }
         catch(err){

@@ -4,12 +4,12 @@ import Session from "../modules/session.mjs";
 import jwt from 'jsonwebtoken';
 
 const db = new DataBase();
-db.connectDataBase();
+db.connect();
 
 class AuthService {
     static async signUp(userName, email) {
         const q = `SELECT * FROM users WHERE userName = ? OR email = ?`;
-        const result = await db.executeQuery(q, [userName, email]);
+        const result = await db.orm.query(q, [userName, email]);
 
         if (result.length !== 0) {
             if (result[0].userName === userName) {
@@ -21,24 +21,23 @@ class AuthService {
         }
     }
     static async signIn(email, password) {
-        const q = `SELECT * FROM users WHERE email = ?`;
-        const result = await db.executeQuery(q, [email]);
-
-        if (result.length === 0) {
-            throw new Error("User Not Found");
-        }
-
-        const hashedPassword = result[0].password;
+        const user = await db.User.findOne({where: {
+            email: email
+        }});
+        if(user == null)throw new Error("User Not Found");
+        const hashedPassword = user.password;
         const match = await bcrypt.compare(password, hashedPassword);
 
         if (!match) {
             throw new Error("Password is Incorrect");
         }
-        const user = result[0];
         const userToken = {
             userID: user.userID
         };
-        const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '20s' });
+        console.log(user);
+        console.log('userToken');
+        console.log(userToken);
+        const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
         console.log(accessToken);
         try {
             await Session.createSession(user.userID, accessToken);

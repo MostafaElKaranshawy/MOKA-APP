@@ -1,43 +1,84 @@
 import DataBase from "./dataBase.mjs";
 
 const db = new DataBase();
-db.connectDataBase();
+db.connect();
+
 class Post {
     static async addPost(post){
-        const q = `INSERT INTO posts (content, userID)VALUES (?, ?)`;
-        try {await db.executeQuery(q, [post.content, post.userID]);}
-        catch (error) {throw new Error("Error adding post");}
+        try {
+            const user = await db.User.findOne({
+                where: {
+                    userID: post.userID
+                }
+            });
+            await user.createPost({
+                content : post.content
+            });
+        }
+        catch(err){
+            return err;
+        }
     }
-    static async getPosts(userID){
-        const userQ = `SELECT * FROM users WHERE userID = ?`;
-        const user = await db.executeQuery(userQ, [userID]);
-        if(user == null || user.length == 0){throw new Error("User Not Found");}
-        const q = `SELECT *,DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') as time FROM posts WHERE userID = ? ORDER BY time DESC`;
-        try {return await db.executeQuery(q, [userID]);}
-        catch (error) {throw new Error("Error getting posts");}
+    static async getPosts(userID, limit, offset){
+        try {
+            const user = await db.User.findOne({
+                where: {
+                    userID: userID
+                }
+            });
+            const posts = await user.getPosts({
+                order: [
+                    ['time', 'DESC']
+                ],
+                offset: offset,
+                limit: limit
+            });
+            return posts;
+        }
+        catch(err){
+            return err;
+        }
     }
     static async deletePost(postID){
-        
-        const post = await this.getPost(postID);
-        if(post == null || post.length == 0)throw new Error("Post Not Found");
-        
-        const q = `DELETE FROM posts WHERE postID = ?`;
-        try {return await db.executeQuery(q, [postID]);}
-        catch(err) {throw new Error("Error deleting");}
+        try {
+            return await db.Post.destroy({
+                where: {
+                    postID: postID
+                }
+            });
+        }
+        catch(err){
+            return err;
+        }
     }
     static async updatePost(postID, newContent){
-        
-        const post = await this.getPost(postID);
-        if(post == null || post.length == 0)throw new Error("Post Not Found");
-
-        let updatePostQuery = "UPDATE posts SET content = ? WHERE postID = ?";
-        try{await db.executeQuery(updatePostQuery, [newContent, postID]);}
-        catch(err) {throw new Error("Error updating");}
+        try {
+            await db.Post.update({
+                content: newContent
+            },
+            {
+                where: {
+                    postID: postID
+                }
+            });
+            
+        }
+        catch(err){
+            return err;
+        }
     }
     static async getPost(postID){
-        const q = `SELECT *,DATE_FORMAT(time, '%Y-%m-%d %H:%i:%s') as time FROM posts WHERE postID = ? ORDER BY time DESC`;
-        try {return await db.executeQuery(q, [postID]);}
-        catch (error) {throw new Error("Error getting posts");}
+        try {
+            const post = await db.Post.findOne({
+                where: {
+                    postID: postID
+                }
+            });
+            return post;
+        }
+        catch(err){
+            return err;
+        }
     }
 }
 export default Post;

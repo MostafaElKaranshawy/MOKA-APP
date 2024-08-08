@@ -1,14 +1,9 @@
-import Post from '../modules/post.mjs';
 import PostService from '../services/postService.mjs';
-import User from '../modules/user.mjs';
 class PostController{
     static async addPost(req, res){
-        console.log("post controller added")
         try{
-            const post = await PostService.createPost(req.user.userID, req.body.content);
-            await Post.addPost(post);
-            const posts = await Post.getPosts(post.userID);
-            console.log(posts);
+            console.log(req.user.userID);
+            const posts = await PostService.createPost(req.user.userID, req.body.content);
             return res.status(200).send(posts);
         }
         catch(err){
@@ -38,7 +33,7 @@ class PostController{
     }
     static async getPosts(req, res){
         try {
-            const userID = await User.getUserID(req.user.userID);
+            const userID = req.user.userID;
             const posts = await Post.getPosts(userID);
             return res.status(200).send(posts);
         }

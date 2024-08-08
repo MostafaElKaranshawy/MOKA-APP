@@ -1,63 +1,89 @@
 import DataBase from "./dataBase.mjs";
-const db = new DataBase();
-db.connectDataBase();
 
-class Like{
-    static async addLike(like){
-        console.log(like);
-        if(like.commentID != null){
-            console.log("comment");
-            const q = `INSERT INTO likes(commentID, userID) VALUES(?,?)`;
-            try{await db.executeQuery(q, [like.commentID, like.userID]);}
-            catch(error) {throw new Error("Cannot find comment")};
+const db = new DataBase();
+db.connect();
+class Like {
+    static async addPostLike(like){
+        try {
+            const post = await db.Post.findOne({
+                where: {
+                    postID: like.postID
+                }
+            });
+            await post.createLike({
+                userID : like.userID
+            });
         }
-        else if(like.postID != null){
-            console.log("post");
-            const q = `INSERT INTO likes(postID, userID) VALUES(?,?)`;
-            try{await db.executeQuery(q,[ like.postID, like.userID]);}
-            catch(error) {throw new Error("Cannot find post")};
+        catch(err){
+            return err;
         }
     }
-    static async removeLike(like){
-        // console.log(like.likeID); 
-        if(like.likeID == null)throw new Error("cannot find like");
-        const findLike = await db.executeQuery(`SELECT * FROM likes WHERE likeID = ?`, [like.likeID]);
-        if(findLike == null || findLike.length == 0)throw new Error("cannot find like");
-        const q = `DELETE FROM likes WHERE likeID = ?`;
-        try {db.executeQuery(q, [like.likeID]);}
-        catch(err){throw new Error("Cannot find like");}
+    static async addCommentLike(like){
+        try {
+            const comment = await db.Comment.findOne({
+                where: {
+                    commentID: like.commentID
+                }
+            });
+            await comment.createLike({
+                userID : like.userID
+            });
+        }
+        catch(err){
+            return err;
+        }
     }
     static async getPostLikes(postID){
-        const q = `SELECT * FROM likes WHERE postID = ?`;
         try {
-            let likes = db.executeQuery(q, [postID]);
-            if(likes == null)throw new Error ("Post Not Found");
+            const post = await db.Post.findOne({
+                where: {
+                    postID: postID
+                }
+            })
+            const likes = await post.getLikes();
             return likes;
         }
         catch(err){
-            throw new Error("Post Not Found");
+            return err;
         }
     }
     static async getCommentLikes(commentID){
-        const q = `SELECT * FROM likes WHERE commentID = ?`;
         try {
-            let likes = db.executeQuery(q, [commentID]);
-            if(likes == null)throw new Error ("comment Not Found");
+            const comment = await db.Comment.findOne({
+                where: {
+                    commentID: commentID
+                }
+            })
+            const likes = await comment.getLikes();
             return likes;
         }
         catch(err){
-            throw new Error("comment Not Found");
+            return err;
         }
     }
-    static async deletePostLikes(postID){
-        const q = `DELETE FROM likes WHERE postID = ? || commentID IN (SELECT commentID FROM comments WHERE postID = ?)`;
-        try {return await db.executeQuery(q, [postID, postID]);}
-        catch(err) {throw new Error("Error deleting");}
+    static async deletePostLike(likeID){
+        try {
+            return await db.PostLike.destroy({
+                where: {
+                    postLikeID: likeID
+                }
+            });
+        }
+        catch(err){
+            return err;
+        }
     }
-    static async deleteCommentLikes(commentID){
-        const q = `DELETE FROM likes WHERE commentID = ?`;
-        try {return await db.executeQuery(q, [commentID]);}
-        catch(err) {throw new Error("Error deleting");}
+    static async deleteCommentLike(likeID){
+        try {
+            return await db.CommentLike.destroy({
+                where: {
+                    commentLikeID: likeID
+                }
+            });
+        }
+        catch(err){
+            return err;
+        }
     }
 }
 export default Like;

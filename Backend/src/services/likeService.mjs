@@ -1,37 +1,45 @@
 import Like from "../modules/like.mjs";
 
 class likeService {
-    static async addLike(like){
+    static async addPostLike(like){
         try{
-            await Like.addLike(like);
-            if(like.postID != null){
-                const likes = Like.getPostLikes(like.postID);
-                if(likes == null)throw new Error('cannot find post');
-                return likes;
-            }
-            else if(like.commentID != null){
-                const likes = Like.getCommentLikes(like.postID);
-                if(likes == null)throw new Error('cannot find comment');
-                return likes;
-            }
+            await Like.addPostLike(like);
+            const likes = await Like.getPostLikes(like.postID);
+            if(likes == null)throw new Error('cannot find post');
+            return likes;
         }
         catch(err){
             throw new Error(err.message);
         }
     }
-    static async removeLike(like){
+    static async addCommentLike(like){
         try{
-            await Like.removeLike(like);
-            if(like.postID != null){
-                const likes = Like.getPostLikes(like.postID);
-                if(likes == null)throw new Error('cannot find post');
-                return likes;
-            }
-            else if(like.commentID != null){
-                const likes = Like.getCommentLikes(like.postID);
-                if(likes == null)throw new Error('cannot find comment');
-                return likes;
-            }
+            await Like.addCommentLike(like);
+            const likes = await Like.getCommentLikes(like.commentID);
+            if(likes == null)throw new Error('cannot find comment');
+            return likes;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
+    static async removePostLike(like){
+        try{
+            await Like.removePostLike(like);
+            const likes = await Like.getPostLikes(like.postID);
+            if(likes == null)throw new Error('cannot find post');
+            return likes;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
+    static async removeCommentLike(like){
+        try{
+            await Like.removeCommentLike(like);
+            const likes = await Like.getCommentLikes(like.commentID);
+            if(likes == null)throw new Error('cannot find comment');
+            return likes;
         }
         catch(err){
             throw new Error(err.message);

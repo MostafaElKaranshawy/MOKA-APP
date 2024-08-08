@@ -1,55 +1,97 @@
 import DataBase from "./dataBase.mjs";
-const db = new DataBase();
-db.connectDataBase();
 
-class FriendShip {
+const db = new DataBase();
+db.connect();
+
+class FriendShip{
     static async addFriend(friendShip){
-        const checkFriend = await db.executeQuery(`SELECT * FROM users WHERE userID = ?`, [friendShip.friendID]);
-        if(checkFriend == null || checkFriend.length == 0)throw new Error("Cannot find friend");
-        const q = `INSERT INTO friendships(userID, friendID) VALUES(?,?)`;
-        try{await db.executeQuery(q, [friendShip.userID, friendShip.friendID, ]);}
-        catch(error) {throw new Error("Cannot find friend")};
+        try {
+            const checkFriend = await db.User.findOne({
+                where: {
+                    userID: friendShip.friendID
+                }
+            });
+            if(checkFriend == null)throw new Error("Cannot find friend");
+            const friendship = await db.FriendShip.create({
+                status: 0
+            });
+            const user1 = await db.User.findOne({
+                where: {
+                    userID: friendShip.userID
+                }
+            });
+            const user2 = await db.User.findOne({
+                where: {
+                    userID: friendShip.friendID
+                }
+            });
+            await friendship.setFriend1(user1);
+            await friendship.setFriend2(user2);
+        }
+        catch(err){
+            return err;
+        }
     }
     static async acceptFriend(friendShip){
-        const checkFriendShip = await db.executeQuery(`SELECT * FROM friendships WHERE userID = ? AND friendID = ?`, [friendShip.friendID, friendShip.userID]);
-        if(checkFriendShip == null || checkFriendShip.length == 0)throw new Error("Cannot find friendship");
-        const q = `UPDATE friendships SET status = 1 WHERE userID = ? AND friendID = ?`;
-        try{await db.executeQuery(q, [friendShip.friendID, friendShip.userID]);}
-        catch(error) {throw new Error("Cannot find friend")};
+        try {
+            const checkFriendShip = await db.FriendShip.findOne({
+                where: {
+                    userID: friendShip.userID,
+                    friendID: friendShip.friendID
+                }
+            });
+            if(checkFriendShip == null)throw new Error("Cannot find friendship");
+            checkFriendShip.status = 1;
+            await checkFriendShip.save();
+        }
+        catch(err){
+            return err;
+        }
     }
     static async removeFriend(friendShip){
-        const checkFriendShip = await db.executeQuery(`SELECT * FROM friendships WHERE userID = ? AND friendID = ?`, [friendShip.userID, friendShip.friendID]);
-        if(checkFriendShip == null || checkFriendShip.length == 0)throw new Error("Cannot find friendship");
-        const q = `DELETE FROM friendships WHERE userID = ? AND friendID = ?`;
-        try {db.executeQuery(q, [friendShip.userID, friendShip.friendID]);}
-        catch(err){throw new Error("Cannot find friend");}
+        try {
+            const checkFriendShip = await db.FriendShip.findOne({
+                where: {
+                    userID: friendShip.userID,
+                    friendID: friendShip.friendID
+                }
+            });
+            if(checkFriendShip == null)throw new Error("Cannot find friendship");
+            await checkFriendShip.destroy();
+        }
+        catch(err){
+            return err;
+        }
     }
-
-    // the user add friends or friends add the user
     static async getFriends(userID){
-        const q = `SELECT * FROM friendships WHERE (userID = ? || friendID = ?) && status = 1`;
         try {
-            let friends = db.executeQuery(q, [userID, userID]);
-            if(friends == null)throw new Error ("User Not Found");
+            console.log(userID);
+            const Op = db.getOp();
+            const friends = await db.FriendShip.findAll({
+                where: {
+                    [Op.or]: [{ userID: userID },{ friendID: userID }],
+                    status: 1  // Only accepted friendships
+                }
+            });
+            console.log(friends);
             return friends;
         }
         catch(err){
-            throw new Error("User Not Found");
+            return err;
         }
     }
-
-    // friends of my friend Suggestions
     static async getFriendFriends(friendID){
-        const q = `SELECT * FROM friendships WHERE userID = ?`;
         try {
-            let friends = db.executeQuery(q, [friendID]);
-            if(friends == null)throw new Error ("User Not Found");
+            const friends = await db.FriendShip.findAll({
+                where: {
+                    userID: friendID
+                }
+            });
             return friends;
         }
         catch(err){
-            throw new Error("User Not Found");
+            return err;
         }
     }
 }
-
 export default FriendShip;

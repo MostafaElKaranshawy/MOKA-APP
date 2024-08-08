@@ -1,17 +1,10 @@
 import AuthService from "../services/authService.mjs";
 import User from "../modules/user.mjs";
 import bcrypt from 'bcrypt';
-import dotenv from 'dotenv';
-import DataBase from "../modules/dataBase.mjs";
-import { body, validationResult } from 'express-validator';
-
-const db = new DataBase();
-db.connectDataBase();
-dotenv.config();
-
 const saltRounds = 10;
 
 class AuthController {
+
     static async signUp(req, res){
         console.log(req.body);
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
@@ -23,7 +16,7 @@ class AuthController {
             bio: req.body.bio || ''
         }
         try{
-            await AuthService.signUp(user.userName, user.email);
+            // await AuthService.signUp(user.userName, user.email);
             await User.addUser(user);
             res.status(201).send("User Added Successfully!");
         }

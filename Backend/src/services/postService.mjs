@@ -1,4 +1,3 @@
-import User from "../modules/user.mjs";
 import Post from "../modules/post.mjs";
 import Comment from "../modules/comment.mjs";
 import Like from "../modules/like.mjs";
@@ -9,7 +8,7 @@ class PostService {
                 userID : userID,
                 content : content
             }
-            return post;
+            Post.addPost(post);
         }
         else {
             throw new Error("User Not Found");
@@ -17,8 +16,6 @@ class PostService {
     }
     static async deletePost(userID, postID) {
         if(userID != null) {
-            await Like.deletePostLikes(postID);
-            await Comment.deletePostComments(postID);
             await Post.deletePost(postID);
             const posts = await Post.getPosts(userID);
             if(posts != null) return posts;

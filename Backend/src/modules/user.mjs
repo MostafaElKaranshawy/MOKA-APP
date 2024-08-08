@@ -1,28 +1,33 @@
 import DataBase from "./dataBase.mjs";
 const db = new DataBase();
-db.connectDataBase();
+db.connect();
 
 class User{
     static async addUser(user){
-        const q = `INSERT INTO users(name, userName, email, password, bio) VALUES(?, ?, ?, ?, ?)`;
-        const values = [user.name, user.userName, user.email, user.password, user.bio];
-        try{
-            await db.executeQuery(q, values);
+        try {
+            await db.User.create({
+                name : user.name,
+                userName : user.userName,
+                email : user.email,
+                password : user.password
+            });
         }
         catch(err){
             return err;
         }
     }
-    static async getUserID(userName){
-        const q = `SELECT userID FROM users WHERE userName = ?`;
-        const values = [userName];
-        try{
-            const result = await db.executeQuery(q, values);
-            return result[0].userID;
+    static async removeUser(userID){
+        try {
+            await db.User.destroy({
+                where: {
+                    userID: userID
+                }
+            });
         }
         catch(err){
             return err;
-        }   
+        }
     }
 }
+
 export default User;

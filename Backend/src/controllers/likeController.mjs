@@ -7,7 +7,7 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.addLike(like);
+            const likes = await likeService.addPostLike(like);
             return res.status(200).send(likes);
         }
         catch(err){
@@ -20,7 +20,7 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.addLike(like);
+            const likes = await likeService.addCommentLike(like);
             return res.status(200).send(likes);
         }
         catch(err){
@@ -34,7 +34,7 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.removeLike(like)
+            const likes = await likeService.removePostLike(like)
             return res.status(200).send(likes);
         }
         catch(err){
@@ -48,7 +48,7 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.removeLike(like)
+            const likes = await likeService.removeCommentLike(like)
             return res.status(200).send(likes);
         }
         catch(err){
