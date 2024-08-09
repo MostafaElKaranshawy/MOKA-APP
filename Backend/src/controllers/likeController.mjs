@@ -7,8 +7,8 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.addPostLike(like);
-            return res.status(200).send(likes);
+            await likeService.addPostLike(like);
+            return res.status(200).send("like added successfully");
         }
         catch(err){
             return res.status(404).send(err.message);
@@ -20,8 +20,8 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.addCommentLike(like);
-            return res.status(200).send(likes);
+            await likeService.addCommentLike(like);
+            return res.status(200).send("like added successfully");
         }
         catch(err){
             return res.status(404).send(err.message);
@@ -29,13 +29,12 @@ class likeController {
     }
     static async removePostLike(req, res) {
         const like = {
-            likeID : req.params.likeID,
             postID : req.params.postID,
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.removePostLike(like)
-            return res.status(200).send(likes);
+            await likeService.removePostLike(like)
+            return res.status(200).send("like removed successfully");
         }
         catch(err){
             return res.status(404).send(err.message);
@@ -48,8 +47,8 @@ class likeController {
             userID : req.user.userID,
         }
         try{
-            const likes = await likeService.removeCommentLike(like)
-            return res.status(200).send(likes);
+            await likeService.removeCommentLike(like)
+            return res.status(200).send("like removed successfully");
         }
         catch(err){
             return res.status(404).send(err.message);
@@ -58,9 +57,12 @@ class likeController {
     static async getPostLikes(req, res) {
         try{
             if(req.params.postID != null){
-                const likes = await likeService.getPostLikes(req.params.postID);
+                const page = parseInt(req.query.page) || 1;
+                const limit = parseInt(req.query.limit) || 10;
+                const offset = (page - 1) * limit;
+                const likes = await likeService.getPostLikes(req.params.postID, offset, limit);
                 if(likes == null)return res.status(404).send("cannot find post");
-                return likes;
+                return res.status(200).send(likes);
             }
             else{
                 return res.status(404).send("cannot find post");
@@ -73,9 +75,12 @@ class likeController {
     static async getCommentLikes(req, res) {
         try{
             if(req.params.commentID != null){
-                const likes = await likeService.getCommentLikes(req.params.commentID);
+                const page = parseInt(req.query.page) || 1;
+                const limit = parseInt(req.query.limit) || 10;
+                const offset = (page - 1) * limit;
+                const likes = await likeService.getCommentLikes(req.params.commentID, offset, limit);
                 if(likes == null)return res.status(404).send("cannot find comment");
-                return likes;
+                return res.status(200).send(likes);
             }
             else{
                 return res.status(404).send("cannot find comment");

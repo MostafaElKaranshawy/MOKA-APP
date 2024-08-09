@@ -27,12 +27,10 @@ class Post {
                 }
             });
             const posts = await user.getPosts({
-                order: [
-                    ['time', 'DESC']
-                ],
-                offset: offset,
-                limit: limit
+                offset: offset || 0,
+                limit: limit || 10
             });
+            console.log(posts);
             return posts;
         }
         catch(err){

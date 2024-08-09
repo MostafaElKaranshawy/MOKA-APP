@@ -16,10 +16,12 @@ class PostService {
     }
     static async deletePost(userID, postID) {
         if(userID != null) {
-            await Post.deletePost(postID);
-            const posts = await Post.getPosts(userID);
-            if(posts != null) return posts;
-            else throw new Error("User Not Found");
+            try{
+                await Post.deletePost(postID);
+            }
+            catch(err){
+                throw new Error(err.msg);
+            }
         }
         else {
             throw new Error("User Not Found");
@@ -27,12 +29,22 @@ class PostService {
     }
     static async updatePost(userID, postID, newContent){
         if(userID != null) {
-            await Post.updatePost(postID, newContent);
-            const posts = await Post.getPosts(userID);
-            if(posts != null) return posts;
-            else throw new Error("User Not Found");
+            try{
+                await Post.updatePost(postID, newContent);
+            }
+            catch(err){
+                throw new Error(err.msg);
+            }
         }
         else {
+            throw new Error("User Not Found");
+        }
+    }
+    static async getPosts(userID, limit, offset) {
+        if(userID != null) {
+            return await Post.getPosts(userID, limit, offset);
+        }   
+        else{
             throw new Error("User Not Found");
         }
     }

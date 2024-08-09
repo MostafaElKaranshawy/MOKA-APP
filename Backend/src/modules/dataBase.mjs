@@ -195,13 +195,12 @@ class DataBase {
             }
         );
     }
-    
     async setRelations(){
         // User
         this.User.hasMany(this.Post, {onDelete : 'CASCADE', foreignKey : 'userID'});
         this.User.hasOne(this.Session, {onDelete : 'CASCADE', foreignKey : 'userID'});
-        this.User.hasMany(this.FriendShip, {as: 'Friend1', foreignKey: 'userID'});
-        this.User.hasMany(this.FriendShip, {as: 'Friend2', foreignKey: 'friendID'});
+        this.User.hasMany(this.FriendShip, { as: 'Friend1', onDelete : 'CASCADE',foreignKey: 'userID'});
+        this.User.hasMany(this.FriendShip, {as: 'Friend2', onDelete: 'CASCADE' ,foreignKey: 'friendID'});
     
         // Post
         this.Post.belongsTo(this.User, {foreignKey : 'userID'});

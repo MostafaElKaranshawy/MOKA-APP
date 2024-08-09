@@ -10,22 +10,29 @@ class Comment{
                     postID: comment.postID
                 }
             });
+            console.log(comment.content);
             await post.createComment({
-                content : comment.content
+                content : comment.content,
+                userID : comment.userID
             });
         }
         catch(err){
             return err;
         }
     }
-    static async getComments(postID){
+    static async getComments(postID, limit, offset){
         try {
             const post = await db.Post.findOne({
                 where: {
                     postID: postID
-                }
+                },
             })
-            const comments = await post.getComments();
+            const comments = await post.getComments(
+                {
+                    limit: limit || 10,
+                    offset: offset || 0
+                }
+            );
             return comments;
         }
         catch(err){

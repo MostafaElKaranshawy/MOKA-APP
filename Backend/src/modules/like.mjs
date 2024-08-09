@@ -10,7 +10,7 @@ class Like {
                     postID: like.postID
                 }
             });
-            await post.createLike({
+            await post.createPostLike({
                 userID : like.userID
             });
         }
@@ -25,7 +25,7 @@ class Like {
                     commentID: like.commentID
                 }
             });
-            await comment.createLike({
+            await comment.createCommentLike({
                 userID : like.userID
             });
         }
@@ -33,39 +33,45 @@ class Like {
             return err;
         }
     }
-    static async getPostLikes(postID){
+    static async getPostLikes(postID, offset, limit){
         try {
             const post = await db.Post.findOne({
                 where: {
                     postID: postID
                 }
             })
-            const likes = await post.getLikes();
+            const likes = await post.getPostLikes({
+                limit: limit,
+                offset : offset
+            });
             return likes;
         }
         catch(err){
             return err;
         }
     }
-    static async getCommentLikes(commentID){
+    static async getCommentLikes(commentID, offset, limit){
         try {
             const comment = await db.Comment.findOne({
                 where: {
                     commentID: commentID
                 }
             })
-            const likes = await comment.getLikes();
+            const likes = await comment.getCommentLikes({
+                offset : offset,
+                limit : limit
+            });
             return likes;
         }
         catch(err){
             return err;
         }
     }
-    static async deletePostLike(likeID){
+    static async deletePostLike(like){
         try {
             return await db.PostLike.destroy({
                 where: {
-                    postLikeID: likeID
+                    userID: like.userID
                 }
             });
         }
@@ -73,11 +79,11 @@ class Like {
             return err;
         }
     }
-    static async deleteCommentLike(likeID){
+    static async deleteCommentLike(like){
         try {
             return await db.CommentLike.destroy({
                 where: {
-                    commentLikeID: likeID
+                    userID: like.userID
                 }
             });
         }

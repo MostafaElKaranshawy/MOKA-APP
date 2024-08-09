@@ -1,11 +1,9 @@
-import Comment from '../modules/comment.mjs';
 import commentService from '../services/commentService.mjs';
-import User from '../modules/user.mjs';
 class commentController{
     static async addComment(req, res){
         try{
-            const comments = await commentService.createComment(req.params.postID, req.body.content);
-            return res.status(200).send(comments);
+            await commentService.createComment(req.params.postID, req.body.content, req.user.userID);
+            return res.status(200).send("Comment created successfully");
         }
         catch(err){
             return res.status(400).send(err.message);
@@ -13,8 +11,8 @@ class commentController{
     }
     static async deleteComment(req, res){
         try{
-            const comments = await commentService.deleteComment(req.params.commentID, req.params.postID);
-            return res.status(200).send(comments);
+            await commentService.deleteComment(req.params.commentID, req.params.postID);
+            return res.status(200).send("Comment deleted successfully");
         }
         catch(err){
             return res.status(400).send(err.message);
@@ -23,8 +21,8 @@ class commentController{
     }
     static async updateComment(req, res){
         try{
-            const comments = await commentService.updateComment(req.params.commentID,req.params.postID, req.body.content);
-            return res.status(200).send(comments);
+            await commentService.updateComment(req.params.commentID,req.params.postID, req.body.content);
+            return res.status(200).send("Comment updated successfully");
         }
         catch(err){
             return res.status(400).send(err.message);
@@ -32,7 +30,10 @@ class commentController{
     }
     static async getComments(req, res){
         try {
-            const comments = await Comment.getComments(req.params.postID);
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const offset = (page - 1) * limit;
+            const comments = await commentService.getComments(req.params.postID, limit, offset);
             return res.status(200).send(comments);
         }
         catch(err){
