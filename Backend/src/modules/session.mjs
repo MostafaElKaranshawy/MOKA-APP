@@ -19,7 +19,7 @@ class Session{
             console.log(session);
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async checkSession(userID){
@@ -41,7 +41,7 @@ class Session{
             return session;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     

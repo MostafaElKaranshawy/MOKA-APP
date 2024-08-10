@@ -12,12 +12,11 @@ class PostController{
     }
     static async deletePost(req, res){
         try{
-            // console.log(req.params.postID);
-            // console.log(req.user)
             await PostService.deletePost(req.user.userID, req.params.postID);
             return res.status(200).send("Post Deleted Successfully");
         }
         catch(err){
+            // console.log(err);
             return res.status(400).send(err.message);
         }
 

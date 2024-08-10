@@ -17,10 +17,10 @@ class PostService {
     static async deletePost(userID, postID) {
         if(userID != null) {
             try{
-                await Post.deletePost(postID);
+                await Post.deletePost(userID, postID);
             }
             catch(err){
-                throw new Error(err.msg);
+                throw new Error(err.message);
             }
         }
         else {
@@ -30,10 +30,10 @@ class PostService {
     static async updatePost(userID, postID, newContent){
         if(userID != null) {
             try{
-                await Post.updatePost(postID, newContent);
+                await Post.updatePost(userID, postID, newContent);
             }
             catch(err){
-                throw new Error(err.msg);
+                throw new Error(err.message);
             }
         }
         else {

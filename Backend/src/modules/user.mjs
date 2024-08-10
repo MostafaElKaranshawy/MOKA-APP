@@ -13,7 +13,7 @@ class User{
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async removeUser(userID){
@@ -25,7 +25,7 @@ class User{
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
 }

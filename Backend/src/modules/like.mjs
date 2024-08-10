@@ -15,7 +15,7 @@ class Like {
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async addCommentLike(like){
@@ -30,7 +30,7 @@ class Like {
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getPostLikes(postID, offset, limit){
@@ -47,7 +47,7 @@ class Like {
             return likes;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getCommentLikes(commentID, offset, limit){
@@ -64,31 +64,55 @@ class Like {
             return likes;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
-    static async deletePostLike(like){
+    static async deletePostLike(userID, postID){
         try {
-            return await db.PostLike.destroy({
+            const like = db.PostLike.findOne({
                 where: {
-                    userID: like.userID
+                    userID: userID,
+                    postID: postID
                 }
             });
+            if(like == null){
+                throw new Error("like not found");
+            }
+            else{
+                await db.PostLike.destroy({
+                    where: {
+                        userID: userID,
+                        postID: postID
+                    }
+                });
+            }
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
-    static async deleteCommentLike(like){
+    static async deleteCommentLike(userID, commentID){
         try {
-            return await db.CommentLike.destroy({
+            const like = db.CommentLike.findOne({
                 where: {
-                    userID: like.userID
+                    userID: userID,
+                    commentID: commentID
                 }
             });
+            if(like == null){
+                throw new Error("like not found");
+            }
+            else{
+                await db.CommentLike.destroy({
+                    where: {
+                        userID: userID,
+                        commentID: commentID
+                    }
+                });
+            }
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
 }

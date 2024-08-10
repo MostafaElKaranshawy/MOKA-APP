@@ -19,7 +19,7 @@ class likeService {
     }
     static async removePostLike(like){
         try{
-            await Like.deletePostLike(like);
+            await Like.deletePostLike(like.userID, like.postID);
         }
         catch(err){
             throw new Error(err.message);
@@ -27,7 +27,7 @@ class likeService {
     }
     static async removeCommentLike(like){
         try{
-            await Like.deleteCommentLike(like);
+            await Like.deleteCommentLike(like.userID, like.commentID);
         }
         catch(err){
             throw new Error(err.message);

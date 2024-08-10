@@ -17,7 +17,7 @@ class Comment{
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getComments(postID, limit, offset){
@@ -36,35 +36,54 @@ class Comment{
             return comments;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
-    static async deleteComment(commentID){
+    static async deleteComment(userID,commentID, postID){
         try {
-            return await db.Comment.destroy({
+            const comment = await db.Comment.findOne({
                 where: {
                     commentID: commentID
                 }
             });
+            if(comment.userID != userID){
+                throw new Error("Only the owner of the comment can delete it");
+            }
+            else{
+                await db.Comment.destroy({
+                    where: {
+                        commentID: commentID
+                    }
+                });
+            }
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
-    static async updateComment(commentID, newContent){
+    static async updateComment(userID, commentID, newContent){
         try {
-            await db.Comment.update({
-                content: newContent
-            },
-            {
+            const comment = await db.Comment.findOne({
                 where: {
                     commentID: commentID
                 }
             });
-            
+            if(comment.userID != userID){
+                throw new Error("Only the owner of the comment can update it");
+            }
+            else{
+                await db.Comment.update({
+                    content: newContent
+                },
+                {
+                    where: {
+                        commentID: commentID
+                    }
+                });
+            }
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async deletePostComments(postID){
@@ -76,7 +95,7 @@ class Comment{
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
 }

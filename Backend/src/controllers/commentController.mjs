@@ -11,7 +11,7 @@ class commentController{
     }
     static async deleteComment(req, res){
         try{
-            await commentService.deleteComment(req.params.commentID, req.params.postID);
+            await commentService.deleteComment(req.user.userID,req.params.commentID, req.params.postID);
             return res.status(200).send("Comment deleted successfully");
         }
         catch(err){
@@ -21,7 +21,8 @@ class commentController{
     }
     static async updateComment(req, res){
         try{
-            await commentService.updateComment(req.params.commentID,req.params.postID, req.body.content);
+            console.log(req.user.userID)
+            await commentService.updateComment(req.user.userID,req.params.commentID,req.params.postID, req.body.content);
             return res.status(200).send("Comment updated successfully");
         }
         catch(err){

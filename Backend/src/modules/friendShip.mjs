@@ -29,7 +29,7 @@ class FriendShip{
             await friendship.setFriend2(user2);
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async acceptFriend(friendShip){
@@ -45,7 +45,7 @@ class FriendShip{
             await checkFriendShip.save();
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async removeFriend(friendShip){
@@ -60,7 +60,7 @@ class FriendShip{
             await checkFriendShip.destroy();
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getFriends(userID){
@@ -77,7 +77,7 @@ class FriendShip{
             return friends;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getFriendFriends(friendID){
@@ -90,7 +90,7 @@ class FriendShip{
             return friends;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
 }

@@ -11,23 +11,23 @@ class commentService {
             await Comment.addComment(comment);
         }
         catch(err){
-            throw new Error(err.msg);
+            throw new Error(err.message);
         }
     }
-    static async deleteComment(commentID, postID) {
+    static async deleteComment(userID,commentID, postID) {
         try{
-            await Comment.deleteComment(commentID, postID);
+            await Comment.deleteComment(userID,commentID, postID);
         }
         catch(err){
-            throw new Error(err.msg);
+            throw new Error(err.message);
         }
     }
-    static async updateComment(commentID, postID, newContent){
+    static async updateComment(userID, commentID, postID, newContent){
         try{
-            await Comment.updateComment(commentID, newContent);
+            await Comment.updateComment(userID,commentID, newContent);
         }
         catch(err){
-            throw new Error(err.msg);
+            throw new Error(err.message);
         }
     }
     static async getComments(postID, limit, offset){

@@ -1,4 +1,5 @@
 Backend/node_modules
-Frontend/node_modules
 Backend/.env
 notes.txt
+Backend/package-lock.json
+Backend/package.json

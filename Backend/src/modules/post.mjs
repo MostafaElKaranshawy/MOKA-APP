@@ -16,7 +16,7 @@ class Post {
             });
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getPosts(userID, limit, offset){
@@ -34,35 +34,56 @@ class Post {
             return posts;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
-    static async deletePost(postID){
+    static async deletePost(userId,postID){
         try {
-            return await db.Post.destroy({
+            const post = db.Post.findOne({
                 where: {
                     postID: postID
                 }
             });
+            if(post.userID != userId){
+                // console.log("post not deleted as user not the author")
+                throw new Error("Only the owner of the post can delete it");
+            }
+            else{
+                await db.Post.destroy({
+                    where: {
+                        postID: postID
+                    }
+                });
+            }
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
-    static async updatePost(postID, newContent){
+    static async updatePost(userID,postID, newContent){
         try {
-            await db.Post.update({
-                content: newContent
-            },
-            {
+            const post = db.Post.findOne({
                 where: {
                     postID: postID
                 }
             });
+            if(post.userID != userID){
+                throw new Error("Only the owner of the post can update it");
+            }
+            else{
+                await db.Post.update({
+                    content: newContent
+                },
+                {
+                    where: {
+                        postID: postID
+                    }
+                });
+            }
             
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
     static async getPost(postID){
@@ -75,7 +96,7 @@ class Post {
             return post;
         }
         catch(err){
-            return err;
+            throw new Error(err.message);
         }
     }
 }

@@ -48,7 +48,7 @@ class AuthService {
         return {
             accessToken: accessToken,
             user: user,
-            msg: "User Logged In Successfully!"
+            message: "User Logged In Successfully!"
         };
     }
 }
