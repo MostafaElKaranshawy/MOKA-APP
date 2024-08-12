@@ -1,27 +1,35 @@
-import DataBase from "../modules/dataBase.mjs";
+import User from "../modules/user.mjs";
 import bcrypt from 'bcrypt';
-import Session from "../modules/session.mjs";
 import jwt from 'jsonwebtoken';
-
-const db = new DataBase();
-db.connect();
-
+import SessionService from "./sessionService.mjs";
 class AuthService {
-    static async signUp(userName, email) {
-        const q = `SELECT * FROM users WHERE userName = ? OR email = ?`;
-        const result = await db.orm.query(q, [userName, email]);
+    static async signUp(user) {
+        try {
+            const checkEmail = await User.findOne({where: {
+                email: user.email
+            }});
+            if(checkEmail != null)throw new Error("Email already exists");
 
-        if (result.length !== 0) {
-            if (result[0].userName === userName) {
-                throw new Error("Username Already Exists Try Another");
-            } else if (result[0].email === email) {
-                throw new Error("Email Already Exists Try Another");
-            }
-            throw new Error("UserName or Email Already Exists");
+            const checkUserName = await User.findOne({where: {
+                userName: user.userName
+            }});
+            if(checkUserName != null)throw new Error("Username already exists");
+
+            const res = await User.create({
+                name : user.name,
+                userName : user.userName,
+                email : user.email,
+                password : user.password
+            });
+            if(!res)throw new Error("User not created");
+        }
+        catch(err){
+            console.log(err)
+            throw new Error(err.message);
         }
     }
     static async signIn(email, password) {
-        const user = await db.User.findOne({where: {
+        const user = await User.findOne({where: {
             email: email
         }});
         if(user == null)throw new Error("User Not Found");
@@ -34,13 +42,9 @@ class AuthService {
         const userToken = {
             userID: user.userID
         };
-        console.log(user);
-        console.log('userToken');
-        console.log(userToken);
         const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
-        console.log(accessToken);
         try {
-            await Session.createSession(user.userID, accessToken);
+            await SessionService.createSession(user.userID, accessToken);
         }
         catch (err){
             throw new Error(err.message);

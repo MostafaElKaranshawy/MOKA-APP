@@ -1,5 +1,4 @@
 import AuthService from "../services/authService.mjs";
-import User from "../modules/user.mjs";
 import bcrypt from 'bcrypt';
 const saltRounds = 10;
 
@@ -16,8 +15,7 @@ class AuthController {
             bio: req.body.bio || ''
         }
         try{
-            // await AuthService.signUp(user.userName, user.email);
-            await User.addUser(user);
+            await AuthService.signUp(user);
             res.status(201).send("User Added Successfully!");
         }
         catch(err){

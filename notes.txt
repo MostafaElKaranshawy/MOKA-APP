@@ -26,3 +26,15 @@ sessions:
 - photos, pdf, etc are on disk with db include path
 
 - pagination -> limit, offset -> mapped to pages (page No - 1) * limit = offset
+
+
+-> how to create from models files 
+migrations in database (check it out)
+how to call associations from the same class ?  (check gitup if stuck)
+
+
+DO:
+    define foriegn keys directly in Tables
+    migrations in database (check it out) try to change a column name
+    with every action check token and session, bothhh
+    put docker container and make requests to the docker container (locally)

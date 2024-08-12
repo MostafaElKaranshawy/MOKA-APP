@@ -1,5 +1,6 @@
 import express from 'express';
 import cors from 'cors';
+import {orm} from './config/orm.mjs';
 
 const app  = express();
 app.use(express.json());
@@ -18,6 +19,15 @@ app.use(commentRouter);
 app.use(likeRouter);
 app.use(friendShipRouter);
 
-app.listen(4000, () => {
-    console.log('Server is running on port 4000');
+Object.values(orm.models).forEach((model) => {
+    if (model.associate) {
+      model.associate(orm.models); // Pass the models object to each associate method
+    }
+});
+
+const PORT = 4000;
+orm.sync().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server is running on port ${PORT}`);
+    });
 });

@@ -16,9 +16,10 @@ class FriendShipController {
     }
     static async acceptFriend(req, res){
         try{
+            console.log(req.params.friendID, req.user.userID);
             const friendShip = {
-                userID: req.user.userID,
-                friendID: req.params.friendID
+                userID: req.params.friendID,
+                friendID: req.user.userID
             }
             await FriendShipService.acceptFriend(friendShip);
             return res.status(200).send("Friend Accepted");

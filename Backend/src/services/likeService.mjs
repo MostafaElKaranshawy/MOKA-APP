@@ -1,42 +1,110 @@
-import Like from "../modules/like.mjs";
+import Post from '../modules/post.mjs';
+import Comment from '../modules/comment.mjs';
+import PostLike from '../modules/postLike.mjs';
+import CommentLike from '../modules/commentLike.mjs';
 
 class likeService {
     static async addPostLike(like){
-        try{
-            await Like.addPostLike(like);
+        try {
+            const post = await Post.findOne({
+                where: {
+                    postID: like.postID
+                }
+            });
+            const result = await post.createPostLike({
+                userID : like.userID
+            });
+            if(!result){
+                throw new Error("Like not added");
+            }
         }
         catch(err){
             throw new Error(err.message);
         }
     }
     static async addCommentLike(like){
-        try{
-            await Like.addCommentLike(like);
+        try {
+            const comment = await Comment.findOne({
+                where: {
+                    commentID: like.commentID
+                }
+            });
+            const result = await comment.createCommentLike({
+                userID : like.userID
+            });
+            if(!result){
+                throw new Error("Like not added");
+            }
         }
         catch(err){
             throw new Error(err.message);
         }
     }
     static async removePostLike(like){
-        try{
-            await Like.deletePostLike(like.userID, like.postID);
+        try {
+            const like = PostLike.findOne({
+                where: {
+                    userID: like.userID,
+                    postID: like.postID
+                }
+            });
+            if(like == null){
+                throw new Error("like not found");
+            }
+            else{
+                const result = await PostLike.destroy({
+                    where: {
+                        userID: like.userID,
+                        postID: like.postID
+                    }
+                });
+                if(!result){
+                    throw new Error("Like not deleted");
+                }
+            }
         }
         catch(err){
             throw new Error(err.message);
         }
     }
     static async removeCommentLike(like){
-        try{
-            await Like.deleteCommentLike(like.userID, like.commentID);
+        try {
+            const like = CommentLike.findOne({
+                where: {
+                    userID: like.userID,
+                    commentID: like.commentID
+                }
+            });
+            if(like == null){
+                throw new Error("like not found");
+            }
+            else{
+                const result = await CommentLike.destroy({
+                    where: {
+                        userID: like.userID,
+                        commentID: like.commentID
+                    }
+                });
+                if(!result){
+                    throw new Error("Like not deleted");
+                }
+            }
         }
         catch(err){
             throw new Error(err.message);
         }
     }
     static async getPostLikes(postID, offset, limit){
-        try{
-            const likes = await Like.getPostLikes(postID, offset, limit);
-            if(likes == null)throw new Error('Cannot find Post');
+        try {
+            const post = await Post.findOne({
+                where: {
+                    postID: postID
+                }
+            })
+            const likes = await post.getPostLikes({
+                limit: limit,
+                offset : offset
+            });
             return likes;
         }
         catch(err){
@@ -44,9 +112,16 @@ class likeService {
         }
     }
     static async getCommentLikes(commentID, offset, limit){
-        try{
-            const likes = await Like.getCommentLikes(commentID, offset, limit);
-            if(likes == null)throw new Error('Cannot find Comment');
+        try {
+            const comment = await Comment.findOne({
+                where: {
+                    commentID: commentID
+                }
+            })
+            const likes = await comment.getCommentLikes({
+                offset : offset,
+                limit : limit
+            });
             return likes;
         }
         catch(err){

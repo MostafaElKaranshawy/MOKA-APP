@@ -1,6 +1,6 @@
+import User from "../modules/user.mjs";
 import Post from "../modules/post.mjs";
-import Comment from "../modules/comment.mjs";
-import Like from "../modules/like.mjs";
+
 class PostService {
     static async createPost(userID, content) {
         if(userID != null) {
@@ -8,44 +8,97 @@ class PostService {
                 userID : userID,
                 content : content
             }
-            Post.addPost(post);
+            try {
+                const user = await User.findOne({
+                    where: {
+                        userID: post.userID
+                    }
+                });
+                const result = await user.createPost({
+                    content : post.content
+                });
+                if(!result){
+                    throw new Error("Post not added");
+                }
+            }
+            catch(err){
+                throw new Error(err.message);
+            }
         }
         else {
             throw new Error("User Not Found");
         }
     }
     static async deletePost(userID, postID) {
-        if(userID != null) {
-            try{
-                await Post.deletePost(userID, postID);
+        try {
+            const post = Post.findOne({
+                where: {
+                    postID: postID
+                }
+            });
+            if(post.userID != userID){
+                // console.log("post not deleted as user not the author")
+                throw new Error("Only the owner of the post can delete it");
             }
-            catch(err){
-                throw new Error(err.message);
+            else{
+                const result = await Post.destroy({
+                    where: {
+                        postID: postID
+                    }
+                });
+                if(!result){
+                    throw new Error("Post not deleted");
+                }
             }
         }
-        else {
-            throw new Error("User Not Found");
+        catch(err){
+            throw new Error(err.message);
         }
     }
     static async updatePost(userID, postID, newContent){
-        if(userID != null) {
-            try{
-                await Post.updatePost(userID, postID, newContent);
+        try {
+            const post = Post.findOne({
+                where: {
+                    postID: postID
+                }
+            });
+            if(post.userID != userID){
+                throw new Error("Only the owner of the post can update it");
             }
-            catch(err){
-                throw new Error(err.message);
+            else{
+                const result = await Post.update({
+                    content: newContent
+                },
+                {
+                    where: {
+                        postID: postID
+                    }
+                });
+                if(!result){
+                    throw new Error("Post not updated");
+                }
             }
         }
-        else {
-            throw new Error("User Not Found");
+        catch(err){
+            throw new Error(err.message);
         }
     }
     static async getPosts(userID, limit, offset) {
-        if(userID != null) {
-            return await Post.getPosts(userID, limit, offset);
-        }   
-        else{
-            throw new Error("User Not Found");
+        try {
+            const user = await User.findOne({
+                where: {
+                    userID: userID
+                }
+            });
+            const posts = await user.getPosts({
+                offset: offset || 0,
+                limit: limit || 10
+            });
+            console.log(posts);
+            return posts;
+        }
+        catch(err){
+            throw new Error(err.message);
         }
     }
 }

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 import dotenv from 'dotenv';
-import Session from '../modules/session.mjs';
+import SessionService from '../services/sessionService.mjs';
 
 dotenv.config();
 
@@ -16,7 +16,8 @@ const CheckUser = async (req, res, next) => {
             req.user = user;
             console.log(user);
         })
-        await Session.checkSession(req.user.userID);
+        const session = await SessionService.checkSession(req.user.userID, token);
+        if(session == null)return res.status(401).send("Session not found");
     }
     catch(err){
         return res.status(403).send(err.message);
