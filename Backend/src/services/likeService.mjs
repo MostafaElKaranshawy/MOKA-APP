@@ -42,7 +42,7 @@ class likeService {
     }
     static async removePostLike(like){
         try {
-            const like = PostLike.findOne({
+            const like = await PostLike.findOne({
                 where: {
                     userID: like.userID,
                     postID: like.postID
@@ -69,7 +69,7 @@ class likeService {
     }
     static async removeCommentLike(like){
         try {
-            const like = CommentLike.findOne({
+            const like = await CommentLike.findOne({
                 where: {
                     userID: like.userID,
                     commentID: like.commentID

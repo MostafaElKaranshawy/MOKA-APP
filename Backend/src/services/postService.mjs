@@ -31,7 +31,7 @@ class PostService {
     }
     static async deletePost(userID, postID) {
         try {
-            const post = Post.findOne({
+            const post = await Post.findOne({
                 where: {
                     postID: postID
                 }
@@ -57,7 +57,7 @@ class PostService {
     }
     static async updatePost(userID, postID, newContent){
         try {
-            const post = Post.findOne({
+            const post = await Post.findOne({
                 where: {
                     postID: postID
                 }
