@@ -1,28 +1,47 @@
-import {orm, DataTypes } from "../config/orm.mjs";
+import SessionDefinition from './definitions/sessionDefinition.mjs'
+import UserDefinition from './definitions/userDefinition.mjs'
 
-const Session = orm.define('session', 
-    {
-        SessionID : {
-            type: DataTypes.INTEGER,
-            primaryKey: true,
-            autoIncrement: true
-        },
-        token: {
-            type: DataTypes.TEXT,
-            allowNull: false,
-        },
-        expiredAt : {
-            type: DataTypes.TIME,
-            allowNull: false
+export default class Session {
+    static async createSession(userID, accessToken){
+        try {
+            const user = await UserDefinition.findOne({
+                where: {
+                    userID: userID
+                }
+            });
+            const session = await user.createSession({
+                token : accessToken,
+                expiredAt: new Date(new Date().getTime() + 3*24*60*60*1000)
+            });
+            if(!session){
+                throw new Error("Session not created");
+            }
+            return session;
         }
-    },
-    {
-        timestamps: true
+        catch(err){
+            throw new Error(err.message);
+        }
     }
-);
-
-Session.associate = async (models) =>{
-    const {user, session} = models;
-    session.belongsTo(user, {foreignKey : 'userID'});
+    static async checkSession(userID, token){
+        try {
+            let session = await SessionDefinition.findOne({
+                where: {
+                    token: token,
+                    userID: userID
+                }
+            });
+            if(session == null){
+                throw new Error("Session not found");
+            }
+            if(new Date(session.expiredAt) <= new Date()){
+                throw new Error("Session Expired");
+            }
+            session.expiredAt = new Date(new Date().getTime() + 3*24*60*60*1000);
+            await session.save();
+            return session;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
 }
-export default Session;

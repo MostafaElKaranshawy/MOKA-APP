@@ -2,7 +2,14 @@ import commentService from '../services/commentService.mjs';
 class commentController{
     static async addComment(req, res){
         try{
-            await commentService.createComment(req.params.postID, req.body.content, req.user.userID);
+            const userID = req.user.userID;
+            const content = req.body.content;
+            const postID = parseInt(req.params.postID);
+            if(userID == null || content == null || postID == null || isNaN(postID)){
+                throw new Error("Invalid Parameters");
+            }
+
+            await commentService.createComment(postID, content, userID);
             return res.status(200).send("Comment created successfully");
         }
         catch(err){
@@ -11,7 +18,13 @@ class commentController{
     }
     static async deleteComment(req, res){
         try{
-            await commentService.deleteComment(req.user.userID,req.params.commentID, req.params.postID);
+            const userID = req.user.userID;
+            const commentID = parseInt(req.params.commentID);
+            const postID = parseInt(req.params.postID);
+            if(userID == null || commentID == null || isNaN(commentID) || postID == null || isNaN(postID)){
+                throw new Error("Invalid Parameters");
+            }
+            await commentService.deleteComment(userID, commentID, postID);
             return res.status(200).send("Comment deleted successfully");
         }
         catch(err){
@@ -21,8 +34,14 @@ class commentController{
     }
     static async updateComment(req, res){
         try{
-            console.log(req.user.userID)
-            await commentService.updateComment(req.user.userID,req.params.commentID,req.params.postID, req.body.content);
+            const userID = req.user.userID;
+            const commentID = parseInt(req.params.commentID);
+            const postID = parseInt(req.params.postID);
+            const content = req.body.content;
+            if(userID == null || commentID == null || isNaN(commentID) || postID == null || isNaN(postID) || content == null){
+                throw new Error("Invalid Parameters");
+            }
+            await commentService.updateComment(userID, commentID, postID, content);
             return res.status(200).send("Comment updated successfully");
         }
         catch(err){
@@ -31,10 +50,14 @@ class commentController{
     }
     static async getComments(req, res){
         try {
+            const postID = parseInt(req.params.postID);
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const offset = (page - 1) * limit;
-            const comments = await commentService.getComments(req.params.postID, limit, offset);
+            if(isNaN(page) || isNaN(limit)){
+                throw new Error("Invalid Parameters");
+            }
+            const comments = await commentService.getComments(postID, limit, offset);
             return res.status(200).send(comments);
         }
         catch(err){

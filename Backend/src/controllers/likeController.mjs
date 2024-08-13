@@ -2,12 +2,13 @@ import likeService from '../services/likeService.mjs';
 
 class likeController {
     static async addPostLike(req, res) {
-        const like = {
-            postID : req.params.postID,
-            userID : req.user.userID,
+        const postID = parseInt(req.params.postID);
+        const userID = req.user.userID;
+        if(isNaN(postID || userID == null)){
+            return res.status(404).send("Invalid Parameters");
         }
         try{
-            await likeService.addPostLike(like);
+            await likeService.addPostLike(userID, postID);
             return res.status(200).send("like added successfully");
         }
         catch(err){
@@ -15,12 +16,13 @@ class likeController {
         }
     }
     static async addCommentLike(req, res) {
-        const like = {
-            commentID : req.params.postID,
-            userID : req.user.userID,
+        const commentID = parseInt(req.params.commentID);
+        const userID = req.user.userID;
+        if(isNaN(commentID || userID == null)){
+            return res.status(404).send("Invalid Parameters");
         }
         try{
-            await likeService.addCommentLike(like);
+            await likeService.addCommentLike(userID, commentID);
             return res.status(200).send("like added successfully");
         }
         catch(err){
@@ -28,12 +30,14 @@ class likeController {
         }
     }
     static async removePostLike(req, res) {
-        const like = {
-            postID : req.params.postID,
-            userID : req.user.userID,
+        const postID = parseInt(req.params.postID);
+        const userID = req.user.userID;
+        if(isNaN(postID || userID == null)){
+            return res.status(404).send("Invalid Parameters");
         }
+
         try{
-            await likeService.removePostLike(like)
+            await likeService.removePostLike(userID, postID);
             return res.status(200).send("like removed successfully");
         }
         catch(err){
@@ -41,13 +45,13 @@ class likeController {
         }
     }
     static async removeCommentLike(req, res) {
-        const like = {
-            likeID : req.params.likeID,
-            commentID : req.params.commentID,
-            userID : req.user.userID,
+        const commentID = parseInt(req.params.commentID)
+        const userID = req.user.userID
+        if(isNaN(commentID) || userID == null){
+            return res.status(404).send("Invalid Parameters");
         }
         try{
-            await likeService.removeCommentLike(like)
+            await likeService.removeCommentLike(userID, commentID);
             return res.status(200).send("like removed successfully");
         }
         catch(err){
@@ -57,10 +61,15 @@ class likeController {
     static async getPostLikes(req, res) {
         try{
             if(req.params.postID != null){
+                const postID = parseInt(req.params.postID);
                 const page = parseInt(req.query.page) || 1;
                 const limit = parseInt(req.query.limit) || 10;
+                if(isNaN(postID) || isNaN(page) || isNaN(limit)){
+                    return res.status(404).send("Invalid Parameters");
+                }
+
                 const offset = (page - 1) * limit;
-                const likes = await likeService.getPostLikes(req.params.postID, offset, limit);
+                const likes = await likeService.getPostLikes(postID, offset, limit);
                 if(likes == null)return res.status(404).send("cannot find post");
                 return res.status(200).send(likes);
             }

@@ -1,54 +1,28 @@
-import User from "../modules/user.mjs";
 import Post from "../modules/post.mjs";
 
 class PostService {
     static async createPost(userID, content) {
-        if(userID != null) {
-            const post = {
-                userID : userID,
-                content : content
-            }
-            try {
-                const user = await User.findOne({
-                    where: {
-                        userID: post.userID
-                    }
-                });
-                const result = await user.createPost({
-                    content : post.content
-                });
-                if(!result){
-                    throw new Error("Post not added");
-                }
-            }
-            catch(err){
-                throw new Error(err.message);
+        if(userID == null || content == null){
+            throw new Error("Invalid Parameters");
+        }
+        try {
+            const res = await Post.createPost(userID, content);
+            if(!res){
+                throw new Error("Post not added");
             }
         }
-        else {
-            throw new Error("User Not Found");
+        catch(err){
+            throw new Error(err.message);
         }
     }
     static async deletePost(userID, postID) {
         try {
-            const post = await Post.findOne({
-                where: {
-                    postID: postID
-                }
-            });
-            if(post.userID != userID){
-                // console.log("post not deleted as user not the author")
-                throw new Error("Only the owner of the post can delete it");
+            if(userID == null || postID == null){
+                throw new Error("invalid Parameters");
             }
-            else{
-                const result = await Post.destroy({
-                    where: {
-                        postID: postID
-                    }
-                });
-                if(!result){
-                    throw new Error("Post not deleted");
-                }
+            const res = await Post.deletePost(userID, postID);
+            if(!res){
+                throw new Error("Post not deleted");
             }
         }
         catch(err){
@@ -56,45 +30,22 @@ class PostService {
         }
     }
     static async updatePost(userID, postID, newContent){
+        if(userID == null || postID == null || newContent == null){
+            throw new Error("Invalid Parameters");
+        }
         try {
-            const post = await Post.findOne({
-                where: {
-                    postID: postID
-                }
-            });
-            if(post.userID != userID){
-                throw new Error("Only the owner of the post can update it");
-            }
-            else{
-                const result = await Post.update({
-                    content: newContent
-                },
-                {
-                    where: {
-                        postID: postID
-                    }
-                });
-                if(!result){
-                    throw new Error("Post not updated");
-                }
-            }
+            
         }
         catch(err){
             throw new Error(err.message);
         }
     }
     static async getPosts(userID, limit, offset) {
+        if(userID == null || limit == null || offset == null){
+            throw new Error("Invalid Parameters");
+        }
         try {
-            const user = await User.findOne({
-                where: {
-                    userID: userID
-                }
-            });
-            const posts = await user.getPosts({
-                offset: offset || 0,
-                limit: limit || 10
-            });
-            console.log(posts);
+            const posts = await Post.getPosts(userID, limit, offset);
             return posts;
         }
         catch(err){

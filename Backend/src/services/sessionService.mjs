@@ -1,17 +1,12 @@
-import User from "../modules/user.mjs";
+// import User from "../modules/user.mjs";
 import Session from "../modules/session.mjs";
 class SessionService{
     static async createSession(userID, accessToken){
         try {
-            const user = await User.findOne({
-                where: {
-                    userID: userID
-                }
-            });
-            const session = await user.createSession({
-                token : accessToken,
-                expiredAt: new Date(new Date().getTime() + 3*24*60*60*1000)
-            });
+            const session = Session.createSession(userID, accessToken)
+            if(!session){
+                throw new Error("Session not created");
+            }
             return session;
         }
         catch(err){
@@ -20,27 +15,10 @@ class SessionService{
     }
     static async checkSession(userID, token){
         try {
-            const user = await User.findOne({
-                where: {
-                    userID: userID
-                }
-            })
-            let session = await user.getSessions({
-                where: {
-                    token: token
-                }
-            });
-            if(session == null || session.length == 0){
+            const session = Session.checkSession(userID, token);
+            if(!session){
                 throw new Error("Session not found");
-            }
-            else{
-                session = session[0];
-            }
-            if(new Date(session.expiredAt) <= new Date()){
-                throw new Error("Session Expired");
-            }
-            session.expiredAt = new Date(new Date().getTime() + 3*24*60*60*1000);
-            await session.save();
+            } 
             return session;
         }
         catch(err){

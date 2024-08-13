@@ -8,6 +8,6 @@ likeRouter.get('/posts/:postID/likes', paginationValidation ,likeController.getP
 likeRouter.get('/posts/:postID/comments/:commentID/likes', paginationValidation ,likeController.getCommentLikes);               // get likes on a comment on a post
 likeRouter.post('/posts/:postID/like', likeController.addPostLike);                                        // add likes on a post
 likeRouter.post('/posts/:postID/comments/:commentID/like', likeController.addCommentLike);                 // add likes on a comment on a post
-likeRouter.delete('/posts/:postID/likes/', likeController.removePostLike);                           // remove likes on a post
-likeRouter.delete('/posts/:postID/comments/:commentID/likes/', likeController.removeCommentLike);    // remove likes on a comment on a post
+likeRouter.delete('/posts/:postID/like', likeController.removePostLike);                           // remove likes on a post
+likeRouter.delete('/posts/:postID/comments/:commentID/like', likeController.removeCommentLike);    // remove likes on a comment on a post
 export default likeRouter;

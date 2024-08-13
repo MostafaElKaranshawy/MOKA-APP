@@ -1,72 +1,92 @@
 import FriendShipService from "../services/friendShipService.mjs";
 
 class FriendShipController {
-    static async addFriend(req, res){
+    static async sendFriendRequest(req, res){
+        const friendID = parseInt(req.params.friendID);
+        const userID = req.user.userID;
+        if(isNaN(friendID)){
+            return res.status(400).send("Invalid friendID");
+        }
+        if(friendID == userID){
+            return res.status(400).send("Cannot send friend request to yourself");
+        }
         try{
-            const friendShip = {
-                userID: req.user.userID,
-                friendID: req.params.friendID
-            }
-            await FriendShipService.addFriend(friendShip);
+            await FriendShipService.sendFriendRequest(userID, friendID);
             return res.status(200).send("Friend Request Sent");
         }
         catch(err){
             return res.status(400).send(err.message);
         }
     }
-    static async acceptFriend(req, res){
+    static async acceptFriendRequest(req, res){
+        const friendID = parseInt(req.params.friendID);
+        const userID = req.user.userID;
+        if(isNaN(friendID)){
+            return res.status(400).send("Invalid friendID");
+        }
+        if(friendID == userID){
+            return res.status(400).send("Cannot accept friend request from yourself");
+        }
         try{
-            console.log(req.params.friendID, req.user.userID);
-            const friendShip = {
-                userID: req.params.friendID,
-                friendID: req.user.userID
-            }
-            await FriendShipService.acceptFriend(friendShip);
+            await FriendShipService.acceptFriendRequest(userID, friendID);
             return res.status(200).send("Friend Request Accepted");
         }
         catch(err){
             return res.status(400).send(err.message);
         }
     }
-
-    static async removeFriend(req, res){
+    static async removeFriendRequest(req, res){
+        const friendID = parseInt(req.params.friendID);
+        const userID = req.user.userID;
+        if(isNaN(friendID)){
+            return res.status(400).send("Invalid friendID");
+        }
+        if(friendID == userID){
+            return res.status(400).send("Cannot remove yourself from friend list");
+        }
         try{
-            const friendShip = {
-                userID: req.user.userID,
-                friendID: req.params.friendID
-            }
-            await FriendShipService.removeFriend(friendShip);
+            await FriendShipService.removeFriendRequest(userID, friendID);
             return res.status(200).send("Friend Removed");
         }
         catch(err){
             return res.status(400).send(err.message);
         }
     }
-    static async getFriends(req, res){
-        try{
-            let friends = await FriendShipService.getFriends(req.user.userID);
-            return res.status(200).send(friends);
-        }
-        catch(err){
-            return res.status(400).send(err.message);
-        }
-    }
     static async getFriendRequests(req, res){
+        const userID = req.user.userID;
         try{
-            let friendRequests = await FriendShipService.getFriendRequests(req.user.userID);
+            const friendRequests = await FriendShipService.getFriendRequests(userID);
             return res.status(200).send(friendRequests);
         }
         catch(err){
             return res.status(400).send(err.message);
         }
     }
-    static async getFriendFriends(req, res){
+    static async getFriends(req, res){
+        const userID = req.user.userID;
         try{
-            let friends = await FriendShipService.getFriendFriends(req.params.friendID);
-            res.status(200).send(friends);
+            const friends = await FriendShipService.getFriends(userID);
+            return res.status(200).send(friends);
         }
         catch(err){
-            res.status(400).send(err.message);
+            return res.status(400).send(err.message);
+        }
+    }
+    static async removeFriend(req, res){
+        const friendID = parseInt(req.params.friendID);
+        const userID = req.user.userID;
+        if(isNaN(friendID)){
+            return res.status(400).send("Invalid friendID");
+        }
+        if(friendID == userID){
+            return res.status(400).send("Cannot remove yourself from friend list");
+        }
+        try{
+            await FriendShipService.removeFriend(userID, friendID);
+            return res.status(200).send("Friend Removed");
+        }
+        catch(err){
+            return res.status(400).send(err.message);
         }
     }
 }

@@ -1,76 +1,26 @@
-import Post from '../modules/post.mjs';
-import Comment from '../modules/comment.mjs';
 import PostLike from '../modules/postLike.mjs';
 import CommentLike from '../modules/commentLike.mjs';
 
 class likeService {
-    static async addPostLike(like){
+    static async addPostLike(userID, postID){
         try {
-            const post = await Post.findOne({
-                where: {
-                    postID: like.postID
-                }
-            });
-            if(!post){
-                throw new Error("Post not found");
-            }
-            const [result, created] = await PostLike.findOrCreate({
-                where: {
-                    userID: like.userID,
-                    postID: like.postID
-                }
-            });
-            if(!created){
-                throw new Error("Like already exists");
-
-            }
-            await result.setPost(post);
-            if(!result){
-                throw new Error("Like not added");
-            }
+            await PostLike.addPostLike(postID, userID);
         }
         catch(err){
             throw new Error(err.message);
         }
     }
-    static async addCommentLike(like){
+    static async addCommentLike(userID, commentID){
         try {
-            const comment = await Comment.findOne({
-                where: {
-                    commentID: like.commentID
-                }
-            });
-            if(!comment){
-                throw new Error("Comment not found");
-            }
-            console.log(like.commentID, like.userID);
-            const [result, created] = await CommentLike.findOrCreate({
-                where: {
-                    commentID: like.commentID,
-                    userID: like.userID
-                }
-            });
-            if(!created){
-                throw new Error("Like already exists");
-            }
-            await result.setComment(comment);
-
-            if(!result){
-                throw new Error("Like not added");
-            }
+            await CommentLike.addCommentLike(userID, commentID);
         }
         catch(err){
             throw new Error(err.message);
         }
     }
-    static async removePostLike(likeDTO){
+    static async removePostLike(userID, postID){
         try {
-            const result = await PostLike.destroy({
-                where: {
-                    userID: likeDTO.userID,
-                    postID: likeDTO.postID
-                }
-            });
+            const result = await PostLike.removePostLike(userID, postID);
             if(!result){
                 throw new Error("Like not Exist");
             }
@@ -79,17 +29,9 @@ class likeService {
             throw new Error(err.message);
         }
     }
-    static async removeCommentLike(likeDTO){
+    static async removeCommentLike(userID, commentID){
         try {
-            const result = await CommentLike.destroy({
-                where: {
-                    userID: likeDTO.userID,
-                    commentID: likeDTO.commentID
-                }
-            });
-            if(!result){
-                throw new Error("Like not Exist");
-            }    
+            const result = await CommentLike.removeCommentLike(userID, commentID);
         }
         catch(err){
             throw new Error(err.message);
@@ -97,15 +39,7 @@ class likeService {
     }
     static async getPostLikes(postID, offset, limit){
         try {
-            const post = await Post.findOne({
-                where: {
-                    postID: postID
-                }
-            })
-            const likes = await post.getPostLikes({
-                limit: limit,
-                offset : offset
-            });
+            const likes = await PostLike.getPostLikes(postID, offset, limit);
             return likes;
         }
         catch(err){
@@ -114,18 +48,7 @@ class likeService {
     }
     static async getCommentLikes(commentID, offset, limit){
         try {
-            const comment = await Comment.findOne({
-                where: {
-                    commentID: commentID
-                }
-            })
-            if(!comment){
-                throw new Error("Comment not found");
-            }
-            const likes = await comment.getCommentLikes({
-                offset : offset,
-                limit : limit
-            });
+            const likes = await comment.getCommentLikes(commentID, offset, limit);
             return likes;
         }
         catch(err){

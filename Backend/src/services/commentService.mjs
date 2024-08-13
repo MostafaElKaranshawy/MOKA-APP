@@ -1,23 +1,13 @@
 import Comment from "../modules/comment.mjs";
-import Post from "../modules/post.mjs";
+
 class commentService {
     static async createComment(postID, content, userID) {
-        const comment = {
-            postID: postID,
-            content: content,
-            userID: userID
-        }
         try {
-            const post = await Post.findOne({
-                where: {
-                    postID: comment.postID
-                }
-            });
-            const result = await post.createComment({
-                content : comment.content,
-                userID : comment.userID
-            });
-            if(!result){
+            if(userID == null || content == null || postID == null || isNaN(postID)){
+                throw new Error("Invalid Parameters");
+            }
+            const res = await Comment.createComment(postID, content, userID);
+            if(!res){
                 throw new Error("Comment not added");
             }
         }
@@ -27,23 +17,12 @@ class commentService {
     }
     static async deleteComment(userID,commentID, postID) {
         try {
-            const comment = await Comment.findOne({
-                where: {
-                    commentID: commentID
-                }
-            });
-            if(comment.userID != userID){
-                throw new Error("Only the owner of the comment can delete it");
+            if(userID == null || commentID == null || isNaN(commentID) || postID == null || isNaN(postID)){
+                throw new Error("Invalid Parameters");
             }
-            else{
-                const result = await Comment.destroy({
-                    where: {
-                        commentID: commentID
-                    }
-                });
-                if(!result){
-                    throw new Error("Comment not deleted");
-                }
+            const res = await Comment.deleteComment(userID, postID, commentID);
+            if(!res){
+                throw new Error("Comment not deleted");
             }
         }
         catch(err){
@@ -52,26 +31,12 @@ class commentService {
     }
     static async updateComment(userID, commentID, postID, newContent){
         try {
-            const comment = await Comment.findOne({
-                where: {
-                    commentID: commentID
-                }
-            });
-            if(comment.userID != userID){
-                throw new Error("Only the owner of the comment can update it");
+            if(userID == null || commentID == null || isNaN(commentID) || postID == null || isNaN(postID) || newContent == null){
+                throw new Error("Invalid Parameters");
             }
-            else{
-                const result = await Comment.update({
-                    content: newContent
-                },
-                {
-                    where: {
-                        commentID: commentID
-                    }
-                });
-                if(!result){
-                    throw new Error("Comment not updated");
-                }
+            const res = await Comment.updateComment(userID, commentID, postID, newContent);
+            if(!res){
+                throw new Error("Comment not updated");
             }
         }
         catch(err){
@@ -80,17 +45,10 @@ class commentService {
     }
     static async getComments(postID, limit, offset){
         try {
-            const post = await Post.findOne({
-                where: {
-                    postID: postID
-                },
-            })
-            const comments = await post.getComments(
-                {
-                    limit: limit || 10,
-                    offset: offset || 0
-                }
-            );
+            if(isNaN(limit) || isNaN(offset) || postID == null || isNaN(postID)){
+                throw new Error("Invalid Parameters");
+            }
+            const comments = await Comment.getComments(postID, limit, offset);
             return comments;
         }
         catch(err){
