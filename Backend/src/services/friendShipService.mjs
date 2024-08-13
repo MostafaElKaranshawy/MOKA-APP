@@ -60,8 +60,7 @@ class FriendShipService {
         try {
             const checkFriendShip = await FriendShip.findOne({
                 where: {
-                    userID: friendShip.userID,
-                    friendID: friendShip.friendID
+                    [Op.or]: [{ userID: friendShip.userID, friendID: friendShip.friendID },{ userID: friendShip.friendID, friendID: friendShip.userID }]
                 }
             });
             if(checkFriendShip == null)throw new Error("Cannot find friendship");
@@ -86,6 +85,20 @@ class FriendShipService {
             });
             console.log(friends);
             return friends;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
+    static async getFriendRequests(userID){
+        try {
+            const friendRequests = await FriendShip.findAll({
+                where: {
+                    friendID: userID,
+                    status: 0
+                }
+            });
+            return friendRequests;
         }
         catch(err){
             throw new Error(err.message);

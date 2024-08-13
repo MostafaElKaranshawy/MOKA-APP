@@ -8,7 +8,7 @@ class FriendShipController {
                 friendID: req.params.friendID
             }
             await FriendShipService.addFriend(friendShip);
-            return res.status(200).send("Friend Added");
+            return res.status(200).send("Friend Request Sent");
         }
         catch(err){
             return res.status(400).send(err.message);
@@ -22,7 +22,7 @@ class FriendShipController {
                 friendID: req.user.userID
             }
             await FriendShipService.acceptFriend(friendShip);
-            return res.status(200).send("Friend Accepted");
+            return res.status(200).send("Friend Request Accepted");
         }
         catch(err){
             return res.status(400).send(err.message);
@@ -46,6 +46,15 @@ class FriendShipController {
         try{
             let friends = await FriendShipService.getFriends(req.user.userID);
             return res.status(200).send(friends);
+        }
+        catch(err){
+            return res.status(400).send(err.message);
+        }
+    }
+    static async getFriendRequests(req, res){
+        try{
+            let friendRequests = await FriendShipService.getFriendRequests(req.user.userID);
+            return res.status(200).send(friendRequests);
         }
         catch(err){
             return res.status(400).send(err.message);

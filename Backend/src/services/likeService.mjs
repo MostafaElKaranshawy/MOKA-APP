@@ -11,9 +11,20 @@ class likeService {
                     postID: like.postID
                 }
             });
-            const result = await post.createPostLike({
-                userID : like.userID
+            if(!post){
+                throw new Error("Post not found");
+            }
+            const [result, created] = await PostLike.findOrCreate({
+                where: {
+                    userID: like.userID,
+                    postID: like.postID
+                }
             });
+            if(!created){
+                throw new Error("Like already exists");
+
+            }
+            await result.setPost(post);
             if(!result){
                 throw new Error("Like not added");
             }
@@ -29,9 +40,21 @@ class likeService {
                     commentID: like.commentID
                 }
             });
-            const result = await comment.createCommentLike({
-                userID : like.userID
+            if(!comment){
+                throw new Error("Comment not found");
+            }
+            console.log(like.commentID, like.userID);
+            const [result, created] = await CommentLike.findOrCreate({
+                where: {
+                    commentID: like.commentID,
+                    userID: like.userID
+                }
             });
+            if(!created){
+                throw new Error("Like already exists");
+            }
+            await result.setComment(comment);
+
             if(!result){
                 throw new Error("Like not added");
             }
@@ -40,55 +63,33 @@ class likeService {
             throw new Error(err.message);
         }
     }
-    static async removePostLike(like){
+    static async removePostLike(likeDTO){
         try {
-            const like = await PostLike.findOne({
+            const result = await PostLike.destroy({
                 where: {
-                    userID: like.userID,
-                    postID: like.postID
+                    userID: likeDTO.userID,
+                    postID: likeDTO.postID
                 }
             });
-            if(like == null){
-                throw new Error("like not found");
-            }
-            else{
-                const result = await PostLike.destroy({
-                    where: {
-                        userID: like.userID,
-                        postID: like.postID
-                    }
-                });
-                if(!result){
-                    throw new Error("Like not deleted");
-                }
+            if(!result){
+                throw new Error("Like not Exist");
             }
         }
         catch(err){
             throw new Error(err.message);
         }
     }
-    static async removeCommentLike(like){
+    static async removeCommentLike(likeDTO){
         try {
-            const like = await CommentLike.findOne({
+            const result = await CommentLike.destroy({
                 where: {
-                    userID: like.userID,
-                    commentID: like.commentID
+                    userID: likeDTO.userID,
+                    commentID: likeDTO.commentID
                 }
             });
-            if(like == null){
-                throw new Error("like not found");
-            }
-            else{
-                const result = await CommentLike.destroy({
-                    where: {
-                        userID: like.userID,
-                        commentID: like.commentID
-                    }
-                });
-                if(!result){
-                    throw new Error("Like not deleted");
-                }
-            }
+            if(!result){
+                throw new Error("Like not Exist");
+            }    
         }
         catch(err){
             throw new Error(err.message);
@@ -118,6 +119,9 @@ class likeService {
                     commentID: commentID
                 }
             })
+            if(!comment){
+                throw new Error("Comment not found");
+            }
             const likes = await comment.getCommentLikes({
                 offset : offset,
                 limit : limit
