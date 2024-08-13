@@ -34,7 +34,7 @@ class PostService {
             throw new Error("Invalid Parameters");
         }
         try {
-            
+            await Post.updatePost(userID, postID, newContent);
         }
         catch(err){
             throw new Error(err.message);

@@ -8,6 +8,7 @@ export default class Comment {
                 postID: postID
             }
         });
+        if(post == null)throw new Error("Post not found")
         const result = await post.createComment({
             content: content,
             userID: userID
