@@ -1,0 +1,182 @@
+[
+    {
+        "postID": 1,
+        "authorName": "Lucky",
+        "time": "8/11/2024",
+        "liked": false,
+        "likes": 17,
+        "comments": 55,
+        "content": "Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst."
+    },
+    {
+        "postID": 2,
+        "authorName": "Alejoa",
+        "time": "2/28/2024",
+        "liked": true,
+        "likes": 39,
+        "comments": 37,
+        "content": "Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero."
+    },
+    {
+        "postID": 3,
+        "authorName": "Therine",
+        "time": "10/31/2023",
+        "liked": true,
+        "likes": 17,
+        "comments": 28,
+        "content": "Donec semper sapien a libero."
+    },
+    {
+        "postID": 4,
+        "authorName": "Melva",
+        "time": "5/7/2024",
+        "liked": false,
+        "likes": 74,
+        "comments": 97,
+        "content": "In est risus, auctor sed, tristique in, tempus sit amet, sem. Fusce consequat."
+    },
+    {
+        "postID": 5,
+        "authorName": "Carline",
+        "time": "5/1/2024",
+        "liked": true,
+        "likes": 8,
+        "comments": 10,
+        "content": "Sed ante. Vivamus tortor. Duis mattis egestas metus."
+    },
+    {
+        "postID": 6,
+        "authorName": "Symon",
+        "time": "11/3/2023",
+        "liked": true,
+        "likes": 38,
+        "comments": 49,
+        "content": "Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus."
+    },
+    {
+        "postID": 7,
+        "authorName": "Morgan",
+        "time": "4/28/2024",
+        "liked": true,
+        "likes": 61,
+        "comments": 64,
+        "content": "Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti. Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet."
+    },
+    {
+        "postID": 8,
+        "authorName": "Chiarra",
+        "time": "10/5/2023",
+        "liked": false,
+        "likes": 97,
+        "comments": 86,
+        "content": "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue."
+    },
+    {
+        "postID": 9,
+        "authorName": "Shalne",
+        "time": "12/30/2023",
+        "liked": false,
+        "likes": 53,
+        "comments": 23,
+        "content": "Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia. Aenean sit amet justo. Morbi ut odio. Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim."
+    },
+    {
+        "postID": 10,
+        "authorName": "Ellsworth",
+        "time": "10/29/2023",
+        "liked": true,
+        "likes": 75,
+        "comments": 42,
+        "content": "Aliquam quis turpis eget elit sodales scelerisque. Mauris sit amet eros. Suspendisse accumsan tortor quis turpis. Sed ante."
+    },
+    {
+        "postID": 11,
+        "authorName": "Burg",
+        "time": "3/14/2024",
+        "liked": false,
+        "likes": 40,
+        "comments": 25,
+        "content": "Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+    },
+    {
+        "postID": 12,
+        "authorName": "Debbie",
+        "time": "1/25/2024",
+        "liked": false,
+        "likes": 49,
+        "comments": 53,
+        "content": "Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus."
+    },
+    {
+        "postID": 13,
+        "authorName": "Scarlet",
+        "time": "1/20/2024",
+        "liked": false,
+        "likes": 14,
+        "comments": 40,
+        "content": "In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam."
+    },
+    {
+        "postID": 14,
+        "authorName": "Ferrel",
+        "time": "7/5/2024",
+        "liked": true,
+        "likes": 67,
+        "comments": 92,
+        "content": "Etiam faucibus cursus urna. Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius."
+    },
+    {
+        "postID": 15,
+        "authorName": "Joleen",
+        "time": "4/8/2024",
+        "liked": true,
+        "likes": 32,
+        "comments": 26,
+        "content": "Mauris ullamcorper purus sit amet nulla. Quisque arcu libero, rutrum ac, lobortis vel, dapibus at, diam."
+    },
+    {
+        "postID": 16,
+        "authorName": "Tuck",
+        "time": "4/12/2024",
+        "liked": false,
+        "likes": 93,
+        "comments": 41,
+        "content": "Aliquam non mauris."
+    },
+    {
+        "postID": 17,
+        "authorName": "Donnajean",
+        "time": "9/3/2023",
+        "liked": true,
+        "likes": 40,
+        "comments": 100,
+        "content": "Phasellus sit amet erat. Nulla tempus. Vivamus in felis eu sapien cursus vestibulum. Proin eu mi. Nulla ac enim. In tempor, turpis nec euismod scelerisque, quam turpis adipiscing lorem, vitae mattis nibh ligula nec sem. Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue."
+    },
+    {
+        "postID": 18,
+        "authorName": "Tiffy",
+        "time": "3/6/2024",
+        "liked": true,
+        "likes": 76,
+        "comments": 52,
+        "content": "Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum."
+    },
+    {
+        "postID": 19,
+        "authorName": "Teresina",
+        "time": "6/25/2024",
+        "liked": true,
+        "likes": 77,
+        "comments": 31,
+        "content": "Nunc purus. Phasellus in felis."
+    },
+    {
+        "postID": 20,
+        "authorName": "Berkeley",
+        "time": "1/20/2024",
+        "liked": false,
+        "likes": 13,
+        "comments": 64,
+        "content": "In eleifend quam a odio. In hac habitasse platea dictumst. Maecenas ut massa quis augue luctus tincidunt. Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum."
+    }
+]

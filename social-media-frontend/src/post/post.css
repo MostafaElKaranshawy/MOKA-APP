@@ -1,0 +1,94 @@
+.post{
+    display: flex;
+    flex-direction: column;
+    margin: 20px;
+    border-radius: 10px;
+    background-color: white;
+    min-width: 70%;
+}
+.post-header{
+    padding: 10px 20px;
+    display: flex;
+    width: calc(100% - 40px);
+    align-items: center;
+}
+.post-header img{
+    width: 50px;
+    height: 50px;
+    margin-right: 10px;
+}
+.name-time{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    
+} 
+.name-time p{
+    padding: 0;
+    margin: 0;
+}
+.name-time p:first-child{
+    font-weight: bold;
+}
+.name-time p:last-child{
+    font-size: 12px;
+    color: grey;
+
+}
+
+.post-content{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    font-size: 15px;
+    background-color: aliceblue;
+    padding: 10px 20px;
+    text-align: left;
+}
+.post-actions{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(3, calc(100%/3));
+}
+.post-action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.post-action i{
+    font-size: 30px;
+    margin-right: 10px;
+    transition: 0.3s;
+}
+
+.post-action:hover{
+    background-color: aliceblue;
+}
+.post-action:first-child:hover  i{
+    color: red;
+}
+.post-action:not(first-child):hover i{
+    color: rgb(0, 0, 97);
+}
+.action-count{
+    margin: 5px;
+    font-size: 12px;
+    color: grey;
+}
+
+@media screen and (max-width : 500px) {
+    .post{
+        margin: 0 0 5px 0;
+        border-bottom: 1px solid #ccc;
+        border-radius: 0;
+    }
+    .post-header{
+        padding: 10px;
+    }
+
+}

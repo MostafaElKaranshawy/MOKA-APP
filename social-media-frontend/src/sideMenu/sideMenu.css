@@ -1,0 +1,81 @@
+.side-menu{
+    width: 30%;
+    height: 100%;
+    background-color: #eee;
+    color: black;
+    transition: 0.3s;
+    top: 0;
+    left: 0;
+    padding: 20px;
+    border-radius: 10px;
+    margin-right: 20px;
+}
+
+.side-menu .profile{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.side-menu .profile h2{
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+}
+.side-menu .profile h2::after {
+    content: "";
+    display: block;
+    height: 1px;
+    background-color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 0;
+    transition: 0.3s;
+}
+.side-menu .profile::after{
+    content : "";
+    display: block;
+    width: 100%;
+    height: 1px;
+    background-color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.side-menu .profile h2:hover::after{
+    width: 100%;
+}
+.side-menu .profile img{
+    width: 100px;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    position: relative;
+    border: 1px solid transparent;
+}
+.side-menu .profile img:hover{
+    transform: scale(1.1);
+    border: 1px solid black;
+}
+.sidebar-section{
+    display: flex;
+    flex-direction: row;
+    padding: 0 10px;
+    margin-bottom: 10px;
+    width: calc(100% - 20px);
+    align-items: center;
+    justify-content: space-between;
+}
+.sidebar-section p:first-child{
+    padding: 0;
+    margin: 0;
+    color: rgb(117, 117, 117);
+    font-weight: 500;
+}
+.sidebar-section p:last-child{
+    padding: 0;
+    margin: 0;
+    color: rgb(143, 143, 143);
+}

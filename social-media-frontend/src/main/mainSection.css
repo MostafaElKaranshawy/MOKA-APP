@@ -1,0 +1,34 @@
+.main-section{
+    padding: 20px;
+    height: 100%;
+    background-color: #eee;
+    border-radius: 10px;
+    width: 100%;
+}
+
+.main-section h2{
+    color: black;
+    font-weight: 500;
+    cursor: pointer;
+    position: relative;
+    text-align: left;
+}
+
+.posts{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    flex-direction: column;
+    margin: 20px 0;
+    padding: 10px;
+}
+@media screen and (max-width: 500px){
+    .posts{
+        padding: 0;
+    }
+    .main-section{
+        padding: 0;
+        margin: 0;
+    }
+
+}

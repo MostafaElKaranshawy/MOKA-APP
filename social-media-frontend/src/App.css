@@ -1,0 +1,54 @@
+#root {
+  width: 100vw;
+  /* height: 100vh; */
+  margin: 0 auto;
+  padding: 0;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#app {
+  width: 100vw;
+  height: 100vh;
+}
+
+#main {
+  position: relative;
+  padding: 20px;
+  margin: 0;
+  display: flex;
+}
+@media screen and (max-width: 500px){
+    #main{
+        padding: 0;
+    }
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+}
+
+.router {
+  width: 100vw;
+  height: 100vh;
+}
