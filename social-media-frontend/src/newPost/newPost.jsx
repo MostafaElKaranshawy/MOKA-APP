@@ -48,9 +48,6 @@ export default function NewPost() {
                             accept="video/*" // Only allows video files
                         />
                     </div>
-                    <div className="add-voice post-attachment">
-                        <i className="fa-solid fa-microphone"/>
-                    </div>
                 </div>
                 <div className="previews">
                     {photoPreviews.map(({ id, src }, index) => (

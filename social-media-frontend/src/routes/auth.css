@@ -1,0 +1,57 @@
+.auth{
+    display: flex;
+    height: 100vh;
+    background-color: rgb(228, 228, 228);
+    width: 100%;    
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.auth-header{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    height: 100px;
+    width: 100%;
+    padding: 0 50px;
+    justify-self: flex-start;
+    align-self: flex-start;
+}
+.auth-header img{
+    width: 50px;
+    border-radius: 50%;
+}
+.auth-method{
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    flex-direction:column;
+    /* width: 400px; */
+}
+.auth-method .switch{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 10px 0 rgba(0,0,0,0.1);
+    padding: 0;
+    margin: 0;
+}
+.auth-method .switch .switch-button{
+    border: none;
+    padding: 20px;
+    margin: 0;
+    cursor: pointer;
+    background-color: rgb(31 165 255);
+    text-align: center;
+    transition: 0.3s;
+    width: fit-content;
+    font-size: 18px;
+    letter-spacing: 1px;
+    font-weight: 600;
+    color: #f1f1f1;
+}
+.auth-method .switch .switch-button:hover{
+    color: #333;
+    background-color: white;
+}

@@ -63,7 +63,7 @@
     justify-content: space-between;
     align-items: center;
     margin: 10px 0;
-    padding: 0 50px;
+    padding: 0;
 }
 
 .new-post-form .post-attachments .post-attachment{
