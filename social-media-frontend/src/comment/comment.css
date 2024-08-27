@@ -1,0 +1,104 @@
+.comment{
+    position: relative;
+    display: flex;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.comment-header{
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+.comment-header img{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+.comment-header .comment-user{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+.comment-header .comment-user .comdatement-username{
+    font-weight: bold;
+}
+.comment-header .comment-user .comment-time{
+    font-size: 12px;
+    color: gray;
+}
+.comment-body{
+    text-align: left;
+    padding: 0 10px;
+    margin-left: 10px;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    font-size: 15px;
+    color: #333;
+    letter-spacing: 1.1px;
+
+}
+.comment-options{
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    user-select: none;
+    cursor: pointer;
+}
+.comment-options i{
+    font-size: 20px;
+    color: grey;
+}
+.comment-options .comment-likes{
+    color: grey;
+    font-size: 12px;
+}
+.comment-list{
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    background-color: rgb(228, 228, 228);
+}
+.comment-filter{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: 20px;
+    user-select: none;
+}
+
+.select-selected {
+    background-color: #f8f8f8;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+.select-selected i {
+    margin-left: 10px;
+}
+.select-items {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    z-index: 99;
+    text-align: left;
+}
+
+.select-items.select-show {
+    display: block;
+}
+
+.select-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.select-item:hover {
+    background-color: #ddd;
+}

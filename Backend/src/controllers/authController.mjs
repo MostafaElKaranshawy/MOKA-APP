@@ -23,6 +23,7 @@ class AuthController {
         }
     }
     static async signIn(req, res) {
+        console.log(req.body);
         let result = null
         console.log(req.body);
         try{

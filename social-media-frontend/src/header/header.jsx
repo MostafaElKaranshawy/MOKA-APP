@@ -23,7 +23,7 @@ export default function Header() {
                 navMenu && (
                 <ul className="nav-menu">
                     {/* <li className="menu-item"> */}
-                        <NavLink to="/" className="menu-item">
+                        <NavLink to="/home" className="menu-item">
                             <i className="fa-solid fa-house"></i>
                             <p>Home</p>
                         </NavLink>

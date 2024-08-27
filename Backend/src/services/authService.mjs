@@ -38,7 +38,13 @@ class AuthService {
         }
         return {
             accessToken: accessToken,
-            user: user,
+            user: {
+                userID: user.userID,
+                name: user.name,
+                email: user.email,
+                userName: user.userName,
+                bio: user.bio
+            },
             message: "User Logged In Successfully!"
         };
     }

@@ -25,7 +25,7 @@
 .auth-section .auth-form p:hover{
     text-decoration: underline;
 }
-.auth-section .auth-form input{
+.auth-section .auth-form .form-field{
     width: calc(100% - 40px);
     padding: 10px 20px;
     margin: 10px;
@@ -41,15 +41,15 @@
     letter-spacing: 1px;
 }
 
-.auth-section .auth-form input:hover{
+.auth-section .auth-form .form-field:hover{
     border-bottom: 1px solid #333;
 }
-.auth-section .auth-form input:focus{
+.auth-section .auth-form .form-field:focus{
     outline: none;
     border-bottom: 1px solid #333;
     cursor: text;
 }
-.auth-section .auth-form button{
+.auth-section .auth-form .submit-button{
     padding: 20px 50px;
     width: 100%;
     margin: 10px;
@@ -63,7 +63,7 @@
     font-weight: 600;
 }
 
-.auth-section .auth-form button:hover{
+.auth-section .auth-form .submit-button:hover{
     background-color:  rgb(34, 146, 221);
 }
 @media screen and (max-width: 600px){

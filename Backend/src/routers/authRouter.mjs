@@ -14,7 +14,7 @@ authRouter.post(
     AuthController.signUp
 );
 
-authRouter.get(
+authRouter.post(
     '/auth/signIn',
     AuthValidator.emailValidation,
     AuthValidator.passwordValidation,
