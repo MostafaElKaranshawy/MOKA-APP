@@ -5,7 +5,7 @@ import CommentList from "../comment/comments";
 
 export default function Post(probs){
     const [liked, setLike] = useState(probs.liked);
-    const [showComments, setShowComments] = React.useState(false);
+    const [showComments, setShowComments] = React.useState(true);
     function toggleShowComments(){
         setShowComments((pre)=>!pre);
     }

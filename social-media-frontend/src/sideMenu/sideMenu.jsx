@@ -4,13 +4,16 @@ import profilePhoto from "../assets/profile-photo-holder.jpg";
 export default function SideMenu(){
     const innerWidth = window.innerWidth;
     let sideMenu = (innerWidth > 756? true: false);
+    function profileVisit(){
+        window.location.href = "/profile";
+    }
     return (
         <>{    
             sideMenu && (
                 <div className="side-menu">
                     <div className="profile">
-                        <img src={profilePhoto} />
-                        <h2 className="profile-name">John Doe</h2>
+                        <img src={profilePhoto} onClick={profileVisit}/>
+                        <h2 className="profile-name" onClick={profileVisit}>John Doe</h2>
                     </div>
                     <div className="friends sidebar-section">
                         <p>Friends</p>

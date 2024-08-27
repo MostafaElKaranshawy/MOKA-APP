@@ -10,17 +10,17 @@ export default function Comment({ comment }) {
         <div className="comment">
             <div className="comment-header">
                 <img src={profilePhoto} alt="profile" className="comment-profile-picture"/>
+            </div>
+            <div className="comment-body">
                 <div className="comment-user">
                     <span className="comment-username">{comment.authorName}</span>
                     <span className="comment-time">{comment.time}</span>
                 </div>
-            </div>
-            <div className="comment-body">
-                <p>{comment.content}</p>
+                <p className="comment-content">{comment.content}</p>
             </div>
             <div className="comment-options">
                 <div className="comment-like" onClick={toggleLike}>
-                    {liked ?
+                    {!liked ?
                         <i className="fa-regular fa-heart" ></i> : <i className="fa-solid fa-heart" style={{ color: "red" }}></i>
                     }
                 </div>

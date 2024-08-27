@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useRef, useEffect } from "react";
 import "./comment.css";
 import Comment from "./comment";
+import profilePhoto from "../assets/profile-photo-holder.jpg";
 
 export default function Comments({ comments }) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -15,9 +16,47 @@ export default function Comments({ comments }) {
         setCurrentFilter(item);
         setIsDropdownOpen(false);
     };
+    const [comment, setComment] = useState("");
+    const textareaRef = useRef(null);
 
+    useEffect(() => {
+        const textarea = textareaRef.current;
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on scroll height
+    }, [comment]);
+
+    const handleChange = (event) => {
+        setComment(event.target.value);
+    };
+    const addComment = () => {
+        if (comment.trim() === "") {
+            return;
+        }
+        console.log(comment);
+        comments.unshift({
+            content: comment,
+            authorName: "User",
+            time:  new Date().toLocaleString(),
+            likes: 0,
+            liked: false,
+        });
+        setComment("");
+    }
     return (
         <div className="comment-list">
+            <div className="compose-comment">
+                <img src={profilePhoto} alt="profile" className="comment-profile-picture"/>
+                <div className="compose-body">
+                <textarea
+                    ref={textareaRef}
+                    value={comment}
+                    onChange={handleChange}
+                    placeholder="Write a comment..."
+                    className="compose-comment-content"
+                />
+                    <button onClick={addComment}>Post</button>
+                </div>
+            </div>
             <div className="comment-filter">
                 <div className="select-selected" onClick={toggleDropdown}>
                     {currentFilter}

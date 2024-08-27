@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import "./newPost.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
@@ -19,6 +19,12 @@ export default function NewPost() {
     }
     const { uploadPhotos, photoPreviews, removePhoto } = useUploadPhoto();
     const { uploadVideos, videoPreviews, removeVideo } = useUploadVideo();
+    const textareaRef = useRef(null);
+    useEffect(() => {
+        const textarea = textareaRef.current;
+        textarea.style.height = 'auto';
+        textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on scroll height
+    }, [content]);
     return (
         <div className="post new-post">
             <form onSubmit={handleSubmit} className="new-post-form">
@@ -28,6 +34,7 @@ export default function NewPost() {
                         <p>Mostafa Elkaranshawy</p>
                     </div>
                     <textarea
+                    ref={textareaRef}
                     value={content}
                     onChange={handleChange}
                     placeholder="What's on your mind?"

@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-rou
 
 
 import "./header.css";
+import Notifications from "../notifications/notifications";
 export default function Header() {
     let nav = (window.innerWidth > 500? true: false)
     const [navMenu, setNavMenu] = useState(nav);
@@ -37,6 +38,7 @@ export default function Header() {
                     <li className="menu-item">
                         <i className="fa-solid fa-bell"></i>
                         <p>Updates</p>
+                        {/* <Notifications /> */}
                     </li>
                 </ul>)
             }
