@@ -13,6 +13,7 @@ export default class CommentLike {
         }
         const [like, created] = await CommentLikeDefinition.findOrCreate({
             where: {
+                commentID: commentID,
                 userID: userID
             }
         });
@@ -22,12 +23,16 @@ export default class CommentLike {
         if(!like){
             throw new Error("Like not added");
         }
+        comment.likes += 1;
+        await comment.save();
         like.setComment(comment);
+        return created;
     }
     static async removeCommentLike(userID, commentID){
         const comment = await CommentDefintion.findOne({
             where: {
-                commentID: commentID
+                commentID: commentID,
+                userID: userID
             }
         });
         if(!comment){
@@ -54,6 +59,9 @@ export default class CommentLike {
         if(!result){
             throw new Error("Like not Exist");
         }
+        comment.likes -= 1;
+        await comment.save();
+        return result;
     }
     static async getCommentLikes(commentID, offset, limit){
         const comment = await CommentDefintion.findOne({

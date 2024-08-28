@@ -7,7 +7,7 @@ import MainSection from '../main/mainSection'
 
 export default function Home(){
     return (
-        <div className="home">
+        <div className="home view">
             <Header/>
             <div id="main">
                 <SideMenu/>

@@ -1,7 +1,7 @@
 .main-section{
     padding: 20px;
     height: 100%;
-    background-color: #eee;
+    background-color: #f4f4f4;
     border-radius: 10px;
     width: 100%;
 }
@@ -21,10 +21,13 @@
     flex-direction: column;
     margin: 20px 0;
     padding: 10px;
+    width: calc(100% - 20px);
+    /* overflow: hidden; */
 }
 @media screen and (max-width: 500px){
     .posts{
         padding: 0;
+        width: 100%;
     }
     .main-section{
         padding: 0;

@@ -2,7 +2,6 @@
     position: relative;
     display: flex;
     margin-bottom: 20px;
-    background-color: white;
     border-radius: 10px;
 }
 .comment-header{
@@ -42,13 +41,75 @@
     font-size: 15px;
     color: #333;
     letter-spacing: 1.1px;
-    background-color: #f3f2f2;
+    background-color: white;
     border-radius: 5px;
     width: 100%;
-
+    position: relative;
 }
 .comment-body .comment-content{
-    padding-left: 20px;
+    padding: 20px;
+    position: relative;
+}
+.comment-content-text{
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+    width: calc(100% - 40px);
+}
+.edit-comment{
+    position: absolute;
+    cursor: pointer;
+    font-size: 20px;
+    color: grey;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    flex-direction: column;
+    z-index: 10;
+}
+.edit-comment textarea{
+    width: calc(100% - 20px);
+    height: 100%;
+    border: none;
+    background-color: aliceblue;
+    font-size: 15px;
+    padding: 10px;
+    resize: none;
+    color: black;
+    border: 0.5px #333 solid;
+    border-radius: 10px;
+}
+.edit-comment-options{
+    cursor: pointer;
+    font-size: 20px;
+    color: grey;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.edit-comment-options button{
+    background-color: #333;
+    padding: 10px;
+    margin: 10px;
+    font-size: 15px;
+    transition: 0.3s;
+}
+.edit-comment-options button:hover{
+    background-color: #555;
+}
+.comment-body::before{
+    content: '';
+    border: none;
+    border-right: 20px solid white;
+    border-left: 20px solid transparent;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    position: absolute;
+    left: -40px;
+
 }
 .comment-options{
     position: absolute;
@@ -80,7 +141,7 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 20px;
+    
 }
 .compose-body{
     display: flex;
@@ -91,19 +152,18 @@
 }
 .compose-comment .compose-comment-content{
     width: 100%;
-    border-radius: 5px;
     border: 1px solid rgba(0, 0, 0, 0.1);
     font-size: 15px;
     color: #333;
     letter-spacing: 1.1px;
     background-color: #fff;
     padding: 15px;
-    border-radius: 30px;
     box-shadow: 0 0 10px rgba(201, 200, 200, 0.1);
     overflow: hidden;
     resize: none;
     min-height: 50px;
     margin-right: 20px;
+    border-radius: 10px;
 }
 .compose-comment .compose-comment-content:focus{
     outline: none;
@@ -157,4 +217,47 @@
 
 .select-item:hover {
     background-color: #ddd;
+}
+.comment-options-icon{
+    font-size: 20px;
+    color: grey;
+    cursor: pointer;
+    transition: 0.3s;
+    padding:0 10px;
+    margin: 10px 0;
+    border-radius: 50%;
+}
+.comment-options-icon:hover{
+    color: black;
+    background-color: #f0f0f0;
+}
+
+.comment-options-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    z-index: 10;
+    position:absolute ;
+    width: 150px;
+    right: 10px;
+    top: 20px;
+}
+.comment-option{
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: rgb(216, 237, 255);
+    width: 100%;
+    backdrop-filter: blur(10px);
+}
+.comment-option:hover{
+    background-color: rgba(0, 0, 97, 0.466);
+    color: white;
+}
+
+.like-icon:hover{
+    color: red;
 }

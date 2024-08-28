@@ -1,22 +1,52 @@
 .post{
     display: flex;
     flex-direction: column;
-    margin: 20px;
+    margin: 10px;
     border-radius: 10px;
-    background-color: white;
-    min-width: 70%;
+    width: calc(100% - 20px);
+}
+.post .shared-post{
+    display: flex;
+    padding: 5px 20px;
+    border-bottom: 1px solid #333;
+    background-color: aliceblue;
+    border-radius: 10px 10px 0 0;
+    width: fit-content;
+    align-items: center;
+}
+.post .shared-post img{
+    width: 30px;
+    border-radius: 50%;
+    margin-right: 20px;
+}
+.post .shared-post span{
+    font-size: 15px;
+    color: #333;
 }
 .post-header{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: white;
+    border-radius: 10px 10px 0 0;
+    border-bottom: 1px solid #ccc;
+    position: relative;
+}
+.post-header-info{
     padding: 10px 20px;
     display: flex;
     width: calc(100% - 40px);
     align-items: center;
+    background-color: white;
+    position: relative;
 }
 .post-header img{
     width: 50px;
     height: 50px;
     margin-right: 10px;
 }
+
 .name-time{
     display: flex;
     flex-direction: column;
@@ -36,28 +66,126 @@
     color: grey;
 
 }
+.post-options-icon{
+    font-size: 20px;
+    color: grey;
+    cursor: pointer;
+    transition: 0.3s;
+    padding: 10px;
+}
+.post-options-icon:hover{
+    color: black;
+}
+.post-options{
+    position: absolute;
+    top: 60px;
+    right: 20px;
+    cursor: pointer;
+    width: 150px;
+}
+
+.post-options {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    z-index: 10;
+}
+.post-option{
+    padding: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: rgb(216, 237, 255);
+    width: 100%;
+    backdrop-filter: blur(10px);
+}
+.post-option:hover{
+    background-color: rgba(0, 0, 97, 0.466);
+    color: white;
+}
 
 .post-content{
     display: flex;
     align-items: center;
-    justify-content: center;
-    min-height: 300px;
-    font-size: 15px;
+    justify-content: flex-start;
+    font-size: 20px;
     background-color: aliceblue;
-    padding: 10px 20px;
+    padding: 10px 40px;
     text-align: left;
+    position: relative;
+    white-space: normal;
+    overflow-wrap: break-word;
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    /* width: 100%; */
+}
+.post-content p{
+    margin: 0;
+    padding: 0;
+    white-space: normal;
+    width: 100%;
+}
+.edit-post{
+    position: absolute;
+    cursor: pointer;
+    font-size: 20px;
+    color: grey;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 70%;
+    height: 50%;
+    min-height: 200px;
+    backdrop-filter: blur(100px);
+    flex-direction: column;
+    z-index: 100;
+}
+.edit-post textarea{
+    width: calc(100% - 20px);
+    height: 100%;
+    border: none;
+    background-color: aliceblue;
+    font-size: 15px;
+    padding: 10px;
+    resize: none;
+    color: black;
+    border: 0.5px #333 solid;
+    border-radius: 10px;
+}
+.edit-post-options{
+    cursor: pointer;
+    font-size: 20px;
+    color: grey;
+    transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.edit-post-options button{
+    background-color: #333;
+    padding: 10px;
+    margin: 10px;
+    font-size: 15px;
 }
 .post-actions{
-    display: grid;
+    background-color: aliceblue;
     width: 100%;
-    grid-template-columns: repeat(3, calc(100%/3));
+    display: flex;
+    align-items: center; 
+    justify-content: space-evenly;
+    gap: 10px;
 }
 .post-action{
+    background-color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     transition: 0.3s;
+    width: 50%;
 }
 
 .post-action i{
@@ -76,9 +204,13 @@
     color: rgb(0, 0, 97);
 }
 .action-count{
-    margin: 5px;
-    font-size: 12px;
+    margin: 10px;
+    font-size: 15px;
     color: grey;
+    transform: translateY(1px);
+    border-radius: 50%;
+    padding: 5px;
+    background-color: #fff;
 }
 
 @media screen and (max-width : 500px) {
@@ -86,6 +218,7 @@
         margin: 0 0 5px 0;
         border-bottom: 1px solid #ccc;
         border-radius: 0;
+        width: 100%;
     }
     .post-header{
         padding: 10px;

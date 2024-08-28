@@ -15,6 +15,8 @@ export default class PostLike {
         if(!result){
             throw new Error("Like already exists");
         }
+        post.likes += 1;
+        await post.save();
         return result;
     }
     static async removePostLike(userID, postID){
@@ -25,6 +27,8 @@ export default class PostLike {
                     postID: postID
                 }
             });
+            // console.log("LIKE");
+            // console.log(like)
             if(!like){
                 throw new Error("Like not Exist");
             }
@@ -37,11 +41,26 @@ export default class PostLike {
                     postID: postID
                 }
             });
+            console.log("RESULT");
+            console.log(result)
             if(!result){
                 throw new Error("Like not Exist");
             }
+            const post = await PostDefinition.findOne({
+                where: {
+                    postID: postID
+                }
+            });
+            // console.log("POST");
+            // console.log(post);
+            post.likes -= 1;
+            await post.save();
+            // console.log("POST");
+            // console.log(post);
+            return result;
         }
         catch(err){
+            console.log(err)
             throw new Error(err.message);
         }
     }

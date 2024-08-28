@@ -11,7 +11,15 @@ const PostDefinition = orm.define('post',
         content: {
             type: DataTypes.TEXT,
             allowNull: false,
-        }
+        },
+        likes: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        comments: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
     },
     {
         timestamps: true
@@ -23,8 +31,18 @@ const PostDefinition = orm.define('post',
 PostDefinition.associate = async (models) => {
     const {post, user, comment, postLike} = models;
     post.belongsTo(user, {foreignKey : 'userID'});
-    post.hasMany(comment, {onDelete : 'CASCADE', foreignKey : 'postID'});
-    post.hasMany(postLike, {onDelete : 'CASCADE', foreignKey : 'postID'});
+    
+    post.hasMany(comment, {
+        onDelete: 'CASCADE',
+        foreignKey: 'postID',
+        as: 'postComments' // Use an alias to avoid naming collision
+    });
+    
+    post.hasMany(postLike, {
+        onDelete: 'CASCADE',
+        foreignKey: 'postID',
+        as: 'postLikes' // Use an alias to avoid naming collision
+    });
 }
 
 export default PostDefinition;

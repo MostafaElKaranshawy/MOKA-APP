@@ -11,9 +11,9 @@ const CommentDefinition = orm.define('comment',
             type: DataTypes.TEXT,
             allowNull: false,
         },
-        userID : {
+        likes: {
             type: DataTypes.INTEGER,
-            allowNull: false
+            defaultValue: 0
         },
     },
     {
@@ -23,7 +23,8 @@ const CommentDefinition = orm.define('comment',
 
 
 CommentDefinition.associate = async (models) => {
-    const {post,comment ,commentLike} = models;
+    const {post,comment ,commentLike, user} = models;
+    comment.belongsTo(user, {foreignKey : 'userID'});
     comment.belongsTo(post, {foreignKey : 'postID'});
     comment.hasMany(commentLike, {onDelete : 'CASCADE', foreignKey : 'commentID'});
 }

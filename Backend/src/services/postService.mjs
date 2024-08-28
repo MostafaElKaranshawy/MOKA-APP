@@ -1,7 +1,7 @@
 import Post from "../modules/post.mjs";
 
 class PostService {
-    static async createPost(userID, content) {
+    static async createPost(userID, content, name) {
         if(userID == null || content == null){
             throw new Error("Invalid Parameters");
         }

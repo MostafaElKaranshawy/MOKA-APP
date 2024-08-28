@@ -19,12 +19,7 @@ const CommentLikeDefinition = orm.define('commentLike',
 export default CommentLikeDefinition;
 
 CommentLikeDefinition.associate = async (models) => {
-    const {comment, commentLike} = models;
+    const {comment, commentLike, user} = models;
     commentLike.belongsTo(comment, {foreignKey : 'commentID'});
+    commentLike.belongsTo(user, {foreignKey : 'userID'});
 }
-
-// CommentLike.addHook('afterDefine', (model) => {
-//     // Set up the association here
-//     model.belongsTo(Comment, { foreignKey: 'commentID' });
-// });
-// CommentLike.belongsTo(Comment, {foreignKey : 'commentID'});

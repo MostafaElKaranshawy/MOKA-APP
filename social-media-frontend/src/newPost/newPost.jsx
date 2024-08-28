@@ -6,7 +6,7 @@ import profilePhoto from "../assets/profile-photo-holder.jpg";
 import useUploadPhoto from "./uploadPhoto";
 import useUploadVideo from "./uploadVideo";
 
-export default function NewPost() {
+export default function NewPost(probs) {
     const [content, setContent] = useState("");
     
     function handleChange(event) {
@@ -15,7 +15,10 @@ export default function NewPost() {
     
     function handleSubmit(event) {
         event.preventDefault();
-        console.log(content);
+        if((content.trim() === "" || content === "") && photoPreviews.length === 0 && videoPreviews.length === 0)return
+        probs.createPost(content);
+        alert("Post Created successfully");
+        setContent("");
     }
     const { uploadPhotos, photoPreviews, removePhoto } = useUploadPhoto();
     const { uploadVideos, videoPreviews, removeVideo } = useUploadVideo();
@@ -23,10 +26,10 @@ export default function NewPost() {
     useEffect(() => {
         const textarea = textareaRef.current;
         textarea.style.height = 'auto';
-        textarea.style.height = `${textarea.scrollHeight}px`; // Set height based on scroll height
+        textarea.style.height = `${textarea.scrollHeight}px`;
     }, [content]);
     return (
-        <div className="post new-post">
+        <div className="new-post">
             <form onSubmit={handleSubmit} className="new-post-form">
                 <div className="new-post-content">
                     <div className="new-post-data">
@@ -52,7 +55,7 @@ export default function NewPost() {
                             multiple
                             onChange={uploadVideos}
                             className="file-input"
-                            accept="video/*" // Only allows video files
+                            accept="video/*"
                         />
                     </div>
                 </div>

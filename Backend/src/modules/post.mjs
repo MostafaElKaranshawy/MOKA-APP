@@ -1,11 +1,11 @@
 import PostDefinition from './definitions/postDefinition.mjs'
 import UserDefinition from './definitions/userDefinition.mjs'
-
+import { format } from 'date-fns';
 export default class Post {
     static async createPost(userID, content){
         const user = await UserDefinition.findOne({
             where: {
-                userID: userID
+                userID: userID,
             }
         });
         console.log("hello")
@@ -72,10 +72,27 @@ export default class Post {
                 userID: userID
             }
         });
-        const posts = await user.getPosts({
+        let posts = await user.getPosts({
             offset: offset || 0,
             limit: limit || 10
         });
-        return posts;
+        let userLikes = await user.getPostLikes(
+            {
+                attributes: ['postID']
+            }
+        );
+        posts = posts.map((post) => {
+            return {
+                postID: post.postID,
+                authorName: user.name,
+                content: post.content,
+                time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
+                userID: post.userID,
+                liked: userLikes.find((like) => like.postID === post.postID) ? true : false,
+                likes: post.likes,
+                comments: post.comments,
+            };
+        });
+        return posts;        
     }
 }

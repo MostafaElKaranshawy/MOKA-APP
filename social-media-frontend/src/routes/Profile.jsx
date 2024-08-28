@@ -64,7 +64,7 @@ export default function Profile(){
     ];
     const filteredFriends = showAllFriends? friends:friends.filter((friend, index) => index < (window.innerWidth / 350));
     return (
-        <div className="profile router">
+        <div className="profile view">
             <Header/> 
             <div className="profile-section">
                 <div className="profile-header">

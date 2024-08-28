@@ -1,10 +1,42 @@
-import React from "react";
+import React, {useState} from "react";
 import "./comment.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
-export default function Comment({ comment }) {
+export default function Comment(probs){
+    const comment = probs.comment;
     const [liked, setLike] = React.useState(comment.liked);
+    const [showOptions, setShowOptions] = useState(false);
+    const [showEdit, setShowEdit] = useState(false);
+    const [newContent, setNewContent] = useState(comment.content);
     function toggleLike() {
         setLike((pre) => !pre);
+    }
+    function toggleShowOptions(){
+        setShowOptions((pre)=>!pre);
+    }
+    function toggleShowEdit(){
+        setNewContent(comment.content);
+        setShowEdit((pre)=>!pre);
+        toggleShowOptions();
+    }
+    function likeComment(){
+        toggleLike();
+        probs.likeComment(comment.commentID);
+    }
+    function unlikeComment(){
+        toggleLike();
+        probs.unlikeComment(comment.commentID);
+    }
+    function deleteComment(){
+        probs.deleteComment(comment.commentID);
+    }
+    function editComment(){
+        if(newContent.trim() === ""){
+            alert("Comment cannot be empty");
+            return;
+        }
+        console.log(newContent)
+        probs.editComment(comment.commentID, newContent);
+        toggleShowEdit();
     }
     return (
         <div className="comment">
@@ -16,17 +48,40 @@ export default function Comment({ comment }) {
                     <span className="comment-username">{comment.authorName}</span>
                     <span className="comment-time">{comment.time}</span>
                 </div>
-                <p className="comment-content">{comment.content}</p>
+                <div className="comment-content text-container">
+                    <p className="comment-content-text text-container" dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }} />
+                    {showEdit && 
+                    <div className="edit-comment">
+                        <textarea defaultValue={comment.content} onChange={
+                            (e)=>{
+                                setNewContent(e.target.value);
+                            }
+                        }></textarea>
+                        <div className="edit-comment-options">
+                            <button onClick={toggleShowEdit}>Cancel</button>
+                            <button onClick={editComment}>Save</button>
+                        </div>
+                    </div>
+                }    
+                </div>
             </div>
             <div className="comment-options">
-                <div className="comment-like" onClick={toggleLike}>
+                <i className="fa-solid fa-ellipsis-v comment-options-icon" onClick={toggleShowOptions}/>
+                {showOptions &&
+                    <ul className="comment-options-list">
+                        <li className="comment-option" onClick={toggleShowEdit}>Edit Comment</li>
+                        <li className="comment-option" onClick={deleteComment}>Delete Comment</li>
+                    </ul>
+                }
+                <div className="comment-like" >
                     {!liked ?
-                        <i className="fa-regular fa-heart" ></i> : <i className="fa-solid fa-heart" style={{ color: "red" }}></i>
+                        <i className="fa-regular fa-heart like-icon" onClick={likeComment}></i> : <i className="fa-solid fa-heart" style={{ color: "red" }} onClick={unlikeComment}></i>
                     }
                 </div>
                 <div className="comment-likes">
                     {comment.likes}
                 </div>
+
             </div>
         </div>
     );

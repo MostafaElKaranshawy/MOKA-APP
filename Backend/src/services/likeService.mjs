@@ -20,10 +20,7 @@ class likeService {
     }
     static async removePostLike(userID, postID){
         try {
-            const result = await PostLike.removePostLike(userID, postID);
-            if(!result){
-                throw new Error("Like not Exist");
-            }
+            await PostLike.removePostLike(userID, postID);
         }
         catch(err){
             throw new Error(err.message);
@@ -31,7 +28,7 @@ class likeService {
     }
     static async removeCommentLike(userID, commentID){
         try {
-            const result = await CommentLike.removeCommentLike(userID, commentID);
+            await CommentLike.removeCommentLike(userID, commentID);
         }
         catch(err){
             throw new Error(err.message);

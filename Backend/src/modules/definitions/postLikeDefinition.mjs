@@ -19,8 +19,9 @@ const PostLikeDefinition = orm.define('postLike', {
 
 
 PostLikeDefinition.associate = async (models) => {
-    const {post, postLike} = models;
+    const {post, postLike, user} = models;
     postLike.belongsTo(post, {foreignKey : 'postID'});
+    postLike.belongsTo(user, {foreignKey : 'userID'});
     
 }
 export default PostLikeDefinition;

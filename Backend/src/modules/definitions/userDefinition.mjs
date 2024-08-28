@@ -36,7 +36,10 @@ const UserDefinition = orm.define('user',
 
 UserDefinition.associate = async (models) => {
     console.log(models);
-    const {user, post, session, friendShip} = models;
+    const {user, post, session, friendShip, postLike, commentLike, comment} = models;
+    user.hasMany(postLike, {onDelete : 'CASCADE', foreignKey : 'userID'});
+    user.hasMany(commentLike, {onDelete : 'CASCADE', foreignKey : 'userID'});
+    user.hasMany(comment, {onDelete : 'CASCADE', foreignKey : 'userID'});
     user.hasMany(post, {onDelete : 'CASCADE', foreignKey : 'userID'});
     user.hasMany(session, {onDelete : 'CASCADE', foreignKey : 'userID'});
     user.hasMany(friendShip, { as: 'Friend1', onDelete : 'CASCADE',foreignKey: 'user1ID'});

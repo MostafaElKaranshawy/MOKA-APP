@@ -1,6 +1,6 @@
 #root {
   width: 100vw;
-  /* height: 100vh; */
+  min-height: 100vh;
   margin: 0 auto;
   padding: 0;
   text-align: center;
@@ -48,6 +48,12 @@
   color: #888;
 }
 
-.router {
+.view {
   width: 100%;
+  min-height: 100vh;
+}
+text-area,
+.text-container{
+  word-wrap: break-word !important;
+  word-break: break-word !important;
 }
