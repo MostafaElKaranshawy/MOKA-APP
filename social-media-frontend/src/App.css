@@ -57,3 +57,27 @@ text-area,
   word-wrap: break-word !important;
   word-break: break-word !important;
 }
+i {
+  color: #007bff;
+}
+button {
+  background-color: #007bff;
+}
+
+textarea::-webkit-scrollbar {
+  width: 0; /* Width of the scrollbar */
+}
+
+textarea::-webkit-scrollbar-track {
+  background: #f1f1f1; /* Background color of the scrollbar track */
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background: #007bff; /* Background color of the scrollbar thumb */
+  transition: 0.5s;
+  cursor: pointer;
+}
+
+textarea::-webkit-scrollbar-thumb:hover {
+  background: #004b9b; /* Color of the scrollbar thumb on hover */
+}

@@ -29,9 +29,9 @@ export default function Post(probs){
         setShowOptions((pre)=>!pre);
     }
     function toggleShowEdit(){
+        setShowOptions(false);
         setNewContent(post.content);
         setShowEdit((pre)=>!pre);
-        toggleShowOptions();
     }
     function changeLike(){
         setLike((pre)=>!pre)

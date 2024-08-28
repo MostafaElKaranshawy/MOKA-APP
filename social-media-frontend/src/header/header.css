@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     padding: 0 10%;
-    color: #333;
+    color: #007bff;
     background-color: white;
     border-bottom: 1px solid #ccc;
     position: relative;
@@ -11,7 +11,7 @@
 
 .logo-search-container i{
     font-size: 30px;
-    color: #333;
+    color: #007bff;
 }
 
 .logo-search-container{
@@ -78,7 +78,7 @@
 .nav-menu .menu-item i {
     font-size: 20px;
     padding: 5px;
-    color: #818181;
+    color: #007bff;
     transition: 0.3s;
 }
 .nav-menu .menu-item:hover i{

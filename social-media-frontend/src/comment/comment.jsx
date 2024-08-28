@@ -14,9 +14,9 @@ export default function Comment(probs){
         setShowOptions((pre)=>!pre);
     }
     function toggleShowEdit(){
+        setShowOptions(false);
         setNewContent(comment.content);
         setShowEdit((pre)=>!pre);
-        toggleShowOptions();
     }
     function likeComment(){
         toggleLike();

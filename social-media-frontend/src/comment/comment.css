@@ -80,6 +80,7 @@
     color: black;
     border: 0.5px #333 solid;
     border-radius: 10px;
+    min-height: 100px;
 }
 .edit-comment-options{
     cursor: pointer;
@@ -91,7 +92,7 @@
     justify-content: center;
 }
 .edit-comment-options button{
-    background-color: #333;
+    background-color: #007bff;
     padding: 10px;
     margin: 10px;
     font-size: 15px;
@@ -170,8 +171,9 @@
     border: #333 1px solid;
 }
 .compose-body button{
-    background-color: #333;
+    background-color: #007bff;
     color: #fff;
+    transition: 0.3s;
 }
 .compose-body button:hover{
     background-color: #555;
