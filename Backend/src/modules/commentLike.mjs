@@ -32,7 +32,6 @@ export default class CommentLike {
         const comment = await CommentDefintion.findOne({
             where: {
                 commentID: commentID,
-                userID: userID
             }
         });
         if(!comment){

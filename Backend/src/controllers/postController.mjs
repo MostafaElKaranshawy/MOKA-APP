@@ -62,6 +62,24 @@ class PostController{
             return res.status(400).send(err.message);
         }
     }
+    
+    static async getPostsFeed(req, res){
+        try {
+            const userID = req.user.userID;
+            const page = parseInt(req.query.page) || 1;
+            const limit = parseInt(req.query.limit) || 10;
+            const offset = (page - 1) * limit;
+            if(userID == null || isNaN(page) || isNaN(limit)){
+                throw new Error("Invalid Parameters");
+            }
+            const posts = await PostService.getPostsFeed(userID, limit, offset);
+            return res.status(200).send(posts);
+        }
+        catch(err){
+            return res.status(400).send(err.message);
+        }
+    }
+    
 }
 
 export default PostController;

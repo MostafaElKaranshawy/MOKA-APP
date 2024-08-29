@@ -52,6 +52,18 @@ class PostService {
             throw new Error(err.message);
         }
     }
+    static async getPostsFeed(userID, limit, offset) {
+        if(userID == null || limit == null || offset == null){
+            throw new Error("Invalid Parameters");
+        }
+        try {
+            const posts = await Post.getPostsFeed(userID, limit, offset);
+            return posts;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
 }
 
 export default PostService;

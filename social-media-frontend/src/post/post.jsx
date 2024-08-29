@@ -5,6 +5,7 @@ import CommentList from "../comment/comments";
 import axios from "axios";
 
 export default function Post(probs){
+    const user = JSON.parse(localStorage.getItem("user"));
     const post = probs.post;
     const [liked, setLike] = useState(post.liked);
     const [showComments, setShowComments] = useState(false);
@@ -12,6 +13,7 @@ export default function Post(probs){
     const [showEdit, setShowEdit] = useState(false);
     const [newContent, setNewContent] = useState(post.content);
     const [comments, setComments] = useState([]);
+
     useEffect(() => {
         if(probs.userToken){
             getComments();
@@ -106,7 +108,9 @@ export default function Post(probs){
                         <p>{post.time}</p>
                     </div>
                 </div>
-                <i className="fa-solid fa-ellipsis-v post-options-icon" onClick={toggleShowOptions}/>
+                {post.userID === user.userID &&
+                    <i className="fa-solid fa-ellipsis-v post-options-icon" onClick={toggleShowOptions}/>
+                }
                 {showOptions &&
                     <ul className="post-options">
                         <li className="post-option" onClick={toggleShowEdit}>Edit Post</li>

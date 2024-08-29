@@ -2,6 +2,7 @@ import React, {useState} from "react";
 import "./comment.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 export default function Comment(probs){
+    const user = JSON.parse(localStorage.getItem("user"));
     const comment = probs.comment;
     const [liked, setLike] = React.useState(comment.liked);
     const [showOptions, setShowOptions] = useState(false);
@@ -66,7 +67,9 @@ export default function Comment(probs){
                 </div>
             </div>
             <div className="comment-options">
-                <i className="fa-solid fa-ellipsis-v comment-options-icon" onClick={toggleShowOptions}/>
+                {comment.userID === user.userID &&
+                    <i className="fa-solid fa-ellipsis-v comment-options-icon" onClick={toggleShowOptions}/>
+                }
                 {showOptions &&
                     <ul className="comment-options-list">
                         <li className="comment-option" onClick={toggleShowEdit}>Edit Comment</li>

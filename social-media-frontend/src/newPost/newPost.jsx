@@ -8,7 +8,7 @@ import useUploadVideo from "./uploadVideo";
 
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
-    
+    const user = JSON.parse(localStorage.getItem("user"));
     function handleChange(event) {
         setContent(event.target.value);
     }
@@ -34,7 +34,7 @@ export default function NewPost(probs) {
                 <div className="new-post-content">
                     <div className="new-post-data">
                         <img src={profilePhoto} />
-                        <p>Mostafa Elkaranshawy</p>
+                        <p>{user.name}</p>
                     </div>
                     <textarea
                     ref={textareaRef}

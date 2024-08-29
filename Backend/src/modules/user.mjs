@@ -27,5 +27,20 @@ export default class User {
         console.log("#################");
         return user;
     }
-    
+    static async getUserProfile(userID){
+        const user = await UserDefinition.findOne(
+            {
+                attributes: ['name', 'userName', 'bio', 'email', 'userID'],
+                where: {
+                    userID: userID
+                }
+            });
+        return user;
+    }
+    static async editUserProfile(userID, name, bio){
+        const user = await UserDefinition.update({name: name, bio: bio}, {where: {
+            userID: userID
+        }});
+        return user != null;
+    }
 }

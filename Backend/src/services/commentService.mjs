@@ -44,12 +44,12 @@ class commentService {
             throw new Error(err.message);
         }
     }
-    static async getComments(postID, limit, offset){
+    static async getComments(userID, postID, limit, offset){
         try {
-            if(isNaN(limit) || isNaN(offset) || postID == null || isNaN(postID)){
+            if(isNaN(limit) || isNaN(offset) || postID == null || isNaN(postID) || userID == null){
                 throw new Error("Invalid Parameters");
             }
-            const comments = await Comment.getComments(postID, limit, offset);
+            const comments = await Comment.getComments(userID, postID, limit, offset);
             return comments;
         }
         catch(err){

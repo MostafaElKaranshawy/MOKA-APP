@@ -15,16 +15,17 @@ export default function MainSection() {
         setUserToken(token);
         setUser(JSON.parse(localStorage.getItem('user')));
     }, []);
-
+    
     useEffect(() => {
         if (userToken) {
+            console.log(userToken);
             getPosts();
         }
     }, [userToken]);
 
     async function getPosts() {
         try {
-            const response = await axios.get("http://localhost:4000/posts?page=1&limit=10", {
+            const response = await axios.get("http://localhost:4000/posts/feed?page=1&limit=10", {
                 headers: {
                     "Content-Type": "application/json",
                     "authorization": `Bearer ${userToken}`

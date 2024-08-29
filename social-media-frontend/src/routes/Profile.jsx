@@ -1,16 +1,46 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Header from "../header/header";
 import "./profile.css";
 
 export default function Profile(){
-    console.log(window.innerWidth);
-    const [showAllFriends, setShowAllFriends] = React.useState(false);
+    const [showAllFriends, setShowAllFriends] = useState(false);
+    const [showEditBio, setshowEditBio] = useState(false);
+    const [user, setUser] = useState({});
     const toggleShowFriends = () => {
         setShowAllFriends(!showAllFriends);
     }
-    const user = {
-        name: "John Doe",
-        bio: "I am Mustfa Elkaranshawy I am a full stack developer I am Mustfa Elkaranshawy I am a full stack developer I am"
+    const toggleshowEditBio = () => {
+        setshowEditBio(!showEditBio);
+    }
+    useEffect(() => {
+        setUser(JSON.parse(localStorage.getItem("user")));
+        console.log(JSON.parse(localStorage.getItem("user")))
+        setUser((user) => 
+            {
+                return {
+                    ...user,
+                    bio: "Hello to Mustafa ELkaranshawy Profile"
+                }
+            }
+        )
+        
+    }, [])
+    const [bio, setBio] = useState(user.bio);
+    useEffect(() => {
+        setBio(user.bio);
+    }, [user])
+    console.log(bio)
+    const editBio = (e) => {
+        setBio(e.target.value);
+    }
+    const saveBio = () => {
+        setUser((user) => {
+            return {
+                ...user,
+                bio: bio
+            }
+        });
+        setshowEditBio(false);
     }
     const friends = [
         {
@@ -74,9 +104,25 @@ export default function Profile(){
                     <p className="profile-name">
                         {user.name}
                     </p>
-                    <p className="profile-bio">
-                        {user.bio}
-                    </p>
+                    <div className="profile-bio">
+                        <p className="bio">
+                            {user.bio}
+                        </p>
+                        <i className="fa fa-pencil bio-edit-icon" onClick={toggleshowEditBio}></i>
+                        {showEditBio &&
+                            <div className="edit-bio-text">
+                                <textarea name="bio" className="bio-box" value={bio} onChange={editBio}>
+                                </textarea>
+                                <div className="edit-bio-options">
+                                    <div className="cancel edit-option" onClick={()=> {
+                                        setshowEditBio(false);
+                                        setBio(user.bio);
+                                    }}>Cancel</div>
+                                    <div className="save edit-option" onClick={saveBio}>Save</div>
+                                </div>
+                            </div>
+                        }
+                    </div>
                 </div>
                 <div className="profile-friends">
                     <p className="profile-friends-title">

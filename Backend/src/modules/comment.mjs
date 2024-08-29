@@ -35,7 +35,7 @@ export default class Comment{
                 postID: postID
             }
         });
-        if(comment.userID != userID || post.userID != userID){
+        if(comment.userID != userID && post.userID != userID){
             throw new Error("Only the owner of the comment or the post can delete it");
         }
         const result = await CommentDefinition.destroy({
@@ -64,7 +64,7 @@ export default class Comment{
                 postID: postID
             }
         });
-        if(comment.userID != userID || post.userID != userID){
+        if(comment.userID != userID){
             throw new Error("Only the owner of the comment or the post can update it");
         }
         const result = await CommentDefinition.update({
@@ -80,7 +80,7 @@ export default class Comment{
         }
         return result;
     }
-    static async getComments(postID, limit, offset){
+    static async getComments(userID, postID, limit, offset){
         const post = await PostDefinition.findOne({
             where: {
                 postID: postID
@@ -89,7 +89,11 @@ export default class Comment{
         if(!post){
             throw new Error("Post not found");
         }
-        const user = await post.getUser();
+        const user = await UserDefinition.findOne({
+            where: {
+                userID: userID
+            }
+        });
         const userCommentLikes = await user.getCommentLikes(); 
         let comments = await post.getPostComments({
                 limit: limit || 10,

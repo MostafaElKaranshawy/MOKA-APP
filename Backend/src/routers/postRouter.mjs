@@ -10,4 +10,5 @@ postRouter.post("/post",PostController.addPost);              // Add a post
 postRouter.get("/posts", paginationValidation, PostController.getPosts);              // Get a post
 postRouter.delete("/posts/:postID", PostController.deletePost); // Delete a post
 postRouter.patch("/posts/:postID", PostController.updatePost);  // Update a post
+postRouter.get("/posts/feed", PostController.getPostsFeed);       // Get a post
 export default postRouter;

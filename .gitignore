@@ -3,3 +3,5 @@ Backend/.env
 notes.txt
 Backend/package-lock.json
 Backend/package.json
+social-media-frontend/node_modules
+social-media-frontend/.env

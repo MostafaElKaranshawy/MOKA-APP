@@ -24,6 +24,10 @@ const UserDefinition = orm.define('user',
         name : {
             type : DataTypes.STRING(50),
             allowNull : false,
+        },
+        bio :{
+            type : DataTypes.STRING(200),
+            allowNull : true,
         }
     },
     {

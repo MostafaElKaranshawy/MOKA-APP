@@ -30,7 +30,7 @@ sessions:
 
 -> how to create from models files 
 migrations in database (check it out)
-how to call associations from the same class ?  (check gitup if stuck)
+how to call associations from the same class ?  (check githup if stuck)
 
 
 DO:
