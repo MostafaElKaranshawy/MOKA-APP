@@ -38,9 +38,15 @@ export default class User {
         return user;
     }
     static async editUserProfile(userID, name, bio){
-        const user = await UserDefinition.update({name: name, bio: bio}, {where: {
+        const user = await UserDefinition.findOne({where: {
+            userID: userID
+        }}) 
+        if(!name)name = user.name;
+        if(!bio)bio = user.bio;
+        const newUserInfo = await user.update({name: name, bio: bio}, {where: {
             userID: userID
         }});
-        return user != null;
+        console.log(newUserInfo);
+        return newUserInfo;
     }
 }

@@ -131,7 +131,7 @@ export default class FriendShip {
         return friendRequests;
     }
     static async getFriends(userID){
-        const friends = await FriendShipDefinition.findAll({
+        const friendsIDs = await FriendShipDefinition.findAll({
             where: {
                 [Op.or]: [
                     {
@@ -144,8 +144,20 @@ export default class FriendShip {
                 status: 1
             }
         });
-        if(friends == null)
+        if(friendsIDs == null)
             throw new Error("No friends found");
+        const friendUserIDs = friendsIDs.map(friendship => 
+            friendship.user1ID === userID ? friendship.user2ID : friendship.user1ID
+        );
+        
+        // Step 2: Fetch the User Details
+        const friends = await UserDefinition.findAll({
+            where: {
+                userID: {
+                    [Op.in]: friendUserIDs
+                }
+            }
+        });
         return friends;
     }
     static async removeFriend(userID, friendID){

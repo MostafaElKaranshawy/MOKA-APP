@@ -1,8 +1,11 @@
 import React, {useEffect, useState} from "react";
 import Header from "../header/header";
+import axios from 'axios'
 import "./profile.css";
 
 export default function Profile(){
+    const cookies = document.cookie;
+    const userToken = cookies.split("authToken=")[1];
     const [showAllFriends, setShowAllFriends] = useState(false);
     const [showEditBio, setshowEditBio] = useState(false);
     const [user, setUser] = useState({});
@@ -13,86 +16,75 @@ export default function Profile(){
         setshowEditBio(!showEditBio);
     }
     useEffect(() => {
-        setUser(JSON.parse(localStorage.getItem("user")));
-        console.log(JSON.parse(localStorage.getItem("user")))
-        setUser((user) => 
-            {
-                return {
-                    ...user,
-                    bio: "Hello to Mustafa ELkaranshawy Profile"
-                }
-            }
-        )
-        
-    }, [])
-    const [bio, setBio] = useState(user.bio);
-    useEffect(() => {
-        setBio(user.bio);
-    }, [user])
-    console.log(bio)
-    const editBio = (e) => {
-        setBio(e.target.value);
-    }
-    const saveBio = () => {
-        setUser((user) => {
-            return {
-                ...user,
-                bio: bio
-            }
-        });
-        setshowEditBio(false);
-    }
-    const friends = [
-        {
-            friendID: 1,
-            name: "John Doe"
-        },
-        {
-            friendID: 2,
-            name: "Jane Doe"
-        },
-        {
-            friendID: 3,
-            name: "John Doe"
-        },
-        {
-            friendID: 4,
-            name: "Jane Doe"
-        },
-        {
-            friendID: 5,
-            name: "John Doe"
-        },
-        {
-            friendID: 6,
-            name: "Jane Doe"
-        },
-        {
-            friendID: 7,
-            name: "John Doe"
-        },
-        {
-            friendID: 8,
-            name: "Jane Doe"
-        },
-        {
-            friendID: 9,
-            name: "John Doe"
-        },
-        {
-            friendID: 10,
-            name: "Jane Doe"
-        },
-        {
-            friendID: 11,
-            name: "John Doe"
-        },
-        {
-            friendID: 12,
-            name: "Jane Doe"
+        if (userToken) {
+            getUserProfile();
         }
-    ];
+    }, [userToken]);
+    const [bio, setBio] = useState(user.bio || ' ');
+    useEffect(() => {
+        setBio(user.bio || '');
+    }, [user])
+    const editBio = (e) => {
+        setBio(e.target.value || '');
+    }
+    async function saveBio(){
+        setshowEditBio(false);
+        await editUserInfo();
+        console.log("Bio saved")
+    }
+    const [friends, setFriends] = useState([]);
+
+    async function getFriends(){
+        try {
+            const response = await axios.get("http://localhost:4000/friends/", {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${userToken}`
+                },
+            });
+            const friendsData = await response.data;
+            setFriends(friendsData);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async function getUserProfile(){
+        try {
+            // console.log("Getting user profile")
+            const response = await axios.get("http://localhost:4000/user/profile", {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${userToken}`
+                },
+            });
+            const newUserData = response.data;
+            setUser(newUserData)
+            await getFriends()
+        } catch (error) {
+            console.log(error);
+        }
+    }
     const filteredFriends = showAllFriends? friends:friends.filter((friend, index) => index < (window.innerWidth / 350));
+    async function editUserInfo(){
+        try {
+            console.log("Edit user info")
+            const newInfo = {
+                name : user.name,
+                bio : bio
+            }
+            const response = await axios.patch("http://localhost:4000/user/profile",newInfo, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "authorization": `Bearer ${userToken}`
+                },
+            });
+            console.log(response)
+            const newUserInfo = response.data;
+            setUser(newUserInfo);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="profile view">
             <Header/> 
@@ -116,7 +108,7 @@ export default function Profile(){
                                 <div className="edit-bio-options">
                                     <div className="cancel edit-option" onClick={()=> {
                                         setshowEditBio(false);
-                                        setBio(user.bio);
+                                        setBio(user.bio || '');
                                     }}>Cancel</div>
                                     <div className="save edit-option" onClick={saveBio}>Save</div>
                                 </div>

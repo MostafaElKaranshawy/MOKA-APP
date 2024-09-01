@@ -11,13 +11,15 @@ import postRouter from './routers/postRouter.mjs';
 import commentRouter from './routers/commentRouter.mjs';
 import likeRouter from './routers/likeRouter.mjs';
 import friendShipRouter from './routers/friendShipRouter.mjs';
+import userRouter from './routers/userRouter.mjs';
 
-app.use(authRouter);
+app.use(authRouter)
 app.use(CheckUser)
 app.use(postRouter);
 app.use(commentRouter);
 app.use(likeRouter);
 app.use(friendShipRouter);
+app.use(userRouter)
 
 Object.values(orm.models).forEach((model) => {
     if (model.associate) {

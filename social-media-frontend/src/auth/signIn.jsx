@@ -32,13 +32,19 @@ export default function SignIn(probs) {
             });
     
             const data = response.data;
-            console.log(data);
-            alert(data.message);
+            if(response.status !== 200){
+                alert(data);
+                return;
+            }
+            else{
+                alert("Sign In Successful");
+            }
             const token = data.accessToken;
             document.cookie = `authToken=${token}; path=/; secure; samesite=strict;`;
             localStorage.setItem("user", JSON.stringify(data.user));
             window.location.href = "/home";
         } catch (error) {
+            alert(error.response.data);
             console.log(error);
         }
     }

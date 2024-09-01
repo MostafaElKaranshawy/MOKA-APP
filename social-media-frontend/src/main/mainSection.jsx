@@ -32,6 +32,7 @@ export default function MainSection() {
                 },
             });
             const postsData = response.data;
+            console.log(postsData);
             setPosts(postsData);
             setLoading(false);
         } catch (error) {
