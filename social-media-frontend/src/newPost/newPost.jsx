@@ -5,6 +5,7 @@ import "./newPost.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 import useUploadPhoto from "./uploadPhoto";
 import useUploadVideo from "./uploadVideo";
+import { addPost } from "../post/postRequests";
 
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
@@ -13,10 +14,11 @@ export default function NewPost(probs) {
         setContent(event.target.value);
     }
     
-    function handleSubmit(event) {
+    async function handleSubmit(event) {
         event.preventDefault();
         if((content.trim() === "" || content === "") && photoPreviews.length === 0 && videoPreviews.length === 0)return
-        probs.createPost(content);
+        await addPost(content, probs.userToken);
+        await probs.getPosts();
         alert("Post Created successfully");
         setContent("");
     }

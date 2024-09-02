@@ -2,9 +2,11 @@ import FriendShipService from "../services/friendShipService.mjs";
 
 class FriendShipController {
     static async sendFriendRequest(req, res){
+        console.log("sendFriendRequest")
         const friendID = parseInt(req.params.friendID);
         const userID = req.user.userID;
-        if(isNaN(friendID)){
+        console.log(friendID);
+        if(isNaN(friendID) || !friendID || !userID){
             return res.status(400).send("Invalid friendID");
         }
         if(friendID == userID){
@@ -63,9 +65,10 @@ class FriendShipController {
         }
     }
     static async getFriends(req, res){
-        const userID = req.user.userID;
+        // const userID = req.user.userID;
+        const userName = req.params.userName;
         try{
-            const friends = await FriendShipService.getFriends(userID);
+            const friends = await FriendShipService.getFriends(userName);
             return res.status(200).send(friends);
         }
         catch(err){
@@ -75,7 +78,7 @@ class FriendShipController {
     static async removeFriend(req, res){
         const friendID = parseInt(req.params.friendID);
         const userID = req.user.userID;
-        if(isNaN(friendID)){
+        if(isNaN(friendID) || friendID == null){
             return res.status(400).send("Invalid friendID");
         }
         if(friendID == userID){
@@ -84,6 +87,23 @@ class FriendShipController {
         try{
             await FriendShipService.removeFriend(userID, friendID);
             return res.status(200).send("Friend Removed");
+        }
+        catch(err){
+            return res.status(400).send(err.message);
+        }
+    }
+    static async getFriendStatus(req, res){
+        const friendID = parseInt(req.params.friendID);
+        const userID = req.user.userID;
+        if(isNaN(friendID) || friendID == null){
+            return res.status(400).send("Invalid friendID");
+        }
+        if(friendID == userID){
+            return res.status(400).send("Cannot check status with yourself");
+        }
+        try{
+            const status = await FriendShipService.getFriendStatus(userID, friendID);
+            return res.status(200).send(status);
         }
         catch(err){
             return res.status(400).send(err.message);

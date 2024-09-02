@@ -48,7 +48,7 @@ class PostController{
     }
     static async getPosts(req, res){
         try {
-            const userID = req.user.userID;
+            const userID = parseInt(req.params.userID);
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
             const offset = (page - 1) * limit;

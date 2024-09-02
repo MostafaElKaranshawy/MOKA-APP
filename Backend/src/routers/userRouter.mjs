@@ -5,6 +5,6 @@ const userRouter = express.Router();
 
 // Get User Profile
 userRouter.patch('/user/profile',UserController.editUserProfile);
-userRouter.get('/user/profile',UserController.getUserProfile);
-
+userRouter.get('/:userName/profile',UserController.getUserProfile);
+// userRouter.get('/:userName/profile',UserController.getOtherUserProfile);
 export default userRouter;

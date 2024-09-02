@@ -2,14 +2,18 @@ import React, {useState, useEffect} from "react";
 import "./sideMenu.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 export default function SideMenu(){
+    const userToken = document.cookie.split("authToken=")[1];
     const innerWidth = window.innerWidth;
     let sideMenu = (innerWidth > 756? true: false);
     function profileVisit(){
         window.location.href = "/profile";
     }
     const user = JSON.parse(localStorage.getItem('user'));
-    // console.log(user);
-    // console.log(user.name)
+    useEffect(() => {
+        if (user && userToken) {
+            
+        }
+    }, [userToken]);
     return (
         <>{    
             sideMenu && (

@@ -17,10 +17,23 @@ export default class UserController{
         }
     }
     
+    // static async getUserProfile(req, res){
+    //     const userID = req.user.userID;
+    //     try{
+    //         const user = await UserService.getUserProfile(userID);
+    //         console.log(user)
+    //         res.status(200).send(user);
+    //     }
+    //     catch(err){
+    //         res.status(404).send(err.message);
+    //     }
+    // }
+    
     static async getUserProfile(req, res){
-        const userID = req.user.userID;
+        const userName = req.params.userName;
+        console.log(userName)
         try{
-            const user = await UserService.getUserProfile(userID);
+            const user = await UserService.getUserProfile(userName);
             console.log(user)
             res.status(200).send(user);
         }

@@ -19,22 +19,24 @@ export default class User {
         if(userName === user.userName) throw new Error("Username already exists");
         return false;   // not email ot username found.
     }
-    static async getUserByEmail(email){
-        const user = await UserDefinition.findOne({where: {
-            email: email
-        }});
-        console.log(user);
-        console.log("#################");
-        return user;
-    }
-    static async getUserProfile(userID){
+    static async getUserByEmail(email) {
         const user = await UserDefinition.findOne(
             {
-                attributes: ['name', 'userName', 'bio', 'email', 'userID'],
-                where: {
-                    userID: userID
+                where : {
+                    email : email
                 }
-            });
+            }
+        )
+        return user;
+    }
+    static async getUserProfile(userName){
+        const user = await UserDefinition.findOne({
+            attributes: ['name', 'userName', 'bio', 'email', 'userID'],
+            where: {
+                userName: userName
+            }
+        });
+        console.log(user);
         return user;
     }
     static async editUserProfile(userID, name, bio){

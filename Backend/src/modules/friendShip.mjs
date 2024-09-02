@@ -3,20 +3,7 @@ import UserDefinition from './definitions/userDefinition.mjs';
 import { Op } from '../config/orm.mjs';
 export default class FriendShip {
     static async sendFriendRequest(userID, friendID){
-        const user = await UserDefinition.findOne({
-            where: {
-                userID: userID
-            }
-        });
-        const friend = await UserDefinition.findOne({
-            where: {
-                userID: friendID
-            }
-        });
-        if(!user || !friend){
-            throw new Error("User not found");
-        }
-        const [friendship, created] = await FriendShipDefinition.findOrCreate({
+        let friendship = await FriendShipDefinition.findOne({
             where: {
                 [Op.or]: [
                     {
@@ -28,25 +15,37 @@ export default class FriendShip {
                         user2ID: userID
                     }
                 ],
-                status: 0
             }
         });
+        if(friendship == null){
+            friendship = await FriendShipDefinition.create({
+                user1ID: userID,
+                user2ID: friendID,
+                senderID: userID,
+                status: 0
+            });
+            if(!friendship){
+                throw new Error("Friend Request not sent");
+            }
+            return;
+        }
+        console.log(created)
         if(!created){
-            if(friendship.sender == userID){
+            if(friendship.status == 1){
+                throw new Error("You Are Alraedy Friends");
+            }
+            else if(friendship.sender == userID){
                 throw new Error("Friend Request already sent");
             }
-            if(friendship.sender == friendID){
+            else if(friendship.sender == friendID){
                 throw new Error("Friend Request already received");
             }
-
+            return;
         }
         if(!friendship){
             throw new Error("Friend Request not sent");
         }
-        friendship.setFriend1(user);
-        friendship.setFriend2(friend);
-        friendship.setSender(userID);
-        await friendship.save();
+        console.log("FRIEND DONEEE")
     }
     static async acceptFriendRequest(userID, friendID){
         const user = await UserDefinition.findOne({
@@ -95,7 +94,6 @@ export default class FriendShip {
         }
         const friendship = await FriendShipDefinition.findOne({
             where: {
-                senderID : userID,
                 [Op.or]: [
                     {
                         user1ID: userID,
@@ -118,19 +116,50 @@ export default class FriendShip {
         }
     }
     static async getFriendRequests(userID){
-        const friendRequests = await FriendShipDefinition.findAll({
+        const friendsIDs = await FriendShipDefinition.findAll({
             where: {
-                [Op.not]: {
-                    senderID: userID
-                },
+                [Op.or]: [
+                    {
+                        user1ID: userID,
+                    },
+                    {
+                        user2ID: userID,
+                    },
+                ],
+                [Op.not] :[
+                    {
+                        senderID: userID
+                    }
+                ],
                 status: 0
             }
         });
-        if(friendRequests == null)
-            throw new Error("No friend requests found");
+        if(friendsIDs == null)
+            throw new Error("No friends found");
+        const friendUserIDs = friendsIDs.map(friendship => 
+            friendship.user1ID === userID ? friendship.user2ID : friendship.user1ID
+        );
+        
+        // Step 2: Fetch the User Details
+        const friendRequests = await UserDefinition.findAll({
+            where: {
+                userID: {
+                    [Op.in]: friendUserIDs
+                }
+            }
+        });
         return friendRequests;
     }
-    static async getFriends(userID){
+    static async getFriends(userName){
+        const user = await UserDefinition.findOne({
+            where: {
+                userName: userName
+            }
+        });
+        if(!user){
+            throw new Error("User not found");
+        }
+        const userID = user.userID;
         const friendsIDs = await FriendShipDefinition.findAll({
             where: {
                 [Op.or]: [
@@ -183,5 +212,40 @@ export default class FriendShip {
         if(!res){
             throw new Error("Friend not removed");
         }
+    }
+    static async getFriendStatus(userID, friendID){
+        const friendship = await FriendShipDefinition.findOne({
+            where: {
+                [Op.or]: [
+                    {
+                        user1ID: userID,
+                        user2ID: friendID
+                    },
+                    {
+                        user1ID: friendID,
+                        user2ID: userID
+                    }
+                ]
+            }
+        });
+        let friendStatus;
+        if(!friendship){
+            // friendStatus = "Not Friends";
+            return "Not Friends";
+        }
+        if(friendship.status == 1){
+            friendStatus = "Friends";
+            // return "Friends";
+        }
+        else if(friendship.senderID == userID){
+            friendStatus = "Friend Request Sent";
+            // return "Friend Request Sent";
+        }
+        else if(friendship.senderID == friendID){
+            friendStatus = "Friend Request Received";
+            // return "Friend Request Received";
+        }
+        console.log(friendStatus);
+        return friendStatus;
     }
 }

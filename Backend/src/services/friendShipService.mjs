@@ -17,6 +17,14 @@ class FriendShipService {
             throw new Error(err.message);
         }
     }
+    static async removeFriendRequest(userID, friendID){
+        try {
+            await FriendShip.removeFriendRequest(userID, friendID);
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
     static async getFriendRequests(userID){
         try {
             const friendRequests = await FriendShip.getFriendRequests(userID);
@@ -26,9 +34,9 @@ class FriendShipService {
             throw new Error(err.message);
         }
     }
-    static async getFriends(userID){
+    static async getFriends(UserName){
         try {
-            const friends = await FriendShip.getFriends(userID);
+            const friends = await FriendShip.getFriends(UserName);
             return friends;
         }
         catch(err){
@@ -38,6 +46,15 @@ class FriendShipService {
     static async removeFriend(userID, friendID){
         try {
             await FriendShip.removeFriend(userID, friendID);
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
+    static async getFriendStatus(userID, friendID){
+        try {
+            const status = await FriendShip.getFriendStatus(userID, friendID);
+            return status;
         }
         catch(err){
             throw new Error(err.message);

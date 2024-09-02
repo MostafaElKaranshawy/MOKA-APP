@@ -191,6 +191,7 @@
     cursor: pointer;
     transition: 0.3s;
     width: 50%;
+    position: relative;
 }
 
 .post-action i{
@@ -216,6 +217,8 @@
     border-radius: 50%;
     padding: 5px;
     background-color: #fff;
+    position: absolute;
+    right: 0;
 }
 
 @media screen and (max-width : 500px) {

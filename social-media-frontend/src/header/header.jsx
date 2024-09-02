@@ -10,7 +10,8 @@ export default function Header() {
     function toggleNav() {
         setNavMenu((prev) => !prev);
     }
-
+    const user = JSON.parse(localStorage.getItem("user"));
+    const userProfileURL = `/${user.userName}/profile`;
     return (
         <header className="header">
             <div className="logo-search-container">
@@ -23,22 +24,17 @@ export default function Header() {
             {
                 navMenu && (
                 <ul className="nav-menu">
-                    {/* <li className="menu-item"> */}
-                        <NavLink to="/home" className="menu-item">
-                            <i className="fa-solid fa-house"></i>
-                            <p>Home</p>
-                        </NavLink>
-                    {/* </li> */}
-                    {/* <li className="menu-item"> */}
-                        <NavLink to="/profile" className="menu-item">
-                            <i className="fa-solid fa-user"></i>
-                            <p>Profile</p>
-                        </NavLink>
-                    {/* </li> */}
+                    <NavLink to="/home" className="menu-item">
+                        <i className="fa-solid fa-house"></i>
+                        <p>Home</p>
+                    </NavLink>
+                    <NavLink to={userProfileURL} className="menu-item">
+                        <i className="fa-solid fa-user"></i>
+                        <p>Profile</p>
+                    </NavLink>
                     <li className="menu-item">
                         <i className="fa-solid fa-bell"></i>
                         <p>Updates</p>
-                        {/* <Notifications /> */}
                     </li>
                 </ul>)
             }

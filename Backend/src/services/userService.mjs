@@ -10,9 +10,9 @@ export default class UserService{
             throw new Error(err);
         }
     }
-    static async getUserProfile(userID){
+    static async getUserProfile(userName){
         try{
-            return await User.getUserProfile(userID);
+            return await User.getUserProfile(userName);
         }
         catch(err){
             throw new Error(err);

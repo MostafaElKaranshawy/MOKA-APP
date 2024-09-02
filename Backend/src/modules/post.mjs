@@ -84,11 +84,13 @@ export default class Post {
             }
         );
         posts = posts.map((post) => {
+            console.log(post);
             return {
                 postID: post.postID,
                 authorName: user.name,
                 content: post.content,
-                time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
+                time : new Date(post.createdAt),
+                // time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
                 userID: post.userID,
                 liked: userLikes.find((like) => like.postID === post.postID) ? true : false,
                 likes: post.likes,
@@ -146,7 +148,8 @@ export default class Post {
             postID: post.postID,
             authorName: post.user.dataValues.name, // Using the name from the joined User model
             content: post.content,
-            time: format(new Date(post.createdAt), 'dd-MM-yyyy HH:mm:ss'), // Formatting the date and time
+            time: new Date(post.createdAt),
+            // time: format(new Date(post.createdAt), 'dd-MM-yyyy HH:mm:ss'), // Formatting the date and time
             userID: post.userID, // Assuming this is the correct field name for the user ID
             liked: userLikes.find(like => like.postID === post.postID) ? true : false,
             likes: post.likes,

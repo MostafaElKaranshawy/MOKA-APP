@@ -114,7 +114,8 @@ export default class Comment{
                 likes: comment.likes,
                 authorName : comment.user.dataValues.authorName,
                 liked: userCommentLikes.find(like => like.commentID == comment.commentID) ? true : false,
-                time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
+                // time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
+                time: new Date(post.createdAt),
             }
         });
         return comments;

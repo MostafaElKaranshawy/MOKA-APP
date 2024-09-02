@@ -39,6 +39,28 @@ export default function Comment(probs){
         probs.editComment(comment.commentID, newContent);
         toggleShowEdit();
     }
+    function timeAgo(date) {
+        console.log(date);
+        date = new Date(date)
+        const now = new Date();
+        const secondsPast = Math.floor((now - date) / 1000);
+        console.log(date + " " + now);
+        if (secondsPast < 60) {
+            return `${secondsPast} seconds ago`;
+        }
+        if (secondsPast < 3600) {
+            const minutesPast = Math.floor(secondsPast / 60);
+            return `${minutesPast} minutes ago`;
+        }
+        if (secondsPast < 86400) {
+            const hoursPast = Math.floor(secondsPast / 3600);
+            return `${hoursPast} hours ago`;
+        }
+        if (secondsPast < 604800) {
+            const daysPast = Math.floor(secondsPast / 86400);
+            return `${daysPast} days ago`;
+        }
+    }  
     return (
         <div className="comment">
             <div className="comment-header">
@@ -47,7 +69,7 @@ export default function Comment(probs){
             <div className="comment-body">
                 <div className="comment-user">
                     <span className="comment-username">{comment.authorName}</span>
-                    <span className="comment-time">{comment.time}</span>
+                    <span className="comment-time">{timeAgo(comment.time)}</span>
                 </div>
                 <div className="comment-content text-container">
                     <p className="comment-content-text text-container" dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }} />
