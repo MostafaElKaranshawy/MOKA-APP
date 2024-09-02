@@ -1,4 +1,5 @@
 import PostService from '../services/postService.mjs';
+import {eventEmitter} from '../config/wss.mjs';
 class PostController{
     static async addPost(req, res){
         try{
@@ -10,6 +11,7 @@ class PostController{
                 throw new Error("Invalid Parameters");
             }
             await PostService.createPost(userID, content);
+            eventEmitter.emit('broadcast', `${req.user.name} created a new Post`);
             return res.status(200).send("Post Created Successfully");
         }
         catch(err){
@@ -24,6 +26,7 @@ class PostController{
                 throw new Error("Invalid Parameters");
             }
             await PostService.deletePost(userID, postID);
+            eventEmitter.emit('broadcast', `${req.user.name} deleted a Post`);
             return res.status(200).send("Post Deleted Successfully");
         }
         catch(err){
@@ -40,6 +43,7 @@ class PostController{
                 throw new Error("Invalid Parameters");
             }
             await PostService.updatePost(userID, postID, content);
+            eventEmitter.emit('broadcast', `${req.user.name} updated a Post`);
             return res.status(200).send("Post Updated Successfully");
         }
         catch(err){

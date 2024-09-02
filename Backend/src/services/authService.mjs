@@ -27,7 +27,10 @@ class AuthService {
             throw new Error("Password is Incorrect");
         }
         const userToken = {
-            userID: user.userID
+            userID: user.userID,
+            name: user.name,
+            email: user.email,
+            userName: user.userName,
         };
         const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
         try {

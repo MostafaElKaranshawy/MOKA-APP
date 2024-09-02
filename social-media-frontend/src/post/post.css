@@ -41,10 +41,17 @@
     background-color: white;
     position: relative;
 }
+.post-header-info p:first-child{
+    cursor: pointer;
+}
+.post-header-info p:first-child:hover{
+    color: #0056b3;
+}
 .post-header img{
     width: 50px;
     height: 50px;
     margin-right: 10px;
+    cursor: pointer;
 }
 
 .name-time{

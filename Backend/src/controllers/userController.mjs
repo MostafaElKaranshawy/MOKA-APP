@@ -1,5 +1,5 @@
 import UserService from '../services/userService.mjs';
-
+import {eventEmitter} from '../config/wss.mjs';
 export default class UserController{
     static async editUserProfile(req, res){
         const userID = req.user.userID;
@@ -8,6 +8,7 @@ export default class UserController{
         try{
             const newUserInfo = await UserService.editUserProfile(userID, name, bio);
             if(newUserInfo){
+                eventEmitter.emit('broadcast', `${req.user.name} updated their Profile`);
                 return res.status(200).send(newUserInfo);
             }
             return res.status(404).send("User not found");

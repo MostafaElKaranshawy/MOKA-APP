@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "./post.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 import CommentList from "../comment/comments";
@@ -19,7 +19,7 @@ export default function Post(probs){
     const [showEdit, setShowEdit] = useState(false);
     const [newContent, setNewContent] = useState(post.content);
     const [comments, setComments] = useState([]);
-
+    // const ws = new WebSocket("ws://localhost:4001");
     useEffect(() => {
         if(probs.userToken){
             getComments();
@@ -30,6 +30,37 @@ export default function Post(probs){
             getComments();
         }
     }, [showComments])
+    const ws = useRef(null);
+
+    useEffect(() => {
+        // Create the WebSocket connection once
+        ws.current = new WebSocket("ws://localhost:4001");
+
+        ws.current.onmessage = (event) => {
+            if (probs.userToken && user) {
+                handleGetComments();
+            }
+            console.log(`Message from server: ${event.data}`);
+        };
+
+        ws.current.onopen = () => {
+            console.log('Connected to WebSocket server');
+        };
+
+        ws.current.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Clean up on component unmount
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, []);
+    async function handleGetComments(){
+        await getComments();
+    }
     async function toggleShowComments(){
         setShowComments((pre)=>!pre);
     }
@@ -41,13 +72,13 @@ export default function Post(probs){
         setNewContent(post.content);
         setShowEdit((pre)=>!pre);
     }
-    function changeLike(){
+    async function changeLike(){
         setLike((pre)=>!pre)
         if(liked){
-            handleUnlikePost();
+            await handleUnlikePost();
         }
         else{
-            handleLikePost();
+            await handleLikePost();
         }
     }
     async function handleDeletePost(){
@@ -70,7 +101,7 @@ export default function Post(probs){
         await probs.getPosts();
     }
     async function handleUnlikePost(){
-        unlikePost(post.postID, probs.userToken);
+        await unlikePost(post.postID, probs.userToken);
         await probs.getPosts();
     }
     async function getComments(){
@@ -125,6 +156,10 @@ export default function Post(probs){
             return `${daysPast} days ago`;
         }
     }       
+    const goToUserProfile = (userName) => () => {
+        console.log(userName);
+        window.location.href = `/${userName}/profile`;
+    };
     return (
         <div className="post">
             {post.shared &&
@@ -134,9 +169,9 @@ export default function Post(probs){
             </div>}
             <div className="post-header">
                 <div className="post-header-info">
-                    <img src={profilePhoto} alt="" />
+                    <img src={profilePhoto} alt="" onClick={goToUserProfile(post.userName)}/>
                     <div className="name-time">
-                        <p>{post.authorName}</p>
+                        <p onClick={goToUserProfile(post.userName)}>{post.authorName}</p>
                         <p>{timeAgo(post.time)}</p>
                     </div>
                 </div>

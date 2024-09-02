@@ -10,9 +10,9 @@ export default class Post {
                 userID: userID,
             }
         });
-        console.log("hello")
-        console.log(userID);
-        console.log(user)
+        // console.log("hello")
+        // console.log(userID);
+        // console.log(user)
         const result = await user.createPost({
             content : content
         });
@@ -84,10 +84,11 @@ export default class Post {
             }
         );
         posts = posts.map((post) => {
-            console.log(post);
+            // console.log(post);
             return {
                 postID: post.postID,
                 authorName: user.name,
+                userName : user.userName,
                 content: post.content,
                 time : new Date(post.createdAt),
                 // time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
@@ -112,10 +113,11 @@ export default class Post {
         );
         const friends = await FriendShipDefinition.findAll({
             where: {
-            [Op.or]: [
-                { user1ID: userID },
-                { user2ID: userID },
-            ],
+                [Op.or]: [
+                    { user1ID: userID },
+                    { user2ID: userID },
+                ],
+                status: 1
             },
             attributes: ['user1ID', 'user2ID'],
         });
@@ -134,14 +136,14 @@ export default class Post {
             include: [
             {
                 model: UserDefinition, // Assuming you have a User model associated with the Post model
-                attributes: ['name'], // Replace 'name' with the actual field for the user's name
+                attributes: ['name', 'userName', 'userID'], // Replace 'name' with the actual field for the user's name
             },
             ],
             limit: limit,
             offset: offset,
             order: [['createdAt', 'DESC']], // Sort posts by most recent
         });
-        console.log(postsFeed[0].user);
+        // console.log(postsFeed[0].user);
         // Assuming you have a userLikes array that contains the likes
         const formattedPostsFeed = postsFeed.map(post => {
             return {
@@ -149,6 +151,7 @@ export default class Post {
             authorName: post.user.dataValues.name, // Using the name from the joined User model
             content: post.content,
             time: new Date(post.createdAt),
+            userName : post.user.dataValues.userName,
             // time: format(new Date(post.createdAt), 'dd-MM-yyyy HH:mm:ss'), // Formatting the date and time
             userID: post.userID, // Assuming this is the correct field name for the user ID
             liked: userLikes.find(like => like.postID === post.postID) ? true : false,
@@ -156,7 +159,7 @@ export default class Post {
             comments: post.comments,
             };
         });
-        console.log(formattedPostsFeed);
+        // console.log(formattedPostsFeed);
         return formattedPostsFeed;
     }
 }

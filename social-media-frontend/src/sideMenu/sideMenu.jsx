@@ -1,8 +1,10 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useRef} from "react";
 import "./sideMenu.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../routes/profileRequests";
 export default function SideMenu(){
+    // const ws = new WebSocket("ws://localhost:4001");
+    
     const userToken = document.cookie.split("authToken=")[1];
     const innerWidth = window.innerWidth;
     let sideMenu = (innerWidth > 756? true: false);
@@ -17,6 +19,36 @@ export default function SideMenu(){
             handleUser();
         }
     }, [userToken]);
+
+    const ws = useRef(null);
+
+    useEffect(() => {
+        // Create the WebSocket connection once
+        ws.current = new WebSocket("ws://localhost:4001");
+
+        ws.current.onmessage = (event) => {
+            if (userToken && user) {
+                handleUser();
+            }
+            console.log(`Message from server: ${event.data}`);
+        };
+
+        ws.current.onopen = () => {
+            console.log('Connected to WebSocket server');
+        };
+
+        ws.current.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Clean up on component unmount
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, []);
+
     const handleUser = async () => {
         const userFriends = await getUserFriends(user.userName, userToken);
         setFriends(userFriends);

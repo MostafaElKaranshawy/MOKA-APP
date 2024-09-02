@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
 import Post from "../post/post";
 import NewPost from "../newPost/newPost";
 import "./mainSection.css";
 import { getPosts } from "../post/postRequests";
+// import ws from "../webSocket";
 export default function MainSection() {
+    // const ws = new WebSocket("ws://localhost:4001");
     const [user, setUser] = useState({});
     const [userToken, setUserToken] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -22,6 +24,35 @@ export default function MainSection() {
             handleGetPosts();
         }
     }, [userToken]);
+    const ws = useRef(null);
+
+    useEffect(() => {
+        // Create the WebSocket connection once
+        ws.current = new WebSocket("ws://localhost:4001");
+
+        ws.current.onmessage = (event) => {
+            if (userToken) {
+                // console.log('Getting posts');
+                handleGetPosts();
+            }
+            console.log(`Message from server: ${event.data}`);
+        };
+
+        ws.current.onopen = () => {
+            console.log('Connected to WebSocket server');
+        };
+
+        ws.current.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Clean up on component unmount
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, []);
 
     async function handleGetPosts() {
         try {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import Header from "../header/header";
 import Post from "../post/post";
 import "./profile.css";
@@ -17,6 +17,7 @@ import {
 } from "./profileRequests.jsx";
 
 export default function Profile() {
+    // const ws = new WebSocket("ws://localhost:4001");
     const cookies = document.cookie;
     const { userName } = useParams();
     const userToken = cookies.split("authToken=")[1];
@@ -58,6 +59,34 @@ export default function Profile() {
         setBio(user.bio || '');
     }, [user]);
 
+    const ws = useRef(null);
+
+    useEffect(() => {
+        // Create the WebSocket connection once
+        ws.current = new WebSocket("ws://localhost:4001");
+
+        ws.current.onmessage = (event) => {
+            if (userToken && userName) {
+                fetchUserProfile();
+            }
+            console.log(`Message from server: ${event.data}`);
+        };
+
+        ws.current.onopen = () => {
+            console.log('Connected to WebSocket server');
+        };
+
+        ws.current.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Clean up on component unmount
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, []);
     const editBio = (e) => {
         setBio(e.target.value || '');
     };
