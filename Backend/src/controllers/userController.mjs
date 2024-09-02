@@ -16,19 +16,6 @@ export default class UserController{
             res.status(404).send(err.message);
         }
     }
-    
-    // static async getUserProfile(req, res){
-    //     const userID = req.user.userID;
-    //     try{
-    //         const user = await UserService.getUserProfile(userID);
-    //         console.log(user)
-    //         res.status(200).send(user);
-    //     }
-    //     catch(err){
-    //         res.status(404).send(err.message);
-    //     }
-    // }
-    
     static async getUserProfile(req, res){
         const userName = req.params.userName;
         console.log(userName)
@@ -41,5 +28,15 @@ export default class UserController{
             res.status(404).send(err.message);
         }
     }
-    
+    static async searchUsers(req, res){
+        const search = req.query.search;
+        console.log(search);
+        try{
+            const users = await UserService.searchUsers(search);
+            res.status(200).send(users);
+        }
+        catch(err){
+            res.status(404).send(err.message);
+        }
+    }
 }

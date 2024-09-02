@@ -51,4 +51,17 @@ export default class User {
         console.log(newUserInfo);
         return newUserInfo;
     }
+    static async searchUsers(search){
+        let users = await UserDefinition.findAll({
+            attributes: ['name', 'userName', 'userID'],
+            where: {
+                name: {[Op.substring]: search}
+            }
+        });
+        // console.log(users);
+        // console.log('#######################');
+        users = users.map(user =>user.dataValues);
+        console.log(users);
+        return users;
+    }
 }

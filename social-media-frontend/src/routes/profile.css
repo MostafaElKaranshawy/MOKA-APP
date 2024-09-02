@@ -166,6 +166,14 @@
     font-weight: bold;
 }
 
+.profile-friend:hover img,
+.friend-request-user-info:hover img {
+    transform: scale(1.1);
+}
+.profile-friend:hover .profile-friend-name,
+.friend-request-user-info:hover .profile-friend-request-name {
+    color: #1877f2;
+}
 .profile-friend:hover img{
     transform: scale(1.1);
 }
@@ -198,18 +206,24 @@
     cursor: pointer;
     text-align: center;
     font-size: 12px;
-}
-
-.accept {
-    background-color: #1877f2;
     color: white;
+    font-weight: bold;
+    transition: 0.3s;
 }
 
+.accept:hover {
+    background-color: #1877f2;
+}
+
+.reject:hover {
+    background-color: red;
+}
 .reject {
-    background-color: #e4e6eb;
-    color: #606770;
+    background-color: #f54f4f;
 }
-
+.accept {
+    background-color: #488ffa;
+}
 .show-all-friends {
     color: #1877f2;
     cursor: pointer;

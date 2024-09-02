@@ -18,4 +18,12 @@ export default class UserService{
             throw new Error(err);
         }
     }
+    static async searchUsers(search){
+        try{
+            return await User.searchUsers(search);
+        }
+        catch(err){
+            throw new Error(err);
+        }
+    }
 }

@@ -142,6 +142,7 @@ export default function Profile() {
             setFriendStatus(friendStatusData);
     }
     const goToUserProfile = (userName) => () => {
+        console.log(userName);
         window.location.href = `/${userName}/profile`;
     };
 
@@ -232,8 +233,10 @@ export default function Profile() {
                         <div className="profile-friend-requests-list">
                             {mainUserFriendRequests.map((friendRequest, index) => (
                                 <div className="profile-friend-request" key={index}>
-                                    <img src="https://www.w3schools.com/howto/img_avatar.png" alt="friend" />
-                                    <p className="profile-friend-request-name">{friendRequest.name}</p>
+                                    <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
+                                        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="friend"  />
+                                        <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
+                                    </div>
                                     <div className="profile-friend-request-options">
                                         <div className="accept" onClick={() => handleAcceptFriendRequest(friendRequest.userID)}>
                                             Accept
