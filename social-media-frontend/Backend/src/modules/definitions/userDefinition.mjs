@@ -28,7 +28,11 @@ const UserDefinition = orm.define('user',
         bio :{
             type : DataTypes.STRING(200),
             allowNull : true,
-        }
+        },
+        profilePhotoUrl: {
+            type: DataTypes.STRING,
+            allowNull: true,
+        },
     },
     {
         timestamps: false

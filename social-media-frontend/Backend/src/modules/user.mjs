@@ -31,7 +31,7 @@ export default class User {
     }
     static async getUserProfile(userName){
         const user = await UserDefinition.findOne({
-            attributes: ['name', 'userName', 'bio', 'email', 'userID'],
+            attributes: ['name', 'userName', 'bio', 'email', 'userID', 'profilePhotoUrl'],
             where: {
                 userName: userName
             }
@@ -58,10 +58,20 @@ export default class User {
                 name: {[Op.substring]: search}
             }
         });
-        // console.log(users);
-        // console.log('#######################');
         users = users.map(user =>user.dataValues);
         console.log(users);
         return users;
+    }
+    static async uploadProfilePhoto(userID, profilePhoto) {
+        const user = await UserDefinition.findOne({ where: { userID } });
+    
+        if (!user) {
+            throw new Error("User not found");
+        }
+    
+        user.profilePhotoUrl = `/Backend/uploads/${profilePhoto}`; // Assuming you want to store the file path
+        await user.save();
+    
+        return user;
     }
 }

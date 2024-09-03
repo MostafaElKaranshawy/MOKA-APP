@@ -142,6 +142,7 @@ export default class FriendShip {
         
         // Step 2: Fetch the User Details
         const friendRequests = await UserDefinition.findAll({
+            attributes: ['userID', 'name', 'userName', 'profilePhotoUrl'],
             where: {
                 userID: {
                     [Op.in]: friendUserIDs
@@ -181,6 +182,7 @@ export default class FriendShip {
         
         // Step 2: Fetch the User Details
         const friends = await UserDefinition.findAll({
+            attributes: ['userID', 'name', 'userName', 'profilePhotoUrl'],
             where: {
                 userID: {
                     [Op.in]: friendUserIDs

@@ -9,11 +9,16 @@ export default function Comments(probs) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [currentFilter, setCurrentFilter] = useState("Most Recent");
     const [filteredCommments, setFilteredComments] = useState([]);
-    const [page, setPage] = useState(probs.page);
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
+    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };
-
+    useEffect(() => {
+        if (user) {
+            setProfilePhotoURL(user.profilePhotoUrl);
+        }
+    }, [user])
     useEffect(() => {
         Filtering();
     }, [comments, currentFilter]); // Added `comments` as a dependency
@@ -118,7 +123,7 @@ export default function Comments(probs) {
     return (
         <div className="comment-list">
             <div className="compose-comment">
-                <img src={profilePhoto} alt="profile" className="comment-profile-picture" />
+                <img src={profilePhotoURL} alt="profile" className="comment-profile-picture" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
                 <div className="compose-body">
                     <textarea
                         ref={textareaRef}

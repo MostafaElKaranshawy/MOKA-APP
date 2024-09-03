@@ -99,7 +99,7 @@ export default class Comment{
                 include: [
                     {
                         model: UserDefinition, 
-                        attributes: [['name', 'authorName']], 
+                        attributes: [['name', 'authorName'], 'profilePhotoURL', 'userName'], 
                     }
                 ]
             }
@@ -112,7 +112,8 @@ export default class Comment{
                 likes: comment.likes,
                 authorName : comment.user.dataValues.authorName,
                 liked: userCommentLikes.find(like => like.commentID == comment.commentID) ? true : false,
-                // time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
+                profilePhotoURL: comment.user.dataValues.profilePhotoURL,
+                userName: comment.user.dataValues.userName,
                 time: new Date(comment.createdAt),
             }
         });

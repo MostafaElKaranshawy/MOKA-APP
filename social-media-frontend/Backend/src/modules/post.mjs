@@ -91,7 +91,7 @@ export default class Post {
                 userName : user.userName,
                 content: post.content,
                 time : new Date(post.createdAt),
-                // time : format(new Date(post.createdAt), 'dd-mm-yyyy HH:mm:ss'),
+                profilePhotoUrl : user.profilePhotoUrl,
                 userID: post.userID,
                 liked: userLikes.find((like) => like.postID === post.postID) ? true : false,
                 likes: post.likes,
@@ -136,7 +136,7 @@ export default class Post {
             include: [
             {
                 model: UserDefinition, // Assuming you have a User model associated with the Post model
-                attributes: ['name', 'userName', 'userID'], // Replace 'name' with the actual field for the user's name
+                attributes: ['name', 'userName', 'userID', 'profilePhotoUrl'], // Replace 'name' with the actual field for the user's name
             },
             ],
             limit: limit,
@@ -152,7 +152,7 @@ export default class Post {
             content: post.content,
             time: new Date(post.createdAt),
             userName : post.user.dataValues.userName,
-            // time: format(new Date(post.createdAt), 'dd-MM-yyyy HH:mm:ss'), // Formatting the date and time
+            profilePhotoUrl : post.user.dataValues.profilePhotoUrl,
             userID: post.userID, // Assuming this is the correct field name for the user ID
             liked: userLikes.find(like => like.postID === post.postID) ? true : false,
             likes: post.likes,

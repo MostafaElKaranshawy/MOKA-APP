@@ -40,4 +40,19 @@ export default class UserController{
             res.status(404).send(err.message);
         }
     }
+    static async uploadProfilePhoto(req, res) {
+        const userID = req.user.userID;
+        const profilePhoto = req.file;
+        console.log(profilePhoto);
+        if (!profilePhoto) {
+            return res.status(400).send("No file uploaded");
+        }
+    
+        try {
+            const newProfilePhoto = await UserService.uploadProfilePhoto(userID, profilePhoto.filename); // Pass the filename or the URL, not the whole file object
+            return res.status(200).json({ message: "Profile photo updated successfully", newProfilePhoto });
+        } catch (err) {
+            return res.status(500).send(err.message);
+        }
+    }    
 }

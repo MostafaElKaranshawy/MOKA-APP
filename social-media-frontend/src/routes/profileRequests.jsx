@@ -147,7 +147,7 @@ async function getUserPosts(userID, userToken, setError, page, limit){
                 "Authorization": `Bearer ${userToken}`
             },
         });
-        console.log(response.data);
+        // console.log(response.data);
         return response.data;
     }
     catch(err){

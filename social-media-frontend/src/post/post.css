@@ -11,7 +11,7 @@
     border-bottom: 1px solid #333;
     background-color: aliceblue;
     border-radius: 10px 10px 0 0;
-    width: fit-content;
+    /* width: fit-content; */
     align-items: center;
 }
 .post .shared-post img{
@@ -52,6 +52,7 @@
     height: 50px;
     margin-right: 10px;
     cursor: pointer;
+    border-radius: 50%;
 }
 
 .name-time{
@@ -106,7 +107,7 @@
     transition: 0.3s;
     background-color: rgb(216, 237, 255);
     width: 100%;
-    backdrop-filter: blur(10px);
+    /* backdrop-filter: blur(10px); */
 }
 .post-option:hover{
     background-color: rgba(0, 0, 97, 0.466);
@@ -146,7 +147,7 @@
     width: 70%;
     height: 50%;
     min-height: 200px;
-    backdrop-filter: blur(100px);
+    /* backdrop-filter: blur(100px); */
     flex-direction: column;
     z-index: 100;
     top: 100%;

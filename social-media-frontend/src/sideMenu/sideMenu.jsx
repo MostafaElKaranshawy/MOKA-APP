@@ -3,13 +3,13 @@ import "./sideMenu.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../routes/profileRequests";
 export default function SideMenu(){
-    // const ws = new WebSocket("ws://localhost:4001");
-    
+    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     const userToken = document.cookie.split("authToken=")[1];
     const innerWidth = window.innerWidth;
     let sideMenu = (innerWidth > 756? true: false);
     function profileVisit(){
-        window.location.href = "/profile";
+        const url = `/${user.userName}/profile`;
+        window.open(url, '_blank');
     }
     const user = JSON.parse(localStorage.getItem('user'));
     const [friends, setFriends] = useState([]);
@@ -50,6 +50,7 @@ export default function SideMenu(){
     }, []);
 
     const handleUser = async () => {
+        setProfilePhotoURL(user.profilePhotoUrl);
         const userFriends = await getUserFriends(user.userName, userToken);
         setFriends(userFriends);
         const userFriendRequests = await getFriendRequests(userToken);
@@ -71,7 +72,10 @@ export default function SideMenu(){
             sideMenu && (
                 <div className="side-menu">
                     <div className="profile">
-                        <img src={profilePhoto} onClick={profileVisit}/>
+                        <img 
+                            src={profilePhotoURL} onClick={profileVisit}
+                            onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} 
+                        />
                         <h2 className="profile-name" onClick={profileVisit}>{user.name}</h2>
                     </div>
                     <div className="friends sidebar-section">
@@ -85,9 +89,10 @@ export default function SideMenu(){
                     <div className="profile-friend-requests">
                         <div className="profile-friend-requests-list">
                             {friendRequests.map((friendRequest, index) => (
+                                console.log(friendRequest),
                                 <div className="profile-friend-request" key={index}>
                                     <div className="friend-request-user-info" onClick={()=>{visitProfile(friendRequest.userName)}}>
-                                        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="friend" />
+                                        <img src={friendRequest.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
                                         <p className="profile-friend-request-name">{friendRequest.name}</p>
                                     </div>
                                     <div className="profile-friend-request-options">

@@ -2,12 +2,13 @@ import React, {useState} from "react";
 import "./comment.css";
 import profilePhoto from "../assets/profile-photo-holder.jpg";
 export default function Comment(probs){
-    const user = JSON.parse(localStorage.getItem("user"));
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const comment = probs.comment;
     const [liked, setLike] = React.useState(comment.liked);
     const [showOptions, setShowOptions] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [newContent, setNewContent] = useState(comment.content);
+    // const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     function toggleLike() {
         setLike((pre) => !pre);
     }
@@ -61,14 +62,18 @@ export default function Comment(probs){
             return `${daysPast} days ago`;
         }
     }  
+    const goToUserProfile = () => {
+        const url = `/${comment.userName}/profile`;
+        window.open(url, '_blank');
+    };
     return (
         <div className="comment">
             <div className="comment-header">
-                <img src={profilePhoto} alt="profile" className="comment-profile-picture"/>
+                <img src={comment.profilePhotoURL} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
             </div>
             <div className="comment-body">
                 <div className="comment-user">
-                    <span className="comment-username">{comment.authorName}</span>
+                    <span className="comment-username" onClick={goToUserProfile}>{comment.authorName}</span>
                     <span className="comment-time">{timeAgo(comment.time)}</span>
                 </div>
                 <div className="comment-content text-container">

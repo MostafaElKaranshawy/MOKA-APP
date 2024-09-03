@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef} from "react";
+import axios from "axios";
 import Header from "../header/header";
 import Post from "../post/post";
 import Loading from "../loading/loading";
@@ -38,7 +39,7 @@ export default function Profile() {
     const limit = 5;
     const [error, setError] = useState(null);
     const [mainUserFriendRequests, setMainUserFriendRequests] = useState([]);
-    // const [aFriend, setAFriend] = useState(false); 
+    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     const mainUser = userName === JSON.parse(localStorage.getItem("user")).userName;
     const [friendStatus, setFriendStatus] = useState("");
     const toggleShowFriends = () => {
@@ -143,6 +144,9 @@ export default function Profile() {
     async function fetchUserProfile() {
         try {
             const userData = await getUserProfile(userName, userToken, setError);
+            console.log(userData);
+            setProfilePhotoURL(`${userData.profilePhotoUrl}`);
+            console.log(profilePhotoURL);
             setUser(userData);
             if(mainUser)(localStorage.setItem("user", JSON.stringify(userData)));
             
@@ -160,8 +164,6 @@ export default function Profile() {
             }
             console.log(postsData);
             setLoading(false);
-            // setPosts(userPosts);
-            // setAFriend(friendsData.find(friend => friend.userName === JSON.parse(localStorage.getItem("user")).userName));
             
             if (mainUser) {
                 const friendRequestsData = await getFriendRequests(userToken, setError);
@@ -224,8 +226,43 @@ export default function Profile() {
     };
 
     const handleGetPosts = async () => {
-        const userPosts = await getUserPosts(user.userID, userToken, setError);
+        const userPosts = await getUserPosts(user.userID, userToken, setError, page, limit);
         setPosts(userPosts);
+    }
+    const [profilePhoto, setProfilePhoto] = useState(null);
+    const [photoPreview, setPhotoPreview] = useState(null);
+    const handleFileChange = (e) => {
+        setProfilePhoto(e.target.files[0]);
+        const id = URL.createObjectURL(e.target.files[0]); // Generate a unique ID using object URL
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setPhotoPreview({ id, src: reader.result });
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+    
+    const handleUpload = async () => {
+        if (!profilePhoto) return;
+        const formData = new FormData();
+        formData.append('profilePhoto', profilePhoto);
+        try {
+            const response = await axios.post(`http://localhost:4000/user/profilePhoto`, formData , {
+                headers: {
+                    "authorization": `Bearer ${userToken}`
+                },
+            });
+            console.log(response)
+            setUser(response.data.newProfilePhoto);
+            await fetchUserProfile();
+            setProfilePhoto(null);
+            setPhotoPreview(null);
+        } catch (error) {
+            console.error('Error uploading file:', error);
+        }
+    };
+    const cancelUpload = async () => {
+        setProfilePhoto(null);
+        setPhotoPreview(null);
     }
     return (
         <div className="profile-view view ">
@@ -233,8 +270,37 @@ export default function Profile() {
             <div className="profile-section">
                 <div className="profile-header">
                     <div className="profile-photo">
-                        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profile" />
+                        {/* <img src={'../../../Backend/uploads/profilePhoto-1725378401444-720516434.jpg' || 'https://www.w3schools.com/howto/img_avatar.png'} alt="Profile" /> */}
+                        <img
+                            src={profilePhotoURL}
+                            className="profile-photo-preview"
+                            onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
+                        />
+                        {photoPreview && (
+                            <img 
+                                className="change-profile-photo-preview"
+                                src={photoPreview.src} 
+                                alt="preview"
+                                onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
+                            />
+                        )}
+                        {
+                            mainUser && (
+                                <div className="change-profile-photo" onClick={()=>{
+                                    document.querySelector(".change-profile-photo input").click();
+                                }}>
+                                    <i className="fa-solid fa-image upload-icon"  />
+                                    <input type="file" accept="image/*" onChange={handleFileChange} name="profilePhoto"/>
+                                </div>
+                            )
+                        }
                     </div>
+                    {profilePhoto && (
+                        <div className="change-profile-photo-options">
+                            <div className="save" onClick={handleUpload}>Save</div>
+                            <div className="cancel" onClick={cancelUpload}>Cancel</div>
+                        </div>
+                    )}
                     <p className="profile-name">
                         {user.name}
                     </p>
@@ -294,7 +360,7 @@ export default function Profile() {
                     <div className="profile-friends-list">
                         {filteredFriends.map((friend, index) => (
                             <div className="profile-friend" key={index} onClick={goToUserProfile(friend.userName)}>
-                                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="friend" />
+                                <img src={friend.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
                                 <p className="profile-friend-name">{friend.name}</p>
                             </div>
                         ))}
@@ -311,7 +377,7 @@ export default function Profile() {
                             {mainUserFriendRequests.map((friendRequest, index) => (
                                 <div className="profile-friend-request" key={index}>
                                     <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
-                                        <img src="https://www.w3schools.com/howto/img_avatar.png" alt="friend"  />
+                                        <img src={friendRequest.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
                                         <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
                                     </div>
                                     <div className="profile-friend-request-options">

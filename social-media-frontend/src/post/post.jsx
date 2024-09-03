@@ -19,9 +19,12 @@ export default function Post(probs){
     const [showEdit, setShowEdit] = useState(false);
     const [newContent, setNewContent] = useState(post.content);
     const [comments, setComments] = useState([]);
+    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     // const ws = new WebSocket("ws://localhost:4001");
     useEffect(() => {
         if(probs.userToken){
+            console.log(post);
+            setProfilePhotoURL(post.profilePhotoUrl);
             getComments();
         }
     }, []);
@@ -167,12 +170,12 @@ export default function Post(probs){
         <div className="post">
             {post.shared &&
             <div className="shared-post">
-                    <img src={profilePhoto}/>
+                    <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
                     <span> shared this</span>
             </div>}
             <div className="post-header">
                 <div className="post-header-info">
-                    <img src={profilePhoto} alt="" onClick={goToUserProfile(post.userName)}/>
+                    <img src={profilePhotoURL} alt="" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
                     <div className="name-time">
                         <p onClick={goToUserProfile(post.userName)}>{post.authorName}</p>
                         <p>{timeAgo(post.time)}</p>

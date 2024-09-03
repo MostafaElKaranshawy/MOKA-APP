@@ -26,4 +26,11 @@ export default class UserService{
             throw new Error(err);
         }
     }
+    static async uploadProfilePhoto(userID, profilePhoto) {
+        try {
+            return await User.uploadProfilePhoto(userID, profilePhoto);
+        } catch (err) {
+            throw new Error(err.message);
+        }
+    }
 }

@@ -35,7 +35,7 @@ export default function SignUp(probs) {
     
             const data = response.data;
             console.log(data);
-            alert(data.message + " Please Sign In.");
+            alert("Signed Up Succissfully!, Please Sign In.");
             probs.setSignIn();
         } catch (error) {
             console.log(error);

@@ -10,10 +10,15 @@ import { addPost } from "../post/postRequests";
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
     const user = JSON.parse(localStorage.getItem("user"));
+    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     function handleChange(event) {
         setContent(event.target.value);
     }
-    
+    useEffect(() => {
+        if(user){
+            setProfilePhotoURL(user.profilePhotoUrl);
+        }
+    }, [user])
     async function handleSubmit(event) {
         event.preventDefault();
         if((content.trim() === "" || content === "") && photoPreviews.length === 0 && videoPreviews.length === 0)return
@@ -35,7 +40,7 @@ export default function NewPost(probs) {
             <form onSubmit={handleSubmit} className="new-post-form">
                 <div className="new-post-content">
                     <div className="new-post-data">
-                        <img src={profilePhoto} />
+                        <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
                         <p>{user.name}</p>
                     </div>
                     <textarea
@@ -68,6 +73,7 @@ export default function NewPost(probs) {
                                 src={src}
                                 alt={`Uploaded Preview ${index + 1}`}
                                 style={{ width: "200px", height: "200px", objectFit: "cover", marginTop: "10px", marginRight: "10px" }}
+                                onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
                             />
                             <button onClick={() => removePhoto(id)} style={{ display: 'block', marginTop: '5px' }}>
                                 Remove
@@ -80,6 +86,7 @@ export default function NewPost(probs) {
                             src={src}
                             controls
                             style={{ width: "300px", height: "200px", objectFit: "cover", marginTop: "10px", marginRight: "10px" }}
+                            onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
                         />
                         <button onClick={() => removeVideo(id)} style={{ display: 'block', marginTop: '5px' }}>
                             Remove
