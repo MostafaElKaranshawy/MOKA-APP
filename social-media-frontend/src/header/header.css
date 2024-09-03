@@ -81,6 +81,11 @@
     margin-right: 10px;
 }
 
+.no-results{
+    padding: 20px;
+    font-weight: bold;
+    font-size: 17px;
+}
 .nav-menu{
     display: flex;
     justify-content: space-around;

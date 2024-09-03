@@ -58,6 +58,7 @@ export default function Post(probs){
             }
         };
     }, []);
+    
     async function handleGetComments(){
         await getComments();
     }
@@ -104,15 +105,17 @@ export default function Post(probs){
         await unlikePost(post.postID, probs.userToken);
         await probs.getPosts();
     }
+
     async function getComments(){
         try {
-            const response = await axios.get(`http://localhost:4000/posts/${post.postID}/comments?page=1&limit=10`, {
+            const response = await axios.get(`http://localhost:4000/posts/${post.postID}/comments`, {
                 headers: {
                     "Content-Type": "application/json",
                     "authorization": `Bearer ${probs.userToken}`
                 },
             });
             const commentsData = response.data;
+            console.log(commentsData)
             setComments(commentsData);
         } catch (error) {
             console.log(error);
@@ -157,8 +160,8 @@ export default function Post(probs){
         }
     }       
     const goToUserProfile = (userName) => () => {
-        console.log(userName);
-        window.location.href = `/${userName}/profile`;
+        const url = `/${userName}/profile`;
+        window.open(url, '_blank');
     };
     return (
         <div className="post">

@@ -9,7 +9,7 @@ export default function Comments(probs) {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const [currentFilter, setCurrentFilter] = useState("Most Recent");
     const [filteredCommments, setFilteredComments] = useState([]);
-
+    const [page, setPage] = useState(probs.page);
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };

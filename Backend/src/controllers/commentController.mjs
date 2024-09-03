@@ -55,14 +55,8 @@ class commentController{
     static async getComments(req, res){
         try {
             const userID = req.user.userID;
-            const postID = parseInt(req.params.postID);
-            const page = parseInt(req.query.page) || 1;
-            const limit = parseInt(req.query.limit) || 10;
-            const offset = (page - 1) * limit;
-            if(isNaN(page) || isNaN(limit)){
-                throw new Error("Invalid Parameters");
-            }
-            const comments = await commentService.getComments(userID, postID, limit, offset);
+            const postID = parseInt(req.params.postID);            
+            const comments = await commentService.getComments(userID, postID);
             return res.status(200).send(comments);
         }
         catch(err){

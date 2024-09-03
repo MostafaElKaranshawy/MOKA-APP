@@ -80,7 +80,7 @@ export default class Comment{
         }
         return result;
     }
-    static async getComments(userID, postID, limit, offset){
+    static async getComments(userID, postID){
         const post = await PostDefinition.findOne({
             where: {
                 postID: postID
@@ -96,8 +96,6 @@ export default class Comment{
         });
         const userCommentLikes = await user.getCommentLikes(); 
         let comments = await post.getPostComments({
-                limit: limit || 10,
-                offset: offset || 0,
                 include: [
                     {
                         model: UserDefinition, 

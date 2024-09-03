@@ -1,7 +1,7 @@
 import axios from "axios";
-async function getPosts(userToken) {
+async function getPosts(userToken, page, limit) {
     try {
-        const response = await axios.get("http://localhost:4000/posts/feed?page=1&limit=10", {
+        const response = await axios.get(`http://localhost:4000/posts/feed?page=${page}&limit=${limit}`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`

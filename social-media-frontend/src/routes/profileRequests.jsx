@@ -139,9 +139,9 @@ async function removeFriend(friendID, userToken, setError){
         console.error(err);
     }
 }
-async function getUserPosts(userID, userToken, setError){
+async function getUserPosts(userID, userToken, setError, page, limit){
     try {
-        const response = await axios.get(`http://localhost:4000/${userID}/posts?page=1&limit=10`, {
+        const response = await axios.get(`http://localhost:4000/${userID}/posts?page=${page}&limit=${limit}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${userToken}`

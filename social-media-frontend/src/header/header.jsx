@@ -29,7 +29,10 @@ export default function Header() {
                 }
             });
             const data = await response.json();
-            console.log(data);
+            if(data.length == 0) {
+                setSearchResult([{name : "No Results", userID: 0}]);
+                return;
+            }
             setSearchResult(data);
         } catch (error) {
             console.error(error);
@@ -57,9 +60,10 @@ export default function Header() {
                     <div className="search-result">
                         {searchResult && searchResult.map((user) => (
                             <div className="search-item" key={user.userID} onClick={()=>{
-                                window.location.href = `/${user.userName}/profile`;
+                                const url = `/${user.userName}/profile`;
+                                window.open(url, '_blank');
                             }}>
-                                <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profile" />
+                                {user.userName && <img src="https://www.w3schools.com/howto/img_avatar.png" alt="profile" />}
                                 <p>{user.name}</p>
                             </div>
                         ))}

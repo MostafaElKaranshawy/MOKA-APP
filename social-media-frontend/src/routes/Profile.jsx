@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef} from "react";
 import Header from "../header/header";
 import Post from "../post/post";
+import Loading from "../loading/loading";
 import "./profile.css";
 import { useParams } from "react-router-dom";
 import {
@@ -30,6 +31,11 @@ export default function Profile() {
         }
     );
     const [posts, setPosts] = useState([]);
+    const [page, setPage] = useState(1);
+    const [loading, setLoading] = useState(true);
+    const [lastPage, setLastPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const limit = 5;
     const [error, setError] = useState(null);
     const [mainUserFriendRequests, setMainUserFriendRequests] = useState([]);
     // const [aFriend, setAFriend] = useState(false); 
@@ -87,6 +93,37 @@ export default function Profile() {
             }
         };
     }, []);
+    useEffect(() => {
+        if (page === 1) return; // Avoid fetching on initial render
+        if(!loading)return;
+        handlePaginations();
+    }, [page]);
+
+    // Function to handle pagination and data fetching
+    async function handlePaginations() {
+        try {
+            const postsData = await getUserPosts(user.userID, userToken, setError, page, limit);
+            
+            // Simulate network delay
+            setTimeout(() => {
+                console.log(page)
+                console.log(postsData.length)
+                if (postsData.length == 0) {
+                    setHasMore(false);
+                    setLoading(false);
+                    // Don't increment the page if no posts are returned
+                    return;
+                }
+                // Update state with fetched posts
+                setPosts((prev) => [...prev, ...postsData]);
+                setLastPage(page);
+                setLoading(false);
+            }, 1500); // Adjust the delay as needed
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+            setLoading(false); // Ensure loading is set to false on error
+        }
+    }
     const editBio = (e) => {
         setBio(e.target.value || '');
     };
@@ -111,8 +148,19 @@ export default function Profile() {
             
             const friendsData = await getUserFriends(userName, userToken, setError);
             setFriends(friendsData);
-            const userPosts = await getUserPosts(userData.userID, userToken, setError);
-            setPosts(userPosts);
+            // const userPosts = await getUserPosts(userData.userID, userToken, setError);
+            let postsData;
+            if(page == 1){
+                postsData = await getUserPosts(userData.userID, userToken, setError, page, limit);
+                setPosts(postsData);
+            }
+            else{
+                postsData = await getUserPosts(userData.userID, userToken, setError, page, limit);
+                setPosts(postsData);
+            }
+            console.log(postsData);
+            setLoading(false);
+            // setPosts(userPosts);
             // setAFriend(friendsData.find(friend => friend.userName === JSON.parse(localStorage.getItem("user")).userName));
             
             if (mainUser) {
@@ -290,9 +338,19 @@ export default function Profile() {
                         getPosts={handleGetPosts}
                         userToken={userToken}
                         />
-                    )) : <p>No Posts To Show</p>
+                    )) : null
                 }
             </div>
+            <button className="more-button"onClick={() => {
+                    setPage((prev) => prev + 1);
+                    setLoading(true);
+                }}>
+                    Load More
+                </button>
+                <div className="loading">
+                    {loading && <Loading/>}
+                    {!hasMore && !loading && <p>No More Posts</p>}
+                </div>
         </div>
     );
 }

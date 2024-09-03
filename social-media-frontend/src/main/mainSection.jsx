@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from 'axios';
+import Loading from "../loading/loading";
 import Post from "../post/post";
 import NewPost from "../newPost/newPost";
 import "./mainSection.css";
@@ -10,7 +11,12 @@ export default function MainSection() {
     const [user, setUser] = useState({});
     const [userToken, setUserToken] = useState(null);
     const [posts, setPosts] = useState([]);
+    const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(true);
+    const [lastPage, setLastPage] = useState(1);
+    const [hasMore, setHasMore] = useState(true);
+    const limit = 5;
+
     useEffect(() => {
         const cookies = document.cookie;
         const token = cookies.split("authToken=")[1];
@@ -21,7 +27,9 @@ export default function MainSection() {
     useEffect(() => {
         if (userToken) {
             console.log(userToken);
-            handleGetPosts();
+            setTimeout(() => {
+                handleGetPosts();
+            }, 1200)
         }
     }, [userToken]);
     const ws = useRef(null);
@@ -53,12 +61,50 @@ export default function MainSection() {
             }
         };
     }, []);
+    useEffect(() => {
+        if (page === 1) return; // Avoid fetching on initial render
+        if(!loading)return;
+        handlePaginations();
+    }, [page]);
+
+    // Function to handle pagination and data fetching
+    async function handlePaginations() {
+        try {
+            const postsData = await getPosts(userToken, page, limit);
+            
+            // Simulate network delay
+            setTimeout(() => {
+                console.log(page)
+                console.log(postsData.length)
+                if (postsData.length == 0) {
+                    setHasMore(false);
+                    setLoading(false);
+                    // Don't increment the page if no posts are returned
+                    return;
+                }
+                // Update state with fetched posts
+                setPosts((prev) => [...prev, ...postsData]);
+                setLastPage(page);
+                setLoading(false);
+            }, 1500); // Adjust the delay as needed
+        } catch (error) {
+            console.error('Error fetching posts:', error);
+            setLoading(false); // Ensure loading is set to false on error
+        }
+    }
 
     async function handleGetPosts() {
         try {
-            const postsData = await getPosts(userToken);
+            let postsData;
+            if(page == 1){
+                postsData = await getPosts(userToken, page, limit);
+                setPosts(postsData);
+            }
+            else{
+                postsData = await getPosts(userToken, 1, limit*page); 
+                setPosts(postsData);
+            }
             console.log(postsData);
-            setPosts(postsData);
             setLoading(false);
         } catch (error) {
             console.log(error);
@@ -69,16 +115,26 @@ export default function MainSection() {
         <div className="main-section">
             <NewPost getPosts={handleGetPosts} userToken={userToken}/>
             <div className="posts">
-                {loading ? <p>Loading...</p> : (
-                    posts.length ? posts.map((post) => (
-                        <Post 
+                {(
+                    posts.length ? posts.map((post, index) => (
+                        <Post
                         key={post.postID} 
                         post={post} 
                         getPosts={handleGetPosts}
                         userToken={userToken}
                         />
-                    )) : <p>No Posts To Show</p>
+                    )) : null
                 )}
+                <button className="more-button"onClick={() => {
+                    setPage((prev) => prev + 1);
+                    setLoading(true);
+                }}>
+                    Load More
+                </button>
+                <div className="loading">
+                    {loading && <Loading/>}
+                    {!hasMore && !loading && <p>No More Posts</p>}
+                </div>
             </div>
         </div>
     );
