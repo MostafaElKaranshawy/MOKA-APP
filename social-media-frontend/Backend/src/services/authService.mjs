@@ -31,6 +31,8 @@ class AuthService {
             name: user.name,
             email: user.email,
             userName: user.userName,
+            bio: user.bio,
+            profilePhotoUrl: user.profilePhotoUrl,
         };
         const accessToken = jwt.sign(userToken, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '3d' });
         try {
@@ -46,7 +48,8 @@ class AuthService {
                 name: user.name,
                 email: user.email,
                 userName: user.userName,
-                bio: user.bio
+                bio: user.bio,
+                profilePhotoUrl: user.profilePhotoUrl,
             },
             message: "User Logged In Successfully!"
         };

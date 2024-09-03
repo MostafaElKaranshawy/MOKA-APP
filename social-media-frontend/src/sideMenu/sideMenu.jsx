@@ -17,6 +17,8 @@ export default function SideMenu(){
     useEffect(() => {
         if (user && userToken) {
             handleUser();
+            setProfilePhotoURL(user.profilePhotoUrl);
+            console.log(user)
         }
     }, [userToken]);
 
@@ -50,7 +52,6 @@ export default function SideMenu(){
     }, []);
 
     const handleUser = async () => {
-        setProfilePhotoURL(user.profilePhotoUrl);
         const userFriends = await getUserFriends(user.userName, userToken);
         setFriends(userFriends);
         const userFriendRequests = await getFriendRequests(userToken);

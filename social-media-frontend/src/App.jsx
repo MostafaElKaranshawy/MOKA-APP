@@ -5,17 +5,22 @@ import './App.css'
 import Auth from './routes/auth';
 import Home from "./routes/Home";
 import Profile from "./routes/Profile";
-
+import Header from "./header/header";
 function App(){
   
   return (
-      <Router id="app">
+    <Router id="app">
+    <div>
+      <Header /> {/* Header will appear at the top of all views */}
+      <main>
         <Routes>
-            <Route path="/" element={<Auth />} />
-            <Route path="/home" element={<Home />} />
-            <Route path="/:userName/profile" element={<Profile/>} />
+          <Route path="/" element={<Auth />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/:userName/profile" element={<Profile/>} />
         </Routes>
-      </Router>
+      </main>
+    </div>
+  </Router>
   )
 }
 

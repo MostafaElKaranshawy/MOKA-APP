@@ -266,7 +266,7 @@ export default function Profile() {
     }
     return (
         <div className="profile-view view ">
-            <Header />
+            {/* <Header /> */}
             <div className="profile-section">
                 <div className="profile-header">
                     <div className="profile-photo">

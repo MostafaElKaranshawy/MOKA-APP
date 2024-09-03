@@ -1,18 +1,27 @@
 #root {
   width: 100vw;
   min-height: 100vh;
-  margin: 0 auto;
+  margin: 0 ;
   padding: 0;
   text-align: center;
-  display: flex;
+  /* display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: center; */
 }
 #app {
   width: 100vw;
   height: 100vh;
 }
+header {
+  position: fixed; /* Sticks the header to the top */
+  top: 0;
+  /* width: 100%; */
+  z-index: 1000; /* Ensure it's above other elements */
+}
 
+main {
+  /* padding-top: 60px; Adjust based on header height */
+}
 #main {
   position: relative;
   padding: 20px;

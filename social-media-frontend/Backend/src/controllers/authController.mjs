@@ -28,6 +28,7 @@ class AuthController {
         console.log(req.body);
         try{
             result = await AuthService.signIn(req.body.email, req.body.password);
+            console.log(result);
         }
         catch(err){
             return res.status(500).send(err.message);
