@@ -73,7 +73,10 @@ export default function Comment(probs){
             </div>
             <div className="comment-body">
                 <div className="comment-user">
-                    <span className="comment-username" onClick={goToUserProfile}>{comment.authorName}</span>
+                    <div className="comment-user-info">
+                        <span className="comment-user-name" onClick={goToUserProfile}>{comment.authorName}</span>
+                        <span className="comment-user-username">{`@${comment.userName}`}</span>
+                    </div>
                     <span className="comment-time">{timeAgo(comment.time)}</span>
                 </div>
                 <div className="comment-content text-container">
@@ -95,7 +98,7 @@ export default function Comment(probs){
             </div>
             <div className="comment-options">
                 {comment.userID === user.userID &&
-                    <i className="fa-solid fa-ellipsis-v comment-options-icon" onClick={toggleShowOptions}/>
+                    <i className="fa-solid fa-ellipsis-h comment-options-icon" onClick={toggleShowOptions}/>
                 }
                 {showOptions &&
                     <ul className="comment-options-list">

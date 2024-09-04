@@ -41,22 +41,24 @@ export default function NewPost(probs) {
                 <div className="new-post-content">
                     <div className="new-post-data">
                         <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
-                        <p>{user.name}</p>
+                        {/* <p>{user.name}</p> */}
                     </div>
                     <textarea
-                    ref={textareaRef}
-                    value={content}
-                    onChange={handleChange}
-                    placeholder="What's on your mind?"
+                        ref={textareaRef}
+                        value={content}
+                        onChange={handleChange}
+                        placeholder="What's on your mind?"
                     ></textarea>
                 </div>
                 <div className="post-attachments">
                     <div className="add-image post-attachment">
                         <i className="fa-solid fa-image upload-icon" />
+                        <p>Photo</p>
                         <input type="file" multiple onChange={uploadPhotos} className="file-input"  accept="image/*"/>
                     </div>
                     <div className="add-video post-attachment">
                         <i className="fa-solid fa-video upload-icon" />
+                        <p>Video</p>
                         <input
                             type="file"
                             multiple
@@ -65,6 +67,7 @@ export default function NewPost(probs) {
                             accept="video/*"
                         />
                     </div>
+                <button type="submit" className="new-post-button">Post</button>
                 </div>
                 <div className="previews">
                     {photoPreviews.map(({ id, src }, index) => (
@@ -94,7 +97,6 @@ export default function NewPost(probs) {
                     </div>
                 ))}
                 </div>  
-                <button type="submit">Post</button>
             </form>
         </div>
     );

@@ -23,7 +23,7 @@ export default function Post(probs){
     // const ws = new WebSocket("ws://localhost:4001");
     useEffect(() => {
         if(probs.userToken){
-            console.log(post);
+            // console.log(post);
             setProfilePhotoURL(post.profilePhotoUrl);
             getComments();
         }
@@ -118,7 +118,7 @@ export default function Post(probs){
                 },
             });
             const commentsData = response.data;
-            console.log(commentsData)
+            // console.log(commentsData)
             setComments(commentsData);
         } catch (error) {
             console.log(error);
@@ -173,65 +173,79 @@ export default function Post(probs){
                     <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
                     <span> shared this</span>
             </div>}
-            <div className="post-header">
-                <div className="post-header-info">
-                    <img src={profilePhotoURL} alt="" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
-                    <div className="name-time">
-                        <p onClick={goToUserProfile(post.userName)}>{post.authorName}</p>
-                        <p>{timeAgo(post.time)}</p>
+            <div className="post-details">
+
+                <img src={profilePhotoURL} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                <div className="post-body">
+                    <div className="post-header">
+                        <div className="post-header-info">
+                            <div className="name-time">
+                                <div className="post-user-info">
+                                    <p onClick={goToUserProfile(post.userName)} className="post-author-name">{post.authorName}</p>
+                                    <p className="post-user-name">{`@${post.userName}`}</p>
+                                </div>
+                                <p className="post-time">{timeAgo(post.time)}</p>
+                            </div>
+                        </div>
+                        {post.userID === user.userID &&
+                            <i className="fa-solid fa-ellipsis-h post-options-icon" onClick={toggleShowOptions}/>
+                        }
+                        {showOptions &&
+                            <ul className="post-options">
+                                <li className="post-option" onClick={toggleShowEdit}>Edit Post</li>
+                                <li className="post-option" onClick={handleDeletePost}>Delete Post</li>
+                            </ul>
+                        }
                     </div>
-                </div>
-                {post.userID === user.userID &&
-                    <i className="fa-solid fa-ellipsis-v post-options-icon" onClick={toggleShowOptions}/>
-                }
-                {showOptions &&
-                    <ul className="post-options">
-                        <li className="post-option" onClick={toggleShowEdit}>Edit Post</li>
-                        <li className="post-option" onClick={handleDeletePost}>Delete Post</li>
-                    </ul>
-                }
-            </div>
-            <div className="post-content text-container">
-                <p className="text-container" dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
-                {showEdit && 
-                    <div className="edit-post">
-                        <textarea defaultValue={post.content} onChange={
-                            (e)=>{
-                                setNewContent(e.target.value);
+                    <div className="post-content text-container">
+                        <p className="text-container" dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
+                        {showEdit && 
+                            <div className="edit-post">
+                                <textarea defaultValue={post.content} onChange={
+                                    (e)=>{
+                                        setNewContent(e.target.value);
+                                    }
+                                }></textarea>
+                                <div className="edit-post-options">
+                                    <button onClick={toggleShowEdit}>Cancel</button>
+                                    <button onClick={handleEditPost}>Save</button>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <div className="post-action-details">
+                        <div className="post-action-detail">
+                        <i className="fa-solid fa-heart" style={{color:"red"}}></i>
+                            {post.likes >0?<p >{post.likes}</p>:null}
+                        </div>
+                        <div className="post-action-detail" onClick={toggleShowComments}>
+                            <i className="fa-regular fa-comment"></i>
+                            {comments.length > 0? <p>{comments.length}</p> : null}
+                        </div>
+                    </div>
+                    <div className="post-actions">
+                            {liked? (
+                                <div className="post-action" onClick={changeLike}>
+                                    <i className="fa-solid fa-heart" style={{color:"red"}}></i>
+                                    <p>UnLike</p>
+                                    {/* {post.likes >0?<p className="action-count">{post.likes}</p>:null}  */}
+                                </div>
+                                )
+                            :
+                            <div className="post-action" onClick={changeLike}>
+                                    <i className="fa-regular fa-heart like-icon"></i>
+                                    <p>Like</p>
+                                    {/* {post.likes >0?<p className="action-count">{post.likes}</p>:null} */}
+                                </div>
                             }
-                        }></textarea>
-                        <div className="edit-post-options">
-                            <button onClick={toggleShowEdit}>Cancel</button>
-                            <button onClick={handleEditPost}>Save</button>
+                            
+                        <div className="post-action" onClick={toggleShowComments}>
+                            <i className="fa-regular fa-comment"></i>
+                            <p>Comment</p>
+                            {/* {comments.length > 0? <p className="action-count">{comments.length}</p> : null} */}
                         </div>
                     </div>
-                }
-            </div>
-            <div className="post-actions">
-                    {liked? (
-                        <div className="post-action" onClick={changeLike}>
-                            <i className="fa-solid fa-heart" style={{color:"red"}}></i>
-                            <p>UnLike</p>
-                            {post.likes >0?<p className="action-count">{post.likes}</p>:null} 
-                        </div>
-                        )
-                    :
-                        <div className="post-action" onClick={changeLike}>
-                            <i className="fa-regular fa-heart like-icon"></i>
-                            <p>Like</p>
-                            {post.likes >0?<p className="action-count">{post.likes}</p>:null}
-                        </div>
-                    }
-                    
-                <div className="post-action" onClick={toggleShowComments}>
-                    <i className="fa-regular fa-comment"></i>
-                    <p>Comment</p>
-                    {comments.length > 0? <p className="action-count">{comments.length}</p> : null}
                 </div>
-                {/* <div className="post-action">
-                    <i className="fa-duotone fa-solid fa-retweet"></i>
-                    <p>Share</p>
-                </div> */}
             </div>
             {
                 showComments? 
@@ -245,7 +259,6 @@ export default function Post(probs){
                     />
                 </div> : null
             }
-            
         </div>
     )
 }

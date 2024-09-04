@@ -6,8 +6,11 @@ import "./header.css";
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
     let nav = (window.innerWidth > 500? true: false)
-    const [navMenu, setNavMenu] = useState(nav);
+    const [navMenu, setNavMenu] = useState(true);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
+    useEffect(() => {
+        setNavMenu(nav);
+    }, [nav])
     function toggleShowProfileMenu() {
         setShowProfileMenu((prev) => !prev);
     }
@@ -17,7 +20,6 @@ export default function Header() {
             document.querySelector(".drop-down-icon").style.transform = "rotate(180deg)";
         }
         else{
-            setNavMenu(false);
             document.querySelector(".drop-down-icon").style.transform = "rotate(0deg)";
         }
     }, [showProfileMenu])
@@ -99,7 +101,7 @@ export default function Header() {
                 <i className="fa-solid fa-bars"/>
             </div>
             <div className="nav">
-
+                {console.log(navMenu)}
                 {
                     navMenu && (
                     <ul className="nav-menu">

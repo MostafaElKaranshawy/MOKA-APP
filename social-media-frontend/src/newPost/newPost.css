@@ -1,7 +1,7 @@
 .new-post{
     display: flex;
     flex-direction: column;
-    margin: 20px;
+    margin: 0 20px;
     border-radius: 10px;
     background-color: white;
     min-width: 70%;
@@ -14,7 +14,7 @@
 }
  .new-post-content{
     display: flex;
-    flex-direction: column;
+    /* flex-direction: column; */
 }
  .new-post-data{
     display: flex;
@@ -22,23 +22,29 @@
     align-items: center;
 }
  .new-post-data img{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     margin-right: 10px;
     border-radius: 40%;
     border-radius: 50%;
 }
- .new-post-form textarea{
+.new-post-container{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.new-post-form textarea{
     padding: 10px;
     margin: 10px 0;
-    border-radius: 5px;
-    background-color: aliceblue;
+    border-radius: 10px;
+    background-color: #daebfa;
     resize: none;
     border: 0;
     color: #333;
-    font-size: 18px;
+    font-size: 15px;
     line-height: 1.5;
-    height: 100px;
+    height: 100%;
+    width: 100%;
 }
 .new-post-form textarea:focus{
     outline: none;
@@ -62,32 +68,43 @@
 }
  .new-post-form .post-attachments{
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
-    margin: 10px 0;
     padding: 0;
 }
 
+.new-post-form .post-attachments .post-attachment p{
+    font-size: 12px;
+    color: #6bb0f9;
+    margin: 0;
+    margin-left: 5px;
+    font-weight: bold;
+}
 .new-post-form .post-attachments .post-attachment{
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-    border-radius: 5px;
+    padding: 7px;
     color: white;
     cursor: pointer;
     transition: 0.3s;
-    width: 100%;
+    width: 90px;
+    margin: 0 10px;
+    cursor: pointer;
+    box-shadow: inset 0 0 10px 0 #007bff;
+    border-radius: 50px;
 }
 .new-post-form .post-attachments .post-attachment:hover{
-    background-color: #eee;
+    box-shadow: inset 0 0 20px 0 #007bff
 }
 .new-post-form .post-attachments i{
-    font-size: 30px;
+    font-size: 17px;
     cursor: pointer;
     transition: 0.3s;
 }
-
+.new-post-form .post-attachments .post-attachment:hover i {
+    /* color: white; */
+}
 .add-image {
     position: relative;
     display: inline-block;
@@ -116,18 +133,24 @@
     position: relative;
     display: inline-block;
 }
-.new-post-form button{
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 5px;
-    background-color: #007bff;
+.new-post-form .new-post-button{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
     color: white;
-    border: 0;
     cursor: pointer;
     transition: 0.3s;
+    width: 100px;
+    margin: 0 10px;
+    cursor: pointer;
+    background-color: #007bff;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: bold;
 }
-.new-post-form button:hover{
-    background-color: #555;
+.new-post-form .new-post-button:hover{
+    background-color: #0064cf;
 }
 
 @media screen and (max-width:500px) {

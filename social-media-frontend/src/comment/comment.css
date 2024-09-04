@@ -10,8 +10,8 @@
     align-items: flex-start;
 }
 .comment-profile-picture{
-    width: 50px;
-    height: 50px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     margin-right: 10px;
 }
@@ -24,25 +24,32 @@
 .comment-user{
     padding: 10px;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    align-items: flex-start;
     justify-content: flex-start;
     border-bottom: 1px solid rgba(0, 0, 0, 0.1);
     margin-right: 50px;
 }
-.comment-username{
+.comment-user-name{
     font-weight: bold;
-    font-size: 15px;
+    font-size: 13px;
     color: #333;
     cursor: pointer;
 }
 
-.comment-username:hover{
+.comment-user-name:hover{
     text-decoration: underline;
 }
+
+.comment-user-username{
+    font-size: 10px;
+    color: #b2b2b2;
+    padding: 0 5px;
+}
 .comment-user .comment-time{
-    font-size: 12px;
-    color: gray;
-    margin-left: 10px;
+    font-size: 10px;
+    color: #b2b2b2;
+    padding: 5px 0;
 }
 .comment-body{
     text-align: left;
@@ -58,7 +65,7 @@
     position: relative;
 }
 .comment-body .comment-content{
-    padding: 20px;
+    padding: 10px;
     position: relative;
 }
 .comment-content-text{
@@ -66,6 +73,9 @@
     padding: 0;
     white-space: normal;
     width: calc(100% - 40px);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0;
 }
 .edit-comment{
     position: absolute;
@@ -166,7 +176,7 @@
 .compose-comment .compose-comment-content{
     width: 100%;
     border: 1px solid rgba(0, 0, 0, 0.1);
-    font-size: 15px;
+    font-size: 13px;
     color: #333;
     letter-spacing: 1.1px;
     background-color: #fff;
@@ -186,6 +196,8 @@
     background-color: #007bff;
     color: #fff;
     transition: 0.3s;
+    padding: 10px;
+    font-size: 15px;
 }
 .compose-body button:hover{
     background-color: #555;
@@ -197,6 +209,7 @@
     margin-bottom: 20px;
     /* user-select: none; */
     position:relative;
+    font-size: 13px;
 }
 
 .select-selected {
@@ -238,7 +251,7 @@
     cursor: pointer;
     transition: 0.3s;
     padding:0 10px;
-    margin: 10px 0;
+    margin: 20px 0;
     border-radius: 50%;
 }
 .comment-options-icon:hover{
@@ -255,7 +268,7 @@
     z-index: 10;
     position:absolute ;
     width: 150px;
-    right: 10px;
+    right: 29px;
     top: 20px;
 }
 .comment-option{
@@ -268,7 +281,7 @@
     /* backdrop-filter: blur(10px); */
 }
 .comment-option:hover{
-    background-color: rgba(0, 0, 97, 0.466);
+    background-color: #007bff;
     color: white;
 }
 
