@@ -204,7 +204,37 @@
 .post-action-details{
     display: flex;
     justify-content: space-between;
+    position: relative;
 }
+.post-like-users{
+    position: absolute;
+    bottom: 40px;
+    left: 0px;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1px;
+    z-index: 10;
+    padding: 0;
+    z-index: 100;
+}
+.post-like-users p{
+    padding: 10px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: 0.3s;
+    background-color: rgb(216, 237, 255);
+    width: 100%;
+    margin: 0;
+}
+.post-like-users p:hover{
+    background-color: rgb(191, 228, 255);
+    color: white;
+}
+
+
 .post-action-detail{
     display: flex;
     align-items: center;
@@ -212,6 +242,10 @@
     font-size: 15px;
     color: grey;
     cursor: pointer;
+    height: 50px;
+}
+.post-action-detail:hover{
+    text-decoration: underline;
 }
 .post-actions{
     width: 100%;
@@ -274,8 +308,4 @@
         border-radius: 0;
         width: calc(100% - 20px);    
     }
-    .post-header{
-        /* padding: 10px; */
-    }
-
 }

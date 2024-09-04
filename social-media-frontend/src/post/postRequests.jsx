@@ -85,12 +85,28 @@ async function unlikePost(postID, userToken) {
         console.log(error);
     }
 }
-
+async function getPostLikes(postID, userToken) {
+    try {
+        const response = await axios.get(`http://localhost:4000/posts/${postID}/likes`, {
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": `Bearer ${userToken}`
+            },
+        })
+        const likes = response.data;
+        console.log(likes)
+        return likes;
+    }
+    catch(err){
+        console.log(err)
+    }
+}
 export {
     getPosts,
     addPost,
     deletePost,
     editPost,
     likePost,
-    unlikePost
+    unlikePost,
+    getPostLikes
 }

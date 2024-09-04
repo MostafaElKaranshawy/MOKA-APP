@@ -34,18 +34,18 @@ class likeService {
             throw new Error(err.message);
         }
     }
-    static async getPostLikes(postID, offset, limit){
+    static async getPostLikes(postID){
         try {
-            const likes = await PostLike.getPostLikes(postID, offset, limit);
+            const likes = await PostLike.getPostLikes(postID);
             return likes;
         }
         catch(err){
             throw new Error(err.message);
         }
     }
-    static async getCommentLikes(commentID, offset, limit){
+    static async getCommentLikes(commentID){
         try {
-            const likes = await comment.getCommentLikes(commentID, offset, limit);
+            const likes = await CommentLike.getCommentLikes(commentID);
             return likes;
         }
         catch(err){

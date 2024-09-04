@@ -1,6 +1,7 @@
 import CommentDefintion from './definitions/commentDefinition.mjs';
 import CommentLikeDefinition from './definitions/commentLikeDefinition.mjs';
 import commentLikeDefinition from './definitions/commentLikeDefinition.mjs';
+import UserDefinition from './definitions/userDefinition.mjs';
 export default class CommentLike {
     static async addCommentLike(userID, commentID){
         const comment = await CommentDefintion.findOne({
@@ -72,8 +73,10 @@ export default class CommentLike {
             throw new Error("Comment not found");
         }
         const likes = await comment.getCommentLikes({
-            limit: limit,
-            offset: offset
+            include: {
+                model: UserDefinition,
+                attributes: ['userID', 'name', 'email', 'userName'] // specify the attributes you want to retrieve
+            }
         });
         return likes;
     }

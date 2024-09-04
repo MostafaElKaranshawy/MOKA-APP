@@ -1,6 +1,6 @@
 import PostLikeDefinition from './definitions/postLikeDefinition.mjs';
 import PostDefinition from './definitions/postDefinition.mjs';
-
+import UserDefinition from './definitions/userDefinition.mjs';
 export default class PostLike {
     static async addPostLike(postID, userID){
         const post = await PostDefinition.findOne({
@@ -64,7 +64,7 @@ export default class PostLike {
             throw new Error(err.message);
         }
     }
-    static async getPostLikes(postID, offset, limit){
+    static async getPostLikes(postID){
         try {
             const post = await PostDefinition.findOne({
                 where: {
@@ -75,9 +75,12 @@ export default class PostLike {
                 throw new Error("Post not found");
             }
             const likes = await post.getPostLikes({
-                limit: limit,
-                offset : offset
+                include: {
+                    model: UserDefinition,
+                    attributes: ['userID', 'name', 'email', 'userName'] // specify the attributes you want to retrieve
+                }
             });
+            console.log(likes)
             return likes;
         }
         catch(err){

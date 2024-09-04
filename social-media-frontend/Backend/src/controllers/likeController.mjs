@@ -66,14 +66,7 @@ class likeController {
         try{
             if(req.params.postID != null){
                 const postID = parseInt(req.params.postID);
-                const page = parseInt(req.query.page) || 1;
-                const limit = parseInt(req.query.limit) || 10;
-                if(isNaN(postID) || isNaN(page) || isNaN(limit)){
-                    return res.status(404).send("Invalid Parameters");
-                }
-
-                const offset = (page - 1) * limit;
-                const likes = await likeService.getPostLikes(postID, offset, limit);
+                const likes = await likeService.getPostLikes(postID);
                 if(likes == null)return res.status(404).send("cannot find post");
                 return res.status(200).send(likes);
             }
@@ -88,10 +81,8 @@ class likeController {
     static async getCommentLikes(req, res) {
         try{
             if(req.params.commentID != null){
-                const page = parseInt(req.query.page) || 1;
-                const limit = parseInt(req.query.limit) || 10;
-                const offset = (page - 1) * limit;
-                const likes = await likeService.getCommentLikes(req.params.commentID, offset, limit);
+                const commentID = parseInt(req.params.commentID);
+                const likes = await likeService.getCommentLikes(commentID);
                 if(likes == null)return res.status(404).send("cannot find comment");
                 return res.status(200).send(likes);
             }

@@ -8,7 +8,8 @@ import {
     deletePost,
     editPost,
     likePost,
-    unlikePost
+    unlikePost,
+    getPostLikes
 } from "./postRequests";
 export default function Post(probs){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -17,10 +18,11 @@ export default function Post(probs){
     const [showComments, setShowComments] = useState(false);
     const [showOptions, setShowOptions] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
+    const [showPostLikes, setShowPostLikes] = useState(false)
     const [newContent, setNewContent] = useState(post.content);
     const [comments, setComments] = useState([]);
     const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
-    // const ws = new WebSocket("ws://localhost:4001");
+    const [postLikes, setPostLikes] = useState([])
     useEffect(() => {
         if(probs.userToken){
             // console.log(post);
@@ -64,19 +66,24 @@ export default function Post(probs){
     
     async function handleGetComments(){
         await getComments();
+        setShowPostLikes(false);
     }
     async function toggleShowComments(){
         setShowComments((pre)=>!pre);
+        setShowPostLikes(false);
     }
     function toggleShowOptions(){
         setShowOptions((pre)=>!pre);
+        setShowPostLikes(false);
     }
     function toggleShowEdit(){
         setShowOptions(false);
+        setShowPostLikes(false);
         setNewContent(post.content);
         setShowEdit((pre)=>!pre);
     }
     async function changeLike(){
+        setShowPostLikes(false);
         setLike((pre)=>!pre)
         if(liked){
             await handleUnlikePost();
@@ -163,18 +170,29 @@ export default function Post(probs){
         }
     }       
     const goToUserProfile = (userName) => () => {
+        console.log(userName);
         const url = `/${userName}/profile`;
         window.open(url, '_blank');
     };
+    async function handleGetPostLikes(){
+        if(showPostLikes){
+            setShowPostLikes(false);
+            return;
+        }
+        setShowPostLikes(true);
+        const likeUsers = await getPostLikes(post.postID, probs.userToken);
+        setPostLikes(likeUsers)
+        console.log(showPostLikes)
+        console.log(likeUsers);
+    }
     return (
         <div className="post">
-            {post.shared &&
+            {/* {post.shared &&
             <div className="shared-post">
                     <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
                     <span> shared this</span>
-            </div>}
+            </div>} */}
             <div className="post-details">
-
                 <img src={profilePhotoURL} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
                 <div className="post-body">
                     <div className="post-header">
@@ -214,13 +232,27 @@ export default function Post(probs){
                         }
                     </div>
                     <div className="post-action-details">
-                        <div className="post-action-detail">
-                        <i className="fa-solid fa-heart" style={{color:"red"}}></i>
-                            {post.likes >0?<p >{post.likes}</p>:null}
+                        {
+                            postLikes.length>0 && showPostLikes &&(
+                            <div className="post-like-users">
+                                {postLikes.map((like) => (
+                                    <p key={like.user.userID} onClick={goToUserProfile(like.user.userName)}>{like.user.name}</p>
+                                ))} 
+                            </div>)
+                        }
+                        <div className="post-action-detail" onClick={handleGetPostLikes}>
+                            {post.likes > 0 && <>
+                                    <i className="fa-solid fa-heart" style={{color:"red"}}></i>
+                                    <p>{post.likes}</p>
+                                </>
+                            }
                         </div>
                         <div className="post-action-detail" onClick={toggleShowComments}>
-                            <i className="fa-regular fa-comment"></i>
-                            {comments.length > 0? <p>{comments.length}</p> : null}
+                            {comments.length > 0 && <>
+                                <p>{comments.length}</p>
+                                <p>Comments</p>
+                            </>
+                            }
                         </div>
                     </div>
                     <div className="post-actions">
