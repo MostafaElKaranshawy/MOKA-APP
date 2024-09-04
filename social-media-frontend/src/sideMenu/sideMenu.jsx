@@ -18,7 +18,7 @@ export default function SideMenu(){
         if (user && userToken) {
             handleUser();
             setProfilePhotoURL(user.profilePhotoUrl);
-            console.log(user)
+            // console.log(user)
         }
     }, [userToken]);
 
@@ -68,6 +68,28 @@ export default function SideMenu(){
     const visitProfile = async (userName) => {
         window.location.href = `/${userName}/profile`;
     }
+    function timeAgo(date) {
+        // console.log(date);
+        date = new Date(date)
+        const now = new Date();
+        const secondsPast = Math.floor((now - date) / 1000);
+        // console.log(date + " " + now);
+        if (secondsPast < 60) {
+            return `${secondsPast} seconds ago`;
+        }
+        if (secondsPast < 3600) {
+            const minutesPast = Math.floor(secondsPast / 60);
+            return `${minutesPast} minutes ago`;
+        }
+        if (secondsPast < 86400) {
+            const hoursPast = Math.floor(secondsPast / 3600);
+            return `${hoursPast} hours ago`;
+        }
+        if (secondsPast < 604800) {
+            const daysPast = Math.floor(secondsPast / 86400);
+            return `${daysPast} days ago`;
+        }
+    }
     return (
         <>{    
             sideMenu && (
@@ -78,25 +100,35 @@ export default function SideMenu(){
                             onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} 
                         />
                         <h2 className="profile-name" onClick={profileVisit}>{user.name}</h2>
+                        <p className="profile-username">{`@${user.userName}`}</p>
+                        <p className="profile-bio">{`"${user.bio}"` || ''}</p>
                     </div>
-                    <div className="friends sidebar-section">
-                        <p>Friends</p>
-                        <p>{friends.length || 0}</p>
+                    <div className="sidebar-sections">
+                        <div className="friends sidebar-section">
+                            <p>{friends.length || 0}</p>
+                            <p>Friends</p>
+                        </div>
+                        <div className="friendRequests sidebar-section">
+                            <p>{friendRequests.length || 0}</p>
+                            <p>Friend Requests</p>
+                        </div>
                     </div>
-                    <div className="friendRequests sidebar-section">
-                        <p>Friend Requests</p>
-                        <p>{friendRequests.length || 0}</p>
-                    </div>
-                    <div className="profile-friend-requests">
-                        <div className="profile-friend-requests-list">
-                            {friendRequests.map((friendRequest, index) => (
-                                console.log(friendRequest),
-                                <div className="profile-friend-request" key={index}>
-                                    <div className="friend-request-user-info" onClick={()=>{visitProfile(friendRequest.userName)}}>
-                                        <img src={friendRequest.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
-                                        <p className="profile-friend-request-name">{friendRequest.name}</p>
+                    <div className="nav-menu-profile-friend-requests">
+                        {friendRequests.map((friendRequest, index) => (
+                            console.log(friendRequest),
+                            <div className="nav-menu-profile-friend-request" key={index}>
+                                <div  onClick={()=>{visitProfile(friendRequest.userName)}}>
+                                    <img src={friendRequest.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                                </div>
+                                <div className="nav-menu-profile-friend-request-body">
+                                    <div className="nav-menu-profile-friend-request-info">
+                                        <div className="nav-menu-profile-friend-request-name-time">
+                                            <p className="nav-menu-profile-friend-request-name">{friendRequest.name}</p>
+                                            <p className="nav-menu-profile-friend-request-time">{timeAgo(friendRequest.time)}</p>
+                                        </div>
+                                        <p className="nav-menu-profile-friend-request-username">@{friendRequest.userName}</p>
                                     </div>
-                                    <div className="profile-friend-request-options">
+                                    <div className="nav-menu-profile-friend-request-options">
                                         <div className="accept" onClick={() => handleAcceptFriendRequest(friendRequest.userID)}>
                                             Accept
                                         </div>
@@ -105,8 +137,8 @@ export default function SideMenu(){
                                         </div>
                                     </div>
                                 </div>
-                            ))}
-                        </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             )

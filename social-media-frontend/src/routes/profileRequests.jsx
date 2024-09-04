@@ -10,7 +10,7 @@ async function getUserProfile(userName, userToken, setError){
         const newUserData = response.data;
         return newUserData;
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -25,7 +25,7 @@ async function getUserFriends(userName, userToken, setError) {
         const friendsData = response.data;
         return friendsData;
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -45,7 +45,7 @@ async function updateUserInfo(name, bio, userToken, setError) {
         return response.data;
         alert("Profile Updated");
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -61,7 +61,7 @@ async function getFriendRequests(userToken, setError) {
         const friendRequests = response.data;
         return friendRequests;
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -76,7 +76,7 @@ async function sendFriendRequest(userID, userToken, setError) {
         });
         alert("Friend Request Sent");
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -90,7 +90,7 @@ async function removeFriendRequest(senderID, userToken, setError){
         });
         console.log(response.data);
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -104,7 +104,7 @@ async function acceptFriendRequest(senderID, userToken, setError){
         });
         console.log(response.data);
     } catch (err) {
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -120,7 +120,7 @@ async function getFriendStatus(friendID, userToken, setError){
         return response.data;
     }
     catch(err){
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -135,7 +135,7 @@ async function removeFriend(friendID, userToken, setError){
         console.log(response.data);
     }
     catch(err){
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }
@@ -151,7 +151,7 @@ async function getUserPosts(userID, userToken, setError, page, limit){
         return response.data;
     }
     catch(err){
-        setError(err.message);
+        // setError(err.message);
         console.error(err);
     }
 }

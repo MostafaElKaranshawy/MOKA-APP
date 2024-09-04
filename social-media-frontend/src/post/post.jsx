@@ -236,7 +236,10 @@ export default function Post(probs){
                             postLikes.length>0 && showPostLikes &&(
                             <div className="post-like-users">
                                 {postLikes.map((like) => (
-                                    <p key={like.user.userID} onClick={goToUserProfile(like.user.userName)}>{like.user.name}</p>
+                                    <div className="post-like-user" key={like.user.userID} onClick={goToUserProfile(like.user.userName)}>
+                                        <img src={like.user.profilePhotoUrl}/>
+                                        <p>{like.user.name}</p>
+                                    </div>
                                 ))} 
                             </div>)
                         }

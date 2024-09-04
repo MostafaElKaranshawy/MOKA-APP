@@ -39,6 +39,7 @@
     background-color: white;
     border-radius: 10px 10px 0 0;
     position: relative;
+    margin-bottom: 20px;
 }
 .post-header-info{
     display: flex;
@@ -142,7 +143,7 @@
     overflow-wrap: break-word;
     word-wrap: break-word !important;
     word-break: break-word !important;
-    padding: 20px 0;
+    padding: 0;
     font-size: 15px;
     background-color: white;
     font-weight: 500;
@@ -220,8 +221,10 @@
     padding: 0;
     z-index: 100;
 }
-.post-like-users p{
-    padding: 10px;
+.post-like-user{
+    display: flex;
+    align-items: center;
+    padding: 5px;
     font-size: 12px;
     cursor: pointer;
     transition: 0.3s;
@@ -229,11 +232,16 @@
     width: 100%;
     margin: 0;
 }
-.post-like-users p:hover{
-    background-color: rgb(191, 228, 255);
-    color: white;
+.post-like-user:hover{
+    background-color: rgb(201, 230, 255);
+    color: #333;
 }
-
+.post-like-user img{
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
 
 .post-action-detail{
     display: flex;
@@ -278,7 +286,7 @@
 }
 
 .post-action:hover{
-    background-color: aliceblue;
+    background-color: rgb(145, 204, 255);
 }
 .post-action:first-child:hover  i{
     color: red;

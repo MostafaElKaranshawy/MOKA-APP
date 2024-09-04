@@ -77,7 +77,7 @@ export default class PostLike {
             const likes = await post.getPostLikes({
                 include: {
                     model: UserDefinition,
-                    attributes: ['userID', 'name', 'email', 'userName'] // specify the attributes you want to retrieve
+                    attributes: ['userID', 'name', 'email', 'userName', 'profilePhotoUrl'] // specify the attributes you want to retrieve
                 }
             });
             console.log(likes)

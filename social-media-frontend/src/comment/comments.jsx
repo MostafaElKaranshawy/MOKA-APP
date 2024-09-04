@@ -162,7 +162,7 @@ export default function Comments(probs) {
                     <Comment key={comment.commentID} comment={comment} likeComment={likeComment} unlikeComment={unlikeComment} editComment={editComment} deleteComment={deleteComment} />
                 ))
             ) : (
-                <p>No Comments</p>
+                <p className="no-comments">No Comments</p>
             )}
         </div>
     );

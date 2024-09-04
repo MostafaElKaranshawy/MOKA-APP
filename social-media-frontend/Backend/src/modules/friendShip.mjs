@@ -119,36 +119,34 @@ export default class FriendShip {
         const friendsIDs = await FriendShipDefinition.findAll({
             where: {
                 [Op.or]: [
-                    {
-                        user1ID: userID,
-                    },
-                    {
-                        user2ID: userID,
-                    },
+                    { user1ID: userID },
+                    { user2ID: userID },
                 ],
-                [Op.not] :[
-                    {
-                        senderID: userID
-                    }
-                ],
-                status: 0
-            }
+                senderID: { [Op.not]: userID },
+                status: 0,
+            },
+            include: [
+                {
+                    model: UserDefinition,
+                    attributes: ['userID', 'name', 'email', 'userName', 'profilePhotoUrl'],
+                    as: 'Sender', 
+                },
+            ],
         });
+        console.log(friendsIDs);
         if(friendsIDs == null)
             throw new Error("No friends found");
-        const friendUserIDs = friendsIDs.map(friendship => 
-            friendship.user1ID === userID ? friendship.user2ID : friendship.user1ID
+        const friendRequests = friendsIDs.map((friend) => {
+            return {
+                userID: friend.user1ID === userID ? friend.user2ID : friend.user1ID,
+                name: friend.Sender.name,
+                email: friend.Sender.email,
+                userName: friend.Sender.userName,
+                profilePhotoUrl: friend.Sender.profilePhotoUrl,
+                time: friend.createdAt,
+            };
+        }
         );
-        
-        // Step 2: Fetch the User Details
-        const friendRequests = await UserDefinition.findAll({
-            attributes: ['userID', 'name', 'userName', 'profilePhotoUrl'],
-            where: {
-                userID: {
-                    [Op.in]: friendUserIDs
-                }
-            }
-        });
         return friendRequests;
     }
     static async getFriends(userName){
