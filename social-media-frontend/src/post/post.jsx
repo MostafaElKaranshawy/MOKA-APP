@@ -23,9 +23,10 @@ export default function Post(probs){
     const [comments, setComments] = useState([]);
     const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     const [postLikes, setPostLikes] = useState([])
+    const [postPhotos, setPostPhotos] = useState(post.photos);
+    const [curPhoto, setCurPhoto] = useState(0);
     useEffect(() => {
-        if(probs.userToken){
-            // console.log(post);
+        if(probs.userToken && post){
             setProfilePhotoURL(post.profilePhotoUrl);
             getComments();
         }
@@ -63,7 +64,6 @@ export default function Post(probs){
             }
         };
     }, []);
-    
     async function handleGetComments(){
         await getComments();
         setShowPostLikes(false);
@@ -147,6 +147,17 @@ export default function Post(probs){
             console.log(error);
         }
     }
+    async function handleGetPostLikes(){
+        if(showPostLikes){
+            setShowPostLikes(false);
+            return;
+        }
+        setShowPostLikes(true);
+        const likeUsers = await getPostLikes(post.postID, probs.userToken);
+        setPostLikes(likeUsers)
+        console.log(showPostLikes)
+        console.log(likeUsers);
+    }
     function timeAgo(date) {
         // console.log(date);
         date = new Date(date)
@@ -174,16 +185,17 @@ export default function Post(probs){
         const url = `/${userName}/profile`;
         window.open(url, '_blank');
     };
-    async function handleGetPostLikes(){
-        if(showPostLikes){
-            setShowPostLikes(false);
-            return;
+    const increaseCurPhoto = () => {
+        console.log(curPhoto);
+        if(postPhotos.length > 0){
+            setCurPhoto((curPhoto+1)%postPhotos.length);
         }
-        setShowPostLikes(true);
-        const likeUsers = await getPostLikes(post.postID, probs.userToken);
-        setPostLikes(likeUsers)
-        console.log(showPostLikes)
-        console.log(likeUsers);
+    }
+    const decreaseCurPhoto = () => {
+        console.log(curPhoto);
+        if(postPhotos.length > 0){
+            setCurPhoto((curPhoto-1+postPhotos.length)%postPhotos.length);
+        }
     }
     return (
         <div className="post">
@@ -217,6 +229,16 @@ export default function Post(probs){
                     </div>
                     <div className="post-content text-container">
                         <p className="text-container" dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
+                        {postPhotos.length > 0 && (
+                            <div className="post-photos">
+                                {postPhotos.length > 1 && <i className="fa fa-chevron-left left-arrow" onClick={decreaseCurPhoto}></i>}
+                                <div className="post-photo">
+                                    <img src={`/Backend/${postPhotos[curPhoto].url}`} />
+                                </div>
+                                {postPhotos.length > 1 && <i className="fa fa-chevron-right right-arrow" onClick={increaseCurPhoto}></i>}
+                                {postPhotos.length > 1 && <p className="photo-count">{`${curPhoto+1}/${postPhotos.length}`}</p>}
+                            </div>
+                        )}
                         {showEdit && 
                             <div className="edit-post">
                                 <textarea defaultValue={post.content} onChange={

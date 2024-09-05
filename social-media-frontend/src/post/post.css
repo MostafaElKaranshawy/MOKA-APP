@@ -137,6 +137,7 @@
     display: flex;
     align-items: center;
     justify-content: flex-start;
+    flex-direction: column;
     text-align: left;
     position: relative;
     white-space: normal;
@@ -153,6 +154,69 @@
     padding: 0;
     white-space: normal;
     width: 100%;
+}
+.post-photos {
+    margin-top: 10px; 
+    display: flex;
+    overflow: hidden;
+    width: 100%;
+    position: relative;
+    cursor: pointer;
+    height: 300px;
+    align-items: center;
+    justify-content: center;
+}
+.post-photos .post-photo {
+    width: 100%;
+}
+.post-photos:hover i{
+    opacity: 1;
+}
+.post-photos .photo-count{
+    position: absolute;
+    bottom: -40px;
+    width: 100%;
+    background-color: #333;
+    color: white;
+    transition: 0.5s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+}
+.post-photos:hover .photo-count{
+    bottom: 0;
+}
+.post-photos i{
+    position: absolute;
+    font-size: 20px;
+    opacity: 0;
+    transition: 0.5s;
+    padding: 5px;
+    border-radius: 50%;
+    background-color: #9ac7f7;
+    width: 20px;
+    height: 20px;
+    color: white;
+    z-index: 100;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.post-photos .left-arrow{
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.post-photos .right-arrow{
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.post-photo img{
+    width: 100%;
+    max-height: 400px;
 }
 .edit-post{
     position: absolute;
@@ -247,7 +311,7 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 15px;
+    font-size: 12px;
     color: grey;
     cursor: pointer;
     height: 50px;
@@ -275,12 +339,12 @@
     border-radius: 10px;
 }
 .post-action p {
-    font-size: 15px;
+    font-size: 13px;
     font-weight: 500;
     margin: 0;
 }
 .post-action i{
-    font-size: 20px;
+    font-size: 15px;
     margin-right: 10px;
     transition: 0.3s;
 }

@@ -245,6 +245,7 @@ export default function Profile() {
         if (!profilePhoto) return;
         const formData = new FormData();
         formData.append('profilePhoto', profilePhoto);
+        console.log(profilePhoto);
         try {
             const response = await axios.post(`http://localhost:4000/user/profilePhoto`, formData , {
                 headers: {

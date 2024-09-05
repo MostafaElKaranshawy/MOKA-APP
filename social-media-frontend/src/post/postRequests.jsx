@@ -15,20 +15,29 @@ async function getPosts(userToken, page, limit) {
     }
 }
 
-async function addPost(content, userToken) {
+async function addPost(content, userToken, files) {
     try {
-        const newPost = {
-            "content": content
-        };
-        const response = await axios.post("http://localhost:4000/post", newPost, {
+        const formData = new FormData();
+        
+        Array.from(files).forEach((file) => {
+            formData.append('photos', file); // 'photos' must match the field name in Multer
+        });
+        formData.append('content', content); // Add the content text
+
+        console.log('Files:', files);
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ', ' + pair[1]); // Logs the FormData key-value pairs
+        // }
+
+        const response = await axios.post("http://localhost:4000/post", formData, {
             headers: {
-                "Content-Type": "application/json",
-                "authorization": `Bearer ${userToken}`
+                'Content-Type': 'multipart/form-data',  // Correct Content-Type for file uploads
+                "authorization": `Bearer ${userToken}`,  // User token for authentication
             },
         });
-        
+        console.log(response.data);
     } catch (error) {
-        console.log(error);
+        console.log('Error uploading post:', error);
     }
 }
 async function deletePost(postID, userToken) {

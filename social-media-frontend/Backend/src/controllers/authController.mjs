@@ -12,7 +12,8 @@ class AuthController {
             userName: req.body.userName,
             email: req.body.email,
             password: hashedPassword,
-            bio: req.body.bio || ''
+            bio: req.body.bio || "",
+            profilePhotoUrl: "/Backend/uploads/profile-photo-holder.jpg"
         }
         try{
             await AuthService.signUp(user);

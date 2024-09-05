@@ -101,7 +101,7 @@ export default function SideMenu(){
                         />
                         <h2 className="profile-name" onClick={profileVisit}>{user.name}</h2>
                         <p className="profile-username">{`@${user.userName}`}</p>
-                        <p className="profile-bio">{`"${user.bio}"` || ''}</p>
+                        <p className="profile-bio">{user.bio? `"${user.bio}"`:''}</p>
                     </div>
                     <div className="sidebar-sections">
                         <div className="friends sidebar-section">

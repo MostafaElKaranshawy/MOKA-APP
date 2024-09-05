@@ -3,14 +3,15 @@ import {eventEmitter} from '../config/wss.mjs';
 class PostController{
     static async addPost(req, res){
         try{
-            console.log("hello")
-            console.log(req.user);
+            // console.log("req headers", req.headers)
+            const photos = req.files; // Array of photo files
             const userID = req.user.userID;
             const content = req.body.content;
+            // console.log(content)
             if(userID == null || content == null){
                 throw new Error("Invalid Parameters");
             }
-            await PostService.createPost(userID, content);
+            await PostService.createPost(userID, content, photos);
             eventEmitter.emit('broadcast', `${req.user.name} created a new Post`);
             return res.status(200).send("Post Created Successfully");
         }

@@ -8,7 +8,7 @@ class AuthService {
             console.log(user);
             const checker = await User.checkEmailAndUserName(user.email, user.userName);               
             if(!checker){
-                const created = await User.createUser(user.name, user.userName, user.email, user.password);
+                const created = await User.createUser(user.name, user.userName, user.email, user.password, user.bio, user.profilePhotoUrl);
                 if(!created)throw new Error("User not created");
             }
         }

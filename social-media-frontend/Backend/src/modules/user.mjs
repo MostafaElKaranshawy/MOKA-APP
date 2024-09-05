@@ -1,12 +1,14 @@
 import UserDefinition from "./definitions/userDefinition.mjs";
 import {Op} from "../config/orm.mjs";
 export default class User {
-    static async createUser(name, userName, email, password){
+    static async createUser(name, userName, email, password, bio, profilePhotoUrl){
         const user = await UserDefinition.create({
             name : name,
             userName : userName,
             email : email,
-            password : password
+            password : password,
+            bio : bio,
+            profilePhotoUrl : profilePhotoUrl
         });
         return user != null;
     }

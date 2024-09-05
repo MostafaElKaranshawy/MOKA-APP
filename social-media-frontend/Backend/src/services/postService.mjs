@@ -1,12 +1,12 @@
 import Post from "../modules/post.mjs";
 
 class PostService {
-    static async createPost(userID, content, name) {
+    static async createPost(userID, content, photos) {
         if(userID == null || content == null){
             throw new Error("Invalid Parameters");
         }
         try {
-            const res = await Post.createPost(userID, content);
+            const res = await Post.createPost(userID, content, photos);
             if(!res){
                 throw new Error("Post not added");
             }

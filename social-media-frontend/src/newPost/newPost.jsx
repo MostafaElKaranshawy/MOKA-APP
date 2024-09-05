@@ -2,7 +2,6 @@ import React from "react";
 import { useState, useRef, useEffect } from "react";
 
 import "./newPost.css";
-import profilePhoto from "../assets/profile-photo-holder.jpg";
 import useUploadPhoto from "./uploadPhoto";
 import useUploadVideo from "./uploadVideo";
 import { addPost } from "../post/postRequests";
@@ -18,17 +17,26 @@ export default function NewPost(probs) {
         if(user){
             setProfilePhotoURL(user.profilePhotoUrl);
         }
-    }, [user])
+    }, [])
+    const { uploadPhotos, photoPreviews, photoFiles , removePhoto } = useUploadPhoto();
+    const { uploadVideos, videoPreviews, removeVideo } = useUploadVideo();
     async function handleSubmit(event) {
         event.preventDefault();
-        if((content.trim() === "" || content === "") && photoPreviews.length === 0 && videoPreviews.length === 0)return
-        await addPost(content, probs.userToken);
-        await probs.getPosts();
-        alert("Post Created successfully");
-        setContent("");
+        
+        console.log(photoPreviews);
+        if ((content.trim() === "" && photoPreviews.length === 0 && videoPreviews.length === 0)) return;
+        try{
+            await addPost(content, probs.userToken, photoFiles);
+            await probs.getPosts();
+            alert("Post Created successfully");
+            setContent("");
+            photoPreviews = [];
+        }
+        catch(err){
+            console.log(err);
+            alert("Post Not Created");
+        }
     }
-    const { uploadPhotos, photoPreviews, removePhoto } = useUploadPhoto();
-    const { uploadVideos, videoPreviews, removeVideo } = useUploadVideo();
     const textareaRef = useRef(null);
     useEffect(() => {
         const textarea = textareaRef.current;

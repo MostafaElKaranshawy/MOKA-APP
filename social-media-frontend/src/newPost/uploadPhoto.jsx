@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function useUploadPhoto() {
     const [photoPreviews, setPreviews] = useState([]);
+    const [photoFiles, setFiles] = useState([]);
 
     // Handle file selection and preview generation
     const uploadPhotos = (event) => {
@@ -11,9 +12,13 @@ function useUploadPhoto() {
             const reader = new FileReader();
             reader.onloadend = () => {
                 setPreviews((prevPreviews) => [...prevPreviews, { id, src: reader.result }]);
+                setFiles((prevFiles) => [...prevFiles, file]);
+            };
+            reader.onerror = () => {
+                console.error('Error reading file');
             };
             reader.readAsDataURL(file);
-            return { id, file }; // Return the file and its ID
+            return { id, src:reader.result }; // Return the file and its ID
         });
 
         // Optionally: Handle file uploads here if needed
@@ -24,7 +29,14 @@ function useUploadPhoto() {
         setPreviews((prevPreviews) => prevPreviews.filter(({ id }) => id !== idToRemove));
     };
 
-    return { uploadPhotos, photoPreviews, removePhoto };
+    // Cleanup object URLs to prevent memory leaks
+    useEffect(() => {
+        return () => {
+            photoPreviews.forEach(({ id }) => URL.revokeObjectURL(id));
+        };
+    }, [photoPreviews]);
+
+    return { uploadPhotos, photoPreviews, photoFiles, removePhoto };
 }
 
 export default useUploadPhoto;

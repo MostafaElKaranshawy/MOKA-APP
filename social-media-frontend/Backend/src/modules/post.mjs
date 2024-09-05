@@ -1,23 +1,32 @@
 import PostDefinition from './definitions/postDefinition.mjs'
 import UserDefinition from './definitions/userDefinition.mjs'
 import FriendShipDefinition from './definitions/friendShipDefinition.mjs'
+import PhotoDefinition from './definitions/photoDefinition.mjs'
 import { format } from 'date-fns';
 import {Op} from 'sequelize';
 export default class Post {
-    static async createPost(userID, content){
+    static async createPost(userID, content, photos){
         const user = await UserDefinition.findOne({
             where: {
                 userID: userID,
             }
         });
-        // console.log("hello")
-        // console.log(userID);
-        // console.log(user)
         const result = await user.createPost({
             content : content
         });
         if(!result){
             throw new Error("Post not added");
+        }
+        console.log(photos)
+        const postID = result.postID;
+        if(photos){
+            photos.forEach(async (photo) => {
+                const photoUrl = photo.path;
+                await PhotoDefinition.create({
+                    url: photoUrl,
+                    postID: postID
+                });
+            });
         }
         return result;
     }
@@ -83,6 +92,12 @@ export default class Post {
                 attributes: ['postID']
             }
         );
+        let postPhotos = await PhotoDefinition.findAll({
+            where: {
+                postID: posts.map((post) => post.postID)
+            }
+        });
+        console.log(postPhotos);
         posts = posts.map((post) => {
             // console.log(post);
             return {
@@ -96,6 +111,7 @@ export default class Post {
                 liked: userLikes.find((like) => like.postID === post.postID) ? true : false,
                 likes: post.likes,
                 comments: post.comments,
+                photos: postPhotos.filter((photo) => photo.postID === post.postID)
             };
         });
         return posts;        
@@ -145,18 +161,25 @@ export default class Post {
         });
         // console.log(postsFeed[0].user);
         // Assuming you have a userLikes array that contains the likes
+        let postPhotos = await PhotoDefinition.findAll({
+            where: {
+                postID: postsFeed.map((post) => post.postID)
+            }
+        });
+        console.log(postPhotos);
         const formattedPostsFeed = postsFeed.map(post => {
             return {
-            postID: post.postID,
-            authorName: post.user.dataValues.name, // Using the name from the joined User model
-            content: post.content,
-            time: new Date(post.createdAt),
-            userName : post.user.dataValues.userName,
-            profilePhotoUrl : post.user.dataValues.profilePhotoUrl,
-            userID: post.userID, // Assuming this is the correct field name for the user ID
-            liked: userLikes.find(like => like.postID === post.postID) ? true : false,
-            likes: post.likes,
-            comments: post.comments,
+                postID: post.postID,
+                authorName: post.user.dataValues.name, // Using the name from the joined User model
+                content: post.content,
+                time: new Date(post.createdAt),
+                userName : post.user.dataValues.userName,
+                profilePhotoUrl : post.user.dataValues.profilePhotoUrl,
+                userID: post.userID, // Assuming this is the correct field name for the user ID
+                liked: userLikes.find(like => like.postID === post.postID) ? true : false,
+                likes: post.likes,
+                comments: post.comments,
+                photos: postPhotos.filter(photo => photo.postID === post.postID)
             };
         });
         // console.log(formattedPostsFeed);

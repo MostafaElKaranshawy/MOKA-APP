@@ -26,10 +26,9 @@ const PostDefinition = orm.define('post',
     }
 );
 
-
-
 PostDefinition.associate = async (models) => {
-    const {post, user, comment, postLike} = models;
+    console.log(models);
+    const {post, user, comment, postLike, photo} = models;
     post.belongsTo(user, {foreignKey : 'userID'});
     
     post.hasMany(comment, {
@@ -42,6 +41,11 @@ PostDefinition.associate = async (models) => {
         onDelete: 'CASCADE',
         foreignKey: 'postID',
         as: 'postLikes' // Use an alias to avoid naming collision
+    });
+    post.hasMany(photo, {
+        onDelete: 'CASCADE',
+        foreignKey: 'postID',
+        as: 'photos' // Use an alias to avoid naming collision
     });
 }
 
