@@ -18,7 +18,7 @@ export default function NewPost(probs) {
             setProfilePhotoURL(user.profilePhotoUrl);
         }
     }, [])
-    const { uploadPhotos, photoPreviews, photoFiles , removePhoto } = useUploadPhoto();
+    const { uploadPhotos, photoPreviews , photoFiles , removePhoto, submitFiles } = useUploadPhoto();
     const { uploadVideos, videoPreviews, removeVideo } = useUploadVideo();
     async function handleSubmit(event) {
         event.preventDefault();
@@ -30,7 +30,7 @@ export default function NewPost(probs) {
             await probs.getPosts();
             alert("Post Created successfully");
             setContent("");
-            photoPreviews = [];
+            submitFiles();
         }
         catch(err){
             console.log(err);

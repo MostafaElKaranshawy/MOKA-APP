@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, useRef} from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 
 import "./header.css";
@@ -9,6 +9,32 @@ export default function Header() {
     const [navMenu, setNavMenu] = useState(true);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const authWindow = (window.location.href == "http://localhost:5173/" ? true : false);
+    const ws = useRef(null);
+    const [userFriends, setUserFriends] = useState([]); 
+    useEffect(() => {
+        // Create the WebSocket connection once
+        ws.current = new WebSocket("ws://localhost:4001");
+
+        ws.current.onmessage = (event) => {
+            console.log(`Message from server: ${event.data}`);
+        };
+
+        ws.current.onopen = () => {
+            console.log('Connected to WebSocket server');
+        };
+
+        ws.current.onclose = () => {
+            console.log('Disconnected from WebSocket server');
+        };
+
+        // Clean up on component unmount
+        return () => {
+            if (ws.current) {
+                ws.current.close();
+            }
+        };
+    }, []);
+
     useEffect(() => {
         setNavMenu(nav);
     }, [nav])

@@ -54,10 +54,11 @@ async function deletePost(postID, userToken) {
     
 }
 
-async function editPost(postID, newContent, userToken) {
+async function editPost(postID, newContent, removedPhotos ,userToken) {
     try {
         const body = {
-            "content": newContent
+            "content": newContent,
+            removedPhotos : removedPhotos || []
         };
         const response = await axios.patch(`http://localhost:4000/posts/${postID}`,body, {
             headers: {

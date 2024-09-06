@@ -7,6 +7,7 @@ class PostController{
             const photos = req.files; // Array of photo files
             const userID = req.user.userID;
             const content = req.body.content;
+            
             // console.log(content)
             if(userID == null || content == null){
                 throw new Error("Invalid Parameters");
@@ -40,10 +41,11 @@ class PostController{
             const userID = req.user.userID;
             const postID = parseInt(req.params.postID);
             const content = req.body.content;
-            if(userID == null || postID == null || isNaN(postID) || content == null){
+            const removedPhotos = req.body.removedPhotos;
+            if(userID == null || postID == null || isNaN(postID) || (content == null && removedPhotos == null)){
                 throw new Error("Invalid Parameters");
             }
-            await PostService.updatePost(userID, postID, content);
+            await PostService.updatePost(userID, postID, content, removedPhotos);
             eventEmitter.emit('broadcast', `${req.user.name} updated a Post`);
             return res.status(200).send("Post Updated Successfully");
         }

@@ -29,12 +29,12 @@ class PostService {
             throw new Error(err.message);
         }
     }
-    static async updatePost(userID, postID, newContent){
+    static async updatePost(userID, postID, newContent, removedPhotos){
         if(userID == null || postID == null || newContent == null){
             throw new Error("Invalid Parameters");
         }
         try {
-            await Post.updatePost(userID, postID, newContent);
+            await Post.updatePost(userID, postID, newContent, removedPhotos);
         }
         catch(err){
             throw new Error(err.message);

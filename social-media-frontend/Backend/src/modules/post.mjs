@@ -52,7 +52,7 @@ export default class Post {
         }
         return result;
     }
-    static async updatePost(userID, postID, newContent){
+    static async updatePost(userID, postID, newContent, removedPhotos){
         const post = await PostDefinition.findOne({
             where: {
                 postID: postID
@@ -72,6 +72,15 @@ export default class Post {
                 postID: postID
             }
         });
+        if(removedPhotos){
+            removedPhotos.forEach(async (photoID) => {
+                await PhotoDefinition.destroy({
+                    where: {
+                        id: photoID
+                    }
+                });
+            })
+        }
         if(!result){
             throw new Error("Post not updated");
         }

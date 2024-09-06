@@ -169,9 +169,6 @@
 .post-photos .post-photo {
     width: 100%;
 }
-.post-photos:hover i{
-    opacity: 1;
-}
 .post-photos .photo-count{
     position: absolute;
     bottom: -40px;
@@ -187,7 +184,7 @@
 .post-photos:hover .photo-count{
     bottom: 0;
 }
-.post-photos i{
+.post-photos .nav-arrow{
     position: absolute;
     font-size: 20px;
     opacity: 0;
@@ -203,6 +200,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    color: white;
+}
+.post-photos:hover .nav-arrow{
+    opacity: 1;
+}
+.post-photos .nav-arrow:hover{
+    background-color: #007bff;
+    color: black;
 }
 .post-photos .left-arrow{
     left: 20px;
@@ -213,6 +218,22 @@
     right: 20px;
     top: 50%;
     transform: translateY(-50%);
+}
+.post-photos .remove-photo{
+    position: absolute;
+    top: 0;
+    right: 0;
+    font-size: 20px;
+    color: white;
+    background-color: red;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.post-photos .remove-photo:hover{
+    background-color: white;
+    color: red;
 }
 .post-photo img{
     width: 100%;

@@ -35,8 +35,12 @@ function useUploadPhoto() {
             photoPreviews.forEach(({ id }) => URL.revokeObjectURL(id));
         };
     }, [photoPreviews]);
+    const submitFiles = async () => {
+        setFiles([]);
+        setPreviews([]);
+    }
 
-    return { uploadPhotos, photoPreviews, photoFiles, removePhoto };
+    return { uploadPhotos, photoPreviews, photoFiles, removePhoto, submitFiles };
 }
 
 export default useUploadPhoto;

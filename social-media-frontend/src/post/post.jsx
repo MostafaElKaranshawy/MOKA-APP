@@ -24,6 +24,7 @@ export default function Post(probs){
     const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     const [postLikes, setPostLikes] = useState([])
     const [postPhotos, setPostPhotos] = useState(post.photos);
+    const [editPhotos, setEditPhotos] = useState(post.photos);
     const [curPhoto, setCurPhoto] = useState(0);
     useEffect(() => {
         if(probs.userToken && post){
@@ -82,6 +83,14 @@ export default function Post(probs){
         setNewContent(post.content);
         setShowEdit((pre)=>!pre);
     }
+    const handleCancelEdit = () => {
+        setShowOptions(false);
+        setShowPostLikes(false);
+        setNewContent(post.content);
+        setShowEdit((pre)=>!pre);
+        setEditPhotos(post.photos);
+        setCurPhoto(0);
+    }
     async function changeLike(){
         setShowPostLikes(false);
         setLike((pre)=>!pre)
@@ -100,11 +109,14 @@ export default function Post(probs){
     async function handleEditPost(){
         toggleShowEdit();
         toggleShowOptions();
-        if(newContent.trim() === ""){
+        if(newContent.trim() === "" && editPhotos.length === 0){
             alert("Post cannot be empty");
+            setEditPhotos(post.photos);
+            setCurPhoto(0);
             return;
         }
-        await editPost(post.postID, newContent, probs.userToken);
+        const removedPhotos = postPhotos.filter((photo) => !editPhotos.includes(photo)).map((photo) => photo.id);
+        await editPost(post.postID, newContent, removedPhotos ,probs.userToken);
         await probs.getPosts();
     }
     async function handleLikePost(){
@@ -131,7 +143,7 @@ export default function Post(probs){
             console.log(error);
         }
     }
-    async function createComment(content){
+    async function Comment(content){
         try {
             const newComment = {
                 "content": content
@@ -187,23 +199,27 @@ export default function Post(probs){
     };
     const increaseCurPhoto = () => {
         console.log(curPhoto);
-        if(postPhotos.length > 0){
-            setCurPhoto((curPhoto+1)%postPhotos.length);
+        if(editPhotos.length > 0){
+            setCurPhoto((curPhoto+1)%editPhotos.length);
         }
     }
     const decreaseCurPhoto = () => {
         console.log(curPhoto);
-        if(postPhotos.length > 0){
-            setCurPhoto((curPhoto-1+postPhotos.length)%postPhotos.length);
+        if(editPhotos.length > 0){
+            setCurPhoto((curPhoto-1+editPhotos.length)%editPhotos.length);
+        }
+    }
+    const handleRemovePhoto = () => {
+        console.log("remove photo");
+        const newPhotos = editPhotos.filter((photo, index) => index !== curPhoto);
+        setEditPhotos(newPhotos);
+        // setPostPhotos(newPhotos);
+        if(curPhoto >= newPhotos.length){
+            setCurPhoto(curPhoto-1);
         }
     }
     return (
         <div className="post">
-            {/* {post.shared &&
-            <div className="shared-post">
-                    <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
-                    <span> shared this</span>
-            </div>} */}
             <div className="post-details">
                 <img src={profilePhotoURL} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
                 <div className="post-body">
@@ -229,14 +245,15 @@ export default function Post(probs){
                     </div>
                     <div className="post-content text-container">
                         <p className="text-container" dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
-                        {postPhotos.length > 0 && (
+                        {editPhotos.length > 0 && (
                             <div className="post-photos">
-                                {postPhotos.length > 1 && <i className="fa fa-chevron-left left-arrow" onClick={decreaseCurPhoto}></i>}
+                                {editPhotos.length > 1 && <i className="fa fa-chevron-left left-arrow nav-arrow" onClick={decreaseCurPhoto}></i>}
                                 <div className="post-photo">
-                                    <img src={`/Backend/${postPhotos[curPhoto].url}`} />
+                                    {showEdit && <i className="fa-solid fa-circle-xmark remove-photo" onClick={handleRemovePhoto}></i>}
+                                    <img src={`/Backend/${editPhotos[curPhoto].url}`} />
                                 </div>
-                                {postPhotos.length > 1 && <i className="fa fa-chevron-right right-arrow" onClick={increaseCurPhoto}></i>}
-                                {postPhotos.length > 1 && <p className="photo-count">{`${curPhoto+1}/${postPhotos.length}`}</p>}
+                                {editPhotos.length > 1 && <i className="fa fa-chevron-right right-arrow nav-arrow" onClick={increaseCurPhoto}></i>}
+                                {editPhotos.length > 1 && <p className="photo-count">{`${curPhoto+1}/${editPhotos.length}`}</p>}
                             </div>
                         )}
                         {showEdit && 
@@ -247,7 +264,7 @@ export default function Post(probs){
                                     }
                                 }></textarea>
                                 <div className="edit-post-options">
-                                    <button onClick={toggleShowEdit}>Cancel</button>
+                                    <button onClick={handleCancelEdit}>Cancel</button>
                                     <button onClick={handleEditPost}>Save</button>
                                 </div>
                             </div>
