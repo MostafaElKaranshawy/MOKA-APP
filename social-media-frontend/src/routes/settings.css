@@ -1,0 +1,126 @@
+.settigns-body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+.settigns-header{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    font-size: 18px;
+}
+.user-info{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+}
+.user-info img{
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    padding: 20px;
+}
+.user-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: #bde0ff 0 0 11px 0;
+    margin-bottom: 30px;
+}
+.user-section{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    border-radius: 10px;
+}
+.user-section{
+    display: flex;
+    flex-direction: column;
+    width: 300px;
+    padding: 20px;
+    align-items: flex-start;
+}
+.user-section label{
+    font-size: 13px;
+    margin-bottom: 10px;
+    font-weight: 500;
+    color: grey;
+}
+.user-section input{
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    box-shadow: 0px 1px 7px 0px #bde0ff;
+    border: none;
+    font-size: 15px;
+    width: 300px;
+    font-weight: 600;
+    color: rgb(57, 57, 57);
+}
+.user-section .input{
+    position: relative;
+}
+.user-section .input i{
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: grey;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.user-section .input i:hover{
+    color: black;
+}
+.user-section input:focus{
+    outline: none;
+    box-shadow: 0px 1px 7px 0px #75beff;
+}
+.user-password{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+.save-changes-button{
+    padding: 10px;
+    font-size: 15px;
+    align-self: center;
+    background: #3ba1fa;
+    transition: 0.3s;
+}
+
+.save-changes-button:focus{
+    outline: none;
+}
+.save-changes-button:hover{
+    background: #0a8dff;
+}
+@media screen and (max-width: 600px){
+    .user-password{
+        flex-direction: column;
+    }
+    
+}
+.input-error{
+    margin: 0;
+    font-size: 12px;
+    color: red;
+    padding: 5px 10px;
+}

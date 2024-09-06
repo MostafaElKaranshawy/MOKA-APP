@@ -6,6 +6,7 @@ import Auth from './routes/auth';
 import Home from "./routes/Home";
 import Profile from "./routes/Profile";
 import Header from "./header/header";
+import Settings from './routes/settings';
 function App(){
   
   return (
@@ -17,6 +18,7 @@ function App(){
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />
           <Route path="/:userName/profile" element={<Profile/>} />
+          <Route path="/settings" element={<Settings/>} />
         </Routes>
       </main>
     </div>

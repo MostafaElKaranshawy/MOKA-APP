@@ -1,8 +1,11 @@
 .post{
     display: flex;
     flex-direction: column;
-    margin: 10px;
+    margin: 10px 0;
     width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .post-details{
     width: calc(100% - 60px);
@@ -162,12 +165,15 @@
     width: 100%;
     position: relative;
     cursor: pointer;
-    height: 300px;
+    /* height: 300px; */
     align-items: center;
     justify-content: center;
 }
 .post-photos .post-photo {
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .post-photos .photo-count{
     position: absolute;
@@ -221,15 +227,18 @@
 }
 .post-photos .remove-photo{
     position: absolute;
-    top: 0;
+    top: 5px;
     right: 0;
     font-size: 20px;
     color: white;
     background-color: red;
-    padding: 5px;
+    z-index: 11111;
     border-radius: 50%;
     cursor: pointer;
     transition: 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .post-photos .remove-photo:hover{
     background-color: white;
@@ -237,7 +246,8 @@
 }
 .post-photo img{
     width: 100%;
-    max-height: 400px;
+    max-width: 400px;
+    /* max-height: 400px; */
 }
 .edit-post{
     position: absolute;
@@ -394,11 +404,11 @@
 @media screen and (max-width : 500px) {
     .post{
         margin: 0 0 10px 0;
-        width: calc(100% - 20px);
+        width: calc(100% );
     }
     .post-details{
         border-bottom: 1px solid #ccc;
         border-radius: 0;
-        width: calc(100% - 20px);    
+        width: calc(100% - 40px);    
     }
 }

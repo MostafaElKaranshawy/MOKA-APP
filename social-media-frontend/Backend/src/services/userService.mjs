@@ -33,4 +33,12 @@ export default class UserService{
             throw new Error(err.message);
         }
     }
+    static async editUserSettings(userInfo){
+        try{
+            return await User.editUserSettings(userInfo);
+        }
+        catch(err){
+            throw new Error(err);
+        }
+    }
 }

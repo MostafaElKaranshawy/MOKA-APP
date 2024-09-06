@@ -54,5 +54,22 @@ export default class UserController{
         } catch (err) {
             return res.status(500).send(err.message);
         }
-    }    
+    }
+    static async editUserSettings(req, res){
+        const userInfo = {
+            userID: req.user.userID,
+            name : req.body.name,
+            email : req.body.email,
+            userName : req.body.userName,
+            password : req.body.password,
+            newPassword : req.body.newPassword
+        }
+        try{
+            const user = await UserService.editUserSettings(userInfo);
+            return res.status(200).send(user);
+        }
+        catch(err){
+            res.status(404).send(err.message);
+        }
+    }
 }

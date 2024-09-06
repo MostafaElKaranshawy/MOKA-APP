@@ -352,3 +352,7 @@
     }
     
 }
+
+.profile-menu .active{
+    color: #007bff;
+}

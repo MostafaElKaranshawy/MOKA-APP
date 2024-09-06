@@ -1,5 +1,6 @@
 import UserDefinition from "./definitions/userDefinition.mjs";
 import {Op} from "../config/orm.mjs";
+import bcrypt from 'bcrypt';
 export default class User {
     static async createUser(name, userName, email, password, bio, profilePhotoUrl){
         const user = await UserDefinition.create({
@@ -74,6 +75,42 @@ export default class User {
         user.profilePhotoUrl = `/Backend/uploads/${profilePhoto}`; // Assuming you want to store the file path
         await user.save();
     
+        return user;
+    }
+    static async editUserSettings(userInfo){
+        const user = await UserDefinition.findOne({where: {
+            userID: userInfo.userID
+        }});
+        if(!user)throw new Error("User not found");
+        if(userInfo.name)user.name = userInfo.name;
+        if(userInfo.email){
+            const checkMail = await UserDefinition.findOne({where: {
+                email: userInfo.email
+            }});
+            if(checkMail)throw new Error("Email already exists");
+            else{
+                user.email = userInfo.email;
+            }
+        }
+        if(userInfo.userName){
+            const checkUserName = await UserDefinition.findOne({where: {
+                userName: userInfo.userName
+            }});
+            if(checkUserName)throw new Error("Username already exists");
+            else{
+                user.userName = userInfo.userName;
+            }
+        }
+        if(userInfo.password){
+            const hashedPassword = user.password;
+            const match = await bcrypt.compare(userInfo.password, hashedPassword);
+            console.log(match);
+            if (!match) {
+                throw new Error("Password is Incorrect");
+            }
+            user.password = userInfo.newPassword;
+        }
+        await user.save();
         return user;
     }
 }
