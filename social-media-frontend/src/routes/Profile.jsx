@@ -22,6 +22,9 @@ export default function Profile() {
     // const ws = new WebSocket("ws://localhost:4001");
     const cookies = document.cookie;
     const { userName } = useParams();
+    if(!document.cookie.split("authToken=")[1]){
+        window.location.href = "/";
+    }
     const userToken = cookies.split("authToken=")[1];
     const [showAllFriends, setShowAllFriends] = useState(false);
     const [showEditBio, setshowEditBio] = useState(false);
@@ -58,6 +61,7 @@ export default function Profile() {
         if (userName && userToken) {
             fetchUserProfile();
         }
+        
     }, [userToken, userName]);
 
     const [bio, setBio] = useState(' ');

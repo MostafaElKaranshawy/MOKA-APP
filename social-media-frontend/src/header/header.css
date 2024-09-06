@@ -12,10 +12,7 @@
     display: flex;
     align-items: center;
     cursor: pointer;
-}
-.logo {
-    display: flex;
-    align-items: center;
+    padding: 10px 0;
 }
 
 .logo i {
@@ -240,6 +237,18 @@
     position: relative;
     left: 0;
     margin-left: 10px;
+}
+.profile-menu-item i{
+    color: white;
+}
+.profile-menu-item:hover i{
+    color: #007bff;
+}
+.profile-menu-item:hover{
+    color: #007bff;
+}
+.profile-menu .active i {
+    color: #007bff;
 }
 .nav-icon i{
     font-size: 0;

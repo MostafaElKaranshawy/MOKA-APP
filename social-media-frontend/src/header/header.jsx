@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
-
+import axios from "axios";
 import "./header.css";
 
 export default function Header() {
@@ -36,6 +36,7 @@ export default function Header() {
     }, []);
 
     useEffect(() => {
+        if(authWindow)return
         setNavMenu(nav);
     }, [nav])
     function toggleShowProfileMenu() {
@@ -56,14 +57,14 @@ export default function Header() {
     }
     let [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [profilePhotoUrl, setProfilePhotoUrl] = useState("/src/assets/profile-photo-jolder.jpg");
-    const userProfileURL = `/${user.userName}/profile`;
+    // const userProfileURL = ;
     const [query, setQuery] = useState("");
     const [searchResult, setSearchResult] = useState([])
     const handleStorageChange = () => {
         setUser(JSON.parse(localStorage.getItem("user")));
     }
     useEffect(() => {
-        if (user.profilePhotoUrl) {
+        if (!authWindow && user.profilePhotoUrl) {
             setProfilePhotoUrl(user.profilePhotoUrl);
             console.log(user.profilePhotoUrl);
         }
@@ -73,16 +74,34 @@ export default function Header() {
         if (query.trim() === "") return;
         await searchUsers();
     };
-    async function searchUsers() {
+    async function handleLogOut() {
         try {
-            const response = await fetch(`http://localhost:4000/users/search?search=${query}`, {
-                method: "GET",
+            console.log(token);
+            const response = await axios.delete("http://localhost:4000/auth/signout",{
                 headers: {
                     "Content-Type": "application/json",
                     "Authorization": `Bearer ${token}`
                 }
             });
-            const data = await response.json();
+            const data = await response.data;
+            if (data === "Logged out") {
+                localStorage.removeItem("user");
+                document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                window.location.href = "/";
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
+    async function searchUsers() {
+        try {
+            const response = await axios.get(`http://localhost:4000/users/search?search=${query}`, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+            const data = await response.data;
             if(data.length == 0) {
                 setSearchResult([{name : "No Results", userID: 0}]);
                 return;
@@ -158,7 +177,7 @@ export default function Header() {
                             {nav && <i className="fa-solid fa-chevron-down drop-down-icon"></i>}
                             {showProfileMenu ?
                                 <ul className="profile-menu">
-                                    <NavLink to={userProfileURL} className="profile-menu-item">
+                                    <NavLink to={`/${user.userName}/profile`} className="profile-menu-item">
                                         <i className="fa-solid fa-user"></i>
                                         <p>Profile</p>
                                     </NavLink>
@@ -166,10 +185,10 @@ export default function Header() {
                                         <i className="fa-solid fa-gear"></i>
                                         <p>Settings</p>
                                     </NavLink>
-                                    <NavLink to="/" className="profile-menu-item">
+                                    <div className="profile-menu-item" onClick={handleLogOut}>
                                         <i className="fa-solid fa-sign-out"></i>
                                         <p>Log Out</p>
-                                    </NavLink> 
+                                    </div> 
                                 </ul> :null}
                         </div>
                     </div>

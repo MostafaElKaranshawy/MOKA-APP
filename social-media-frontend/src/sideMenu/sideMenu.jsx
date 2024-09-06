@@ -18,7 +18,6 @@ export default function SideMenu(){
         if (user && userToken) {
             handleUser();
             setProfilePhotoURL(user.profilePhotoUrl);
-            // console.log(user)
         }
     }, [userToken]);
 

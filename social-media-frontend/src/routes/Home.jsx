@@ -6,6 +6,9 @@ import MainSection from '../main/mainSection'
 
 
 export default function Home(){
+    if(!document.cookie.split("authToken=")[1]){
+        window.location.href = "/";
+    }
     return (
         <div className="home view">
             {/* <Header/> */}

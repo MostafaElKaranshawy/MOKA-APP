@@ -66,6 +66,17 @@
 .auth-section .auth-form .submit-button:hover{
     background-color:  rgb(34, 146, 221);
 }
+.signUp-form, .signIn-form{
+    display: flex;
+    justify-content: center;
+    align-items: center !important;
+    flex-direction:column ;
+    width: calc(100% - 40px);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0px 14px 20px 9px rgba(0, 0, 0, 0.1);
+    border-radius: 0px !important;
+}
 @media screen and (max-width: 600px){
     .auth-section{
         width: 100%;

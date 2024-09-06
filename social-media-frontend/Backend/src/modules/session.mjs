@@ -44,4 +44,21 @@ export default class Session {
             throw new Error(err.message);
         }
     }
+    static async deleteSession(userID, token){
+        try {
+            const session = await SessionDefinition.destroy({
+                where: {
+                    userID: userID,
+                    token: token
+                }
+            });
+            if(!session){
+                throw new Error("Session not deleted");
+            }
+            return session;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
 }

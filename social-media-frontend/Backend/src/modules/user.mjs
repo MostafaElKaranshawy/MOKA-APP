@@ -108,7 +108,7 @@ export default class User {
             if (!match) {
                 throw new Error("Password is Incorrect");
             }
-            user.password = userInfo.newPassword;
+            user.password = await bcrypt.hash(userInfo.newPassword, 10);
         }
         await user.save();
         return user;

@@ -3,12 +3,17 @@ import axios from "axios";
 import './settings.css';
 
 export default function Settings(){
+    if(!document.cookie.split("authToken=")[1]){
+        console.log("No token found");
+        window.location.href = "/";
+    }
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const userToken = document.cookie.split("authToken=")[1];
+    console.log(userToken);
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [formErrors, setFormErrors] = useState({
-        name: "error name musn't be empty",
+        name: "",
         email: "",
         userName: "",
         password: "",

@@ -1,7 +1,7 @@
 import express from 'express';
 import AuthController from '../controllers/authController.mjs';
 import AuthValidator from '../middleWares/authValidation.mjs';
-
+import checkUser from '../middleWares/checkUser.mjs'
 const authRouter = express.Router();
 
 authRouter.post(
@@ -21,5 +21,6 @@ authRouter.post(
     AuthValidator.validate,
     AuthController.signIn
 );
+authRouter.delete('/auth/signout', checkUser,AuthController.signOut);
 
 export default authRouter;

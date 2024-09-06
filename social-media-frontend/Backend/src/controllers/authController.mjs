@@ -17,10 +17,11 @@ class AuthController {
         }
         try{
             await AuthService.signUp(user);
-            res.status(201).send("User Added Successfully!");
+            res.status(201).send("User Signed Up Successfully!");
         }
         catch(err){
-            res.status(500).send(err.message);
+            console.log(err.message);
+            res.status(400).send(err.message);
         }
     }
     static async signIn(req, res) {
@@ -35,6 +36,18 @@ class AuthController {
             return res.status(500).send(err.message);
         }
         return res.status(200).send(result);
+    }
+    static async signOut(req, res) {
+        try{
+            const userID = req.user.userID;
+            const token = req.header('Authorization').replace('Bearer ', '');
+            console.log(userID, token);
+            await AuthService.signOut(userID, token);
+            res.status(200).send("Logged out");
+        }
+        catch(err){
+            res.status(500).send(err.message);
+        }
     }
 }
 

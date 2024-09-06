@@ -25,6 +25,17 @@ class SessionService{
             throw new Error(err.message);
         }
     }
-    
+    static async deleteSession(userID, token){
+        try {
+            const session = Session.deleteSession(userID, token);
+            if(!session){
+                throw new Error("Session not deleted");
+            }
+            return session;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
 }
 export default SessionService;

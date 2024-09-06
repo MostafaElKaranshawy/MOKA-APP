@@ -246,7 +246,7 @@
 }
 .post-photo img{
     width: 100%;
-    max-width: 400px;
+    /* max-width: 400px; */
     /* max-height: 400px; */
 }
 .edit-post{

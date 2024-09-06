@@ -54,6 +54,14 @@ class AuthService {
             message: "User Logged In Successfully!"
         };
     }
+    static async signOut(userID, token) {
+        try {
+            await SessionService.deleteSession(userID, token);
+        }
+        catch (err){
+            throw new Error(err.message);
+        }
+    }
 }
 
 export default AuthService;
