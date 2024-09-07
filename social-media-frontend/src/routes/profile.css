@@ -1,18 +1,13 @@
 .profile-view {
-    /* display: flex;
-    flex-direction: column;
-    align-items: center; */
-    /* padding: 20px; */
     background-color: #f0f2f5;
     font-family: Arial, sans-serif;
     width: 100%;
+    max-width: 700px;
 }
 
 .profile-section {
     width: 100%;
-    /* max-width: 800px; */
     background: white;
-    /* border-radius: 8px; */
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
 }
@@ -199,6 +194,13 @@
     margin-bottom: 10px;
     color: #1c1e21;
     text-align: left;
+}
+.profile-friends-title, .profile-friend-requests-title, .posts .profile-posts-header{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
 }
 
 .profile-friends-list, .profile-friend-requests-list {

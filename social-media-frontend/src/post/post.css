@@ -411,4 +411,7 @@
         border-radius: 0;
         width: calc(100% - 40px);    
     }
+    .post .text-container{
+        font-size: 12px;
+    }
 }

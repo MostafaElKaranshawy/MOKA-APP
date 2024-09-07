@@ -6,38 +6,13 @@ import "./header.css";
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
     let nav = (window.innerWidth > 500? true: false)
-    const [navMenu, setNavMenu] = useState(true);
+    const [search, setsearch] = useState(true);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const authWindow = (window.location.href == "http://localhost:5173/" ? true : false);
-    const ws = useRef(null);
-    const [userFriends, setUserFriends] = useState([]); 
-    useEffect(() => {
-        // Create the WebSocket connection once
-        ws.current = new WebSocket("ws://localhost:4001");
-
-        ws.current.onmessage = (event) => {
-            console.log(`Message from server: ${event.data}`);
-        };
-
-        ws.current.onopen = () => {
-            console.log('Connected to WebSocket server');
-        };
-
-        ws.current.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-        };
-
-        // Clean up on component unmount
-        return () => {
-            if (ws.current) {
-                ws.current.close();
-            }
-        };
-    }, []);
 
     useEffect(() => {
         if(authWindow)return
-        setNavMenu(nav);
+        setsearch(nav);
     }, [nav])
     function toggleShowProfileMenu() {
         setShowProfileMenu((prev) => !prev);
@@ -51,13 +26,12 @@ export default function Header() {
             document.querySelector(".drop-down-icon").style.transform = "rotate(0deg)";
         }
     }, [showProfileMenu])
-    function toggleNav() {
-        setNavMenu((prev) => !prev);
-        if(!navMenu) setShowProfileMenu(false);
+    function toggleSearch() {
+        setsearch((prev) => !prev);
+        if(!search) setShowProfileMenu(false);
     }
     let [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [profilePhotoUrl, setProfilePhotoUrl] = useState("/src/assets/profile-photo-jolder.jpg");
-    // const userProfileURL = ;
     const [query, setQuery] = useState("");
     const [searchResult, setSearchResult] = useState([])
     const handleStorageChange = () => {
@@ -123,20 +97,24 @@ export default function Header() {
                 {
                     !authWindow &&
                     <div className="search-bar">
-                        <input
-                            type="search"
-                            value={query}
-                            onChange={(e) => {
-                                setQuery(e.target.value)
-                                setSearchResult([]);
-                            }}
-                            placeholder="Find friends"
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    handleSearch(); // Search on Enter key press
-                                }
-                            }}
-                        />
+                        {!nav && <i className="fa-solid fa-search search-icon menu-item" onClick={toggleSearch}></i>}
+                        {
+                            search && 
+                            <input
+                                type="search"
+                                value={query}
+                                onChange={(e) => {
+                                    setQuery(e.target.value)
+                                    setSearchResult([]);
+                                }}
+                                placeholder="Find friends"
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        handleSearch(); // Search on Enter key press
+                                    }
+                                }}
+                            />
+                        }
                         <div className="search-result">
                             {searchResult && searchResult.map((user) => (
                                 <div className="search-item" key={user.userID} onClick={()=>{
@@ -154,23 +132,13 @@ export default function Header() {
             {
                 !authWindow &&
                 <>
-                    <div className="nav-icon" onClick={toggleNav}>
-                        <i className="fa-solid fa-bars"/>
-                    </div>
                     <div className="nav">
-                        {
-                            navMenu && (
-                            <ul className="nav-menu">
-                                <NavLink to="/home" className="menu-item" onClick>
-                                    <i className="fa-solid fa-house"></i>
-                                    <p>Home</p>
-                                </NavLink>
-                                <li className="menu-item">
-                                    <i className="fa-solid fa-bell"></i>
-                                    <p>Updates</p>
-                                </li>
-                            </ul>)
-                        }
+                        <ul className="nav-menu">
+                            <NavLink to="/home" className="menu-item" onClick>
+                                <i className="fa-solid fa-house"></i>
+                                <p>Home</p>
+                            </NavLink>
+                        </ul>
                         <div className="user-profile-item"  onClick={toggleShowProfileMenu}>
                             <img src={profilePhotoUrl} onError={()=>{setProfilePhotoUrl("/src/assets/profile-photo-holder.jpg");}}/>
                             <p>{user.name}</p>

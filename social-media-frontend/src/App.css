@@ -20,7 +20,9 @@ header {
 }
 
 main {
-  /* padding-top: 60px; Adjust based on header height */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 #main {
   position: relative;

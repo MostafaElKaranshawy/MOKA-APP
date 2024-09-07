@@ -79,9 +79,9 @@
 .header .logo-search-container input::placeholder{
     color: #ccc;
 }
-.search-bar{
+/* .search-bar{
     position: relative;
-}
+} */
 .search-result{
     position: absolute;
     width: 75%;
@@ -146,20 +146,6 @@
     padding : 5px;
     margin: 5px;
 }
-
-/* .nav-menu .menu-item::after{
-    content: '';
-    position: absolute;
-    width: 0;
-    height: 2px;
-    background-color: #333;
-    bottom: -2px;
-    left: 0;
-    transition: 0.3s;
-} */
-/* .nav-menu .menu-item:hover::after {
-    width: 100%;
-} */
 
 .nav-menu .menu-item i {
     font-size: 20px;
@@ -305,61 +291,34 @@
     .header{
         padding: 10px 20px;
     }
-    .nav-menu{
-        display: flex;
-        flex-direction: column;
+    .header .logo-search-container input {
         position: absolute;
-        top: 100%;
-        left : 0;
-        padding:0;
-        background-color: #333333f1;
-        color: white;
-        width: calc(100%);
-        align-items: flex-start;
-        z-index: 100;
+        bottom: -52px;
+        left: 0;
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+        background-color: #3798ffb7 !important;
+        height: 50px;
+        color: black !important;
     }
-    .nav-menu .menu-item{
-        width: calc(100% - 40px);
-        display: flex;
-        flex-direction: row;
+    .header .logo-search-container input::placeholder{
         color: white;
-        justify-content: flex-start;
-        padding: 20px;
-        border-bottom: black 1px solid;
     }
-    .nav-menu .menu-item p{
-        opacity: 1; /* Visible when active */
-        transform: translateX(0); /* Slide to its original position */
-        position: relative;
+    .search-result{
+        top: calc(100% + 57px);
+        width: 100%;
         left: 0;
     }
-    .nav-menu .menu-item:hover i{
-        color: #eee;
+    .search-item{
+        background-color: #3798ffb7;
     }
-    .nav-menu .menu-item::after{
-        background-color: #eee;
-        transition: 0.5s;
+    .search-icon{
+        font-size: 20px !important;
+        padding: 5px 20px !important;
+        color: #0060c7 !important;
+        z-index: 100;
     }
-    .nav-icon i{
-        font-size: 30px;
-        margin-right: 10px;
-    }
-
-    /* Active Route */
-    .nav-menu .active {
-        color: #eee;
-    }
-
-    .nav-menu .active i{
-        color: #eee;
-    }
-    .nav-menu .active::after {
-        width: 100%;
-    }
-    .nav-menu .menu-item:hover .active{
-        width: 0;
-    }
-    
 }
 
 .profile-menu .active{

@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef} from "react";
 import axios from "axios";
-import Header from "../header/header";
 import Post from "../post/post";
 import Loading from "../loading/loading";
 import "./profile.css";
@@ -400,7 +399,7 @@ export default function Profile() {
                 }
             </div>
             <div className="posts">
-                <p>Posts</p>
+                <p className="profile-posts-header">Posts</p>
                 {
                     posts.length ? posts.map((post) => (
                         <Post 
