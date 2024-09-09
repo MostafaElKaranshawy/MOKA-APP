@@ -1,6 +1,5 @@
 import React, {useState} from "react";
 import "./comment.css";
-import profilePhoto from "../assets/profile-photo-holder.jpg";
 export default function Comment(probs){
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const comment = probs.comment;
@@ -8,7 +7,7 @@ export default function Comment(probs){
     const [showOptions, setShowOptions] = useState(false);
     const [showEdit, setShowEdit] = useState(false);
     const [newContent, setNewContent] = useState(comment.content);
-    // const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
+    const [profilePhotoURL, setProfilePhotoURL] = useState(comment.profilePhotoURL);
     function toggleLike() {
         setLike((pre) => !pre);
     }
@@ -69,7 +68,7 @@ export default function Comment(probs){
     return (
         <div className="comment">
             <div className="comment-header">
-                <img src={comment.profilePhotoURL} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                <img src={profilePhotoURL} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
             </div>
             <div className="comment-body">
                 <div className="comment-user">

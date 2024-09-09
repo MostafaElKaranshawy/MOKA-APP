@@ -49,8 +49,8 @@ export default class UserController{
         }
     
         try {
-            const newProfilePhoto = await UserService.uploadProfilePhoto(userID, profilePhoto.filename); // Pass the filename or the URL, not the whole file object
-            return res.status(200).json({ message: "Profile photo updated successfully", newProfilePhoto });
+            const newUserData = await UserService.uploadProfilePhoto(userID, profilePhoto.filename); // Pass the filename or the URL, not the whole file object
+            return res.status(200).json({ message: "Profile photo updated successfully", newUserData });
         } catch (err) {
             return res.status(500).send(err.message);
         }

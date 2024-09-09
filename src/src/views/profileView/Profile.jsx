@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useRef} from "react";
-import axios from "axios";
-import Post from "../post/post";
-import Loading from "../loading/loading";
+import Post from "../../components/post/post";
+import Loading from "../../components/loading/loading";
 import "./profile.css";
 import { useParams } from "react-router-dom";
 import {
@@ -15,8 +14,11 @@ import {
     getFriendStatus,
     removeFriend,
     getUserPosts
-} from "./profileRequests.jsx";
+} from "../../services/profileRequests";
 
+import { 
+    changeProfilePhoto
+} from '../../services/userRequests';
 export default function Profile() {
     // const ws = new WebSocket("ws://localhost:4001");
     const cookies = document.cookie;
@@ -151,11 +153,12 @@ export default function Profile() {
             setProfilePhotoURL(`${userData.profilePhotoUrl}`);
             console.log(profilePhotoURL);
             setUser(userData);
-            if(mainUser)(localStorage.setItem("user", JSON.stringify(userData)));
+            if(mainUser){
+                (localStorage.setItem("user", JSON.stringify(userData)));
+            }
             
             const friendsData = await getUserFriends(userName, userToken, setError);
             setFriends(friendsData);
-            // const userPosts = await getUserPosts(userData.userID, userToken, setError);
             let postsData;
             if(page == 1){
                 postsData = await getUserPosts(userData.userID, userToken, setError, page, limit);
@@ -250,13 +253,8 @@ export default function Profile() {
         formData.append('profilePhoto', profilePhoto);
         console.log(profilePhoto);
         try {
-            const response = await axios.post(`http://localhost:4000/user/profilePhoto`, formData , {
-                headers: {
-                    "authorization": `Bearer ${userToken}`
-                },
-            });
-            console.log(response)
-            setUser(response.data.newProfilePhoto);
+            const newUserData = await changeProfilePhoto(formData, userToken);
+            setUser(newUserData)
             await fetchUserProfile();
             setProfilePhoto(null);
             setPhotoPreview(null);
@@ -270,11 +268,9 @@ export default function Profile() {
     }
     return (
         <div className="profile-view view ">
-            {/* <Header /> */}
             <div className="profile-section">
                 <div className="profile-header">
                     <div className="profile-photo">
-                        {/* <img src={'../../../Backend/uploads/profilePhoto-1725378401444-720516434.jpg' || 'https://www.w3schools.com/howto/img_avatar.png'} alt="Profile" /> */}
                         <img
                             src={profilePhotoURL}
                             className="profile-photo-preview"
@@ -285,7 +281,7 @@ export default function Profile() {
                                 className="change-profile-photo-preview"
                                 src={photoPreview.src} 
                                 alt="preview"
-                                onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
+                                onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}}
                             />
                         )}
                         {
@@ -364,7 +360,7 @@ export default function Profile() {
                     <div className="profile-friends-list">
                         {filteredFriends.map((friend, index) => (
                             <div className="profile-friend" key={index} onClick={goToUserProfile(friend.userName)}>
-                                <img src={friend.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
+                                <img src={friend.profilePhotoUrl} alt="friend" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}} />
                                 <p className="profile-friend-name">{friend.name}</p>
                             </div>
                         ))}
@@ -381,7 +377,7 @@ export default function Profile() {
                             {mainUserFriendRequests.map((friendRequest, index) => (
                                 <div className="profile-friend-request" key={index}>
                                     <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
-                                        <img src={friendRequest.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
+                                        <img src={friendRequest.profilePhotoUrl} alt="friend" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}} />
                                         <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
                                     </div>
                                     <div className="profile-friend-request-options">

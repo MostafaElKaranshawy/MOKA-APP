@@ -1,8 +1,7 @@
 import React, { useEffect } from "react";
 import "./auth.css";
-import  SignUp  from "../auth/signUp";
-import  SignIn  from "../auth/signIn";
-import logo from "../assets/logo.png";
+import  SignUp  from "../../components/auth/signUp";
+import  SignIn  from "../../components/auth/signIn";
 export default function Auth(){
     if(document.cookie.split("authToken=")[1] && localStorage.getItem("user")) {
         window.location.href = "/home";

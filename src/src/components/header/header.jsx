@@ -1,8 +1,8 @@
 import React, {useEffect, useState, useRef} from "react";
-import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
-import axios from "axios";
+import { BrowserRouter as NavLink } from 'react-router-dom';
 import "./header.css";
-
+import { signOut } from "../../services/authRequests";
+import {searchUsers} from '../../services/userRequests'
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
     let nav = (window.innerWidth > 500? true: false)
@@ -46,18 +46,11 @@ export default function Header() {
     }, [user])
     const handleSearch = async () => {
         if (query.trim() === "") return;
-        await searchUsers();
+        await handleSearchUsers();
     };
     async function handleLogOut() {
         try {
-            console.log(token);
-            const response = await axios.delete("http://localhost:4000/auth/signout",{
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-            const data = await response.data;
+            const data = await signOut(token);
             if (data === "Logged out") {
                 localStorage.removeItem("user");
                 document.cookie = "authToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -67,15 +60,9 @@ export default function Header() {
             console.error(error);
         }
     }
-    async function searchUsers() {
+    async function handleSearchUsers() {
         try {
-            const response = await axios.get(`http://localhost:4000/users/search?search=${query}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${token}`
-                }
-            });
-            const data = await response.data;
+            const data = await searchUsers(query, token);
             if(data.length == 0) {
                 setSearchResult([{name : "No Results", userID: 0}]);
                 return;
@@ -121,7 +108,7 @@ export default function Header() {
                                     const url = `/${user.userName}/profile`;
                                     window.open(url, '_blank');
                                 }}>
-                                    {user.userName && <img src={profilePhotoUrl} alt="profile" onError={()=>{setProfilePhotoUrl("/src/assets/profile-photo-holder.jpg");}} />}
+                                    {user.userName && <img src={user.profilePhotoUrl} alt="profile" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}}/>}
                                     <p>{user.name}</p>
                                 </div>
                             ))}

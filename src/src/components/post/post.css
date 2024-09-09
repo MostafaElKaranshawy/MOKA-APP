@@ -400,7 +400,9 @@
     position: absolute;
     right: 0;
 }
-
+.post-comments{
+    width: calc(100% - 40px);
+}
 @media screen and (max-width : 500px) {
     .post{
         margin: 0 0 10px 0;

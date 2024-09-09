@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
-import axios from "axios";
 import './settings.css';
-
+import { editUserSettings } from "../../services/userRequests";
 export default function Settings(){
     if(!document.cookie.split("authToken=")[1]){
         console.log("No token found");
@@ -9,7 +8,7 @@ export default function Settings(){
     }
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const userToken = document.cookie.split("authToken=")[1];
-    console.log(userToken);
+    // console.log(userToken);
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [formErrors, setFormErrors] = useState({
@@ -56,6 +55,10 @@ export default function Settings(){
         }
         if(form.email == ''){
             setFormErrors({...formErrors, email: "Email musn't be empty"});
+            emailInput.style.boxShadow = "0px 1px 7px 0px red"
+        }
+        if(form.email.length > 0 && !form.email.includes("@")){
+            setFormErrors({...formErrors, email: "Email must be valid"});
             emailInput.style.boxShadow = "0px 1px 7px 0px red"
         }
         if(form.userName.length < 5 || form.userName.length > 30){
@@ -109,19 +112,14 @@ export default function Settings(){
             password: form.password && form.password? form.password : '',
             newPassword: form.newPassword && form.newPassword? form.newPassword : '',
         }
-        await editUserSettings(formData);
+        await handleEditUserSettings(formData);
     }
-    async function editUserSettings(formData) {
+    async function handleEditUserSettings(formData) {
         let submitButton = document.getElementsByClassName('save-changes-button');
         submitButton.disabled = true;
         try {
-            const response = await axios.patch(`http://localhost:4000/user/settings`, formData, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${userToken}`
-                },
-            });            
-            const newUserData = response.data
+            const newUserData = await editUserSettings(formData, userToken)
+            alert("Profile Updated Successfully!")
             console.log(newUserData);
             localStorage.setItem("user", JSON.stringify(newUserData));
             setUser(newUserData)

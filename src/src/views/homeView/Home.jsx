@@ -1,8 +1,7 @@
 import React from "react";
 
-import Header from '../header/header'
-import SideMenu from '../sideMenu/sideMenu'
-import MainSection from '../main/mainSection'
+import SideMenu from '../../components/sideMenu/sideMenu'
+import MainSection from '../../components/main/mainSection'
 
 
 export default function Home(){

@@ -1,10 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import axios from 'axios';
 import Loading from "../loading/loading";
 import Post from "../post/post";
 import NewPost from "../newPost/newPost";
 import "./mainSection.css";
-import { getPosts } from "../post/postRequests";
+import { getPosts, deletePost } from "../../services/postRequests";
 // import ws from "../webSocket";
 export default function MainSection() {
     // const ws = new WebSocket("ws://localhost:4001");
@@ -20,10 +19,9 @@ export default function MainSection() {
     useEffect(() => {
         const cookies = document.cookie;
         const token = cookies.split("authToken=")[1];
-        setUserToken(token);
         setUser(JSON.parse(localStorage.getItem('user')));
+        setUserToken(token);
     }, []);
-    
     useEffect(() => {
         if (userToken) {
             console.log(userToken);
@@ -111,6 +109,15 @@ export default function MainSection() {
             setLoading(false);
         }
     }
+    async function handleDeletePost(postID){
+        try{ 
+            await deletePost(postID, userToken);
+            await handleGetPosts();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
     return (
         <div className="main-section">
             <NewPost getPosts={handleGetPosts} userToken={userToken}/>
@@ -118,10 +125,11 @@ export default function MainSection() {
                 {(
                     posts.length ? posts.map((post, index) => (
                         <Post
-                        key={post.postID} 
-                        post={post} 
-                        getPosts={handleGetPosts}
-                        userToken={userToken}
+                            key={post.postID} 
+                            post={post} 
+                            getPosts={handleGetPosts}
+                            deletePost={handleDeletePost}
+                            userToken={userToken}
                         />
                     )) : null
                 )}

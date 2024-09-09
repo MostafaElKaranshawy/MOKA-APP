@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
 import "./authMethod.css";
-
+import { signUp } from "../../services/authRequests";
 export default function SignUp(probs) {
     const [showPassword, setShowPassword] = useState(false);
     const [submitTried, setSubmitTried] = useState(false);
@@ -93,23 +92,17 @@ export default function SignUp(probs) {
 
         if (Object.keys(errors).length > 0) return;
 
-        await signUp();
+        await handleSignUp();
     };
 
-    async function signUp() {
+    async function handleSignUp() {
         let nameInput = document.getElementById("name");
         let emailInput = document.getElementById("email");
         let userNameInput = document.getElementById("username");
         let passwordInput = document.getElementById("password");
         let errors = {};
         try {
-            const response = await axios.post("http://localhost:4000/auth/signUp", form, {
-                headers: {
-                    "Content-Type": "application/json"
-                },
-            });
-            const data = response.data;
-            console.log(data);
+            await signUp(form);
             alert("Signed Up Successfully! Please Sign In.");
             probs.setSignIn();
         } catch (error) {

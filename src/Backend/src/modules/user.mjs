@@ -56,7 +56,7 @@ export default class User {
     }
     static async searchUsers(search){
         let users = await UserDefinition.findAll({
-            attributes: ['name', 'userName', 'userID'],
+            attributes: ['name', 'userName', 'userID', 'profilePhotoUrl'],
             where: {
                 name: {[Op.substring]: search}
             }

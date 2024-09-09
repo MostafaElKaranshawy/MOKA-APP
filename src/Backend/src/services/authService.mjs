@@ -18,7 +18,7 @@ class AuthService {
     }
     static async signIn(email, password) {
         const user = await User.getUserByEmail(email);
-        if(!user)throw new Error("User Not Found");
+        if(!user)throw new Error("Email not found");
         const hashedPassword = user.password;
         console.log(user);
         const match = await bcrypt.compare(password, hashedPassword);

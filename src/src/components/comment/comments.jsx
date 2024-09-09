@@ -1,9 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
 import "./comment.css";
 import Comment from "./comment";
-import profilePhoto from "../assets/profile-photo-holder.jpg";
-import axios from "axios";
-
+import {
+    deleteComment,
+    editComment,
+    likeComment,
+    unlikeComment
+} from '../../services/commentRequests'
 export default function Comments(probs) {
     const comments = probs.comments;
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -24,6 +27,9 @@ export default function Comments(probs) {
     }, [comments, currentFilter]); // Added `comments` as a dependency
 
     function Filtering() {
+        if(!comments){
+            setFilteredComments([]);
+        }
         let filtered = [...comments]; // Use a copy of comments to avoid mutating the original
         if (currentFilter === 'All Comments') {
             filtered.sort((comment1, comment2) => new Date(comment1.time) - new Date(comment2.time));
@@ -56,70 +62,22 @@ export default function Comments(probs) {
         await probs.createComment(commentContent);
         setCommentContent("");
     }
-
-    async function deleteComment(commentID) {
-        try {
-            console.log(commentID);
-            const response = await axios.delete(`http://localhost:4000/posts/${probs.postID}/comments/${commentID}`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${probs.userToken}`
-                },
-            });
-            await probs.getComments();
-        } catch (error) {
-            console.log(error);
-        }
+    async function handleDeleteComment(commentID){
+        await deleteComment(commentID, probs.postID, probs.userToken);
+        await probs.getComments();
     }
-
-    async function editComment(commentID, newContent) {
-        try {
-            const body = {
-                "content": newContent
-            };
-            console.log(commentID);
-            const response = await axios.patch(`http://localhost:4000/posts/${probs.postID}/comments/${commentID}`, body, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${probs.userToken}`
-                },
-            });
-            await probs.getComments();
-        } catch (error) {
-            console.log(error);
-        }
+    async function handleEditComment(commentID, newContent) {
+        await editComment(commentID, newContent, probs.postID, probs.userToken);
+        await probs.getComments();
     }
-
-    async function likeComment(commentID) {
-        try {
-            console.log("commentID: ", commentID);
-            const response = await axios.post(`http://localhost:4000/posts/${probs.postID}/comments/${commentID}/like`, {}, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${probs.userToken}`
-                },
-            });
-            await probs.getComments();
-        } catch (error) {
-            console.log(error);
-        }
+    async function handleLikeComment(commentID) {
+        await likeComment(commentID, probs.postID, probs.userToken);
+        await probs.getComments();
     }
-
-    async function unlikeComment(commentID) {
-        try {
-            console.log("commentID: ", commentID);
-            const response = await axios.delete(`http://localhost:4000/posts/${probs.postID}/comments/${commentID}/like`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${probs.userToken}`
-                },
-            });
-            await probs.getComments();
-        } catch (error) {
-            console.log(error);
-        }
+    async function handleUnlikeComment(commentID) {
+        await unlikeComment(commentID, probs.postID, probs.userToken);
+        await probs.getComments();
     }
-
     return (
         <div className="comment-list">
             <div className="compose-comment">
@@ -159,7 +117,7 @@ export default function Comments(probs) {
             ) : null}
             {filteredCommments.length ? (
                 filteredCommments.map((comment) => (
-                    <Comment key={comment.commentID} comment={comment} likeComment={likeComment} unlikeComment={unlikeComment} editComment={editComment} deleteComment={deleteComment} />
+                    <Comment key={comment.commentID} comment={comment} likeComment={handleLikeComment} unlikeComment={handleUnlikeComment} editComment={handleEditComment} deleteComment={handleDeleteComment} />
                 ))
             ) : (
                 <p className="no-comments">No Comments</p>

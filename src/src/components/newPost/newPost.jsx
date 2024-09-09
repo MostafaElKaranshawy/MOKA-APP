@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import "./newPost.css";
 import useUploadPhoto from "./uploadPhoto";
 import useUploadVideo from "./uploadVideo";
-import { addPost } from "../post/postRequests";
+import { addPost } from "../../services/postRequests";
 
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
@@ -84,7 +84,6 @@ export default function NewPost(probs) {
                                 src={src}
                                 alt={`Uploaded Preview ${index + 1}`}
                                 style={{ width: "200px", height: "200px", objectFit: "cover", marginTop: "10px", marginRight: "10px" }}
-                                onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
                             />
                             <button onClick={() => removePhoto(id)} style={{ display: 'block', marginTop: '5px' }}>
                                 Remove

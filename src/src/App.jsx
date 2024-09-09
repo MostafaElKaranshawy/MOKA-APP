@@ -2,11 +2,11 @@ import React from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
 // import { WebSocketContext } from './webSocket';
-import Auth from './routes/auth';
-import Home from "./routes/Home";
-import Profile from "./routes/Profile";
-import Header from "./header/header";
-import Settings from './routes/settings';
+import Auth from './views/authView/auth';
+import Home from "./views/homeView/Home";
+import Profile from "./views/profileView/Profile";
+import Header from "./components/header/header";
+import Settings from './views/settingsView/settings';
 function App(){
   
   return (

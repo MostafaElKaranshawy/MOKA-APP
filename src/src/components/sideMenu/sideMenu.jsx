@@ -1,7 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./sideMenu.css";
-import profilePhoto from "../assets/profile-photo-holder.jpg";
-import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../routes/profileRequests";
+import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../../services/profileRequests";
 export default function SideMenu(){
     const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
     const userToken = document.cookie.split("authToken=")[1];
@@ -117,7 +116,7 @@ export default function SideMenu(){
                             console.log(friendRequest),
                             <div className="nav-menu-profile-friend-request" key={index}>
                                 <div  onClick={()=>{visitProfile(friendRequest.userName)}}>
-                                    <img src={friendRequest.profilePhotoUrl} alt="friend" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                                    <img src={friendRequest.profilePhotoUrl} alt="friend" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}}/>
                                 </div>
                                 <div className="nav-menu-profile-friend-request-body">
                                     <div className="nav-menu-profile-friend-request-info">

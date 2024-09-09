@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import "./authMethod.css";
-
+import { signIn } from "../../services/authRequests";
 export default function SignIn(probs) {
     const [showPassword, setShowPassword] = useState(false);
     const [submitTried, setSubmitTried] = useState(false);
@@ -65,26 +64,17 @@ export default function SignIn(probs) {
 
         if (Object.keys(errors).length > 0) return;
 
-        await signIn();
+        await handleSignIn();
     };
 
-    async function signIn() {
+    async function handleSignIn() {
         let emailInput = document.getElementById("email");
         let passwordInput = document.getElementById("password");
         let errors = {};
         setSubmitTried(true);
         try {
-            const response = await axios.post("http://localhost:4000/auth/signIn", form, {
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
-            const data = response.data;
-
-            if (response.status !== 200) {
-                alert(data);
-                return;
-            }
+            const data = await signIn(form);
+            if(!data)return;
 
             alert("Sign In Successful");
             const token = data.accessToken;
@@ -92,8 +82,10 @@ export default function SignIn(probs) {
             localStorage.setItem("user", JSON.stringify(data.user));
             window.location.href = "/home";
         } catch (error) {
-            if (error.response && error.response.data === "Invalid email or password") {
+            console.log(error.message);
+            if (error && error.message === "Email not found" || error.message === "Password is Incorrect") {
                 errors.email = "Invalid email or password";
+                errors.password = "Invalid email or password";
                 emailInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
                 passwordInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
             }

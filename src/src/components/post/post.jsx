@@ -1,16 +1,16 @@
 import React, {useState, useEffect, useRef} from "react";
 import "./post.css";
-import profilePhoto from "../assets/profile-photo-holder.jpg";
 import CommentList from "../comment/comments";
-import axios from "axios";
 import {
-    addPost,
-    deletePost,
     editPost,
     likePost,
     unlikePost,
     getPostLikes
-} from "./postRequests";
+} from "../../services/postRequests";
+import {
+    getComments,
+    createComment
+} from '../../services/commentRequests'
 export default function Post(probs){
     const user = JSON.parse(localStorage.getItem("user"));
     const post = probs.post;
@@ -29,12 +29,12 @@ export default function Post(probs){
     useEffect(() => {
         if(probs.userToken && post){
             setProfilePhotoURL(post.profilePhotoUrl);
-            getComments();
+            handleGetComments();
         }
     }, []);
     useEffect(()=>{
         if(probs.userToken && showComments){
-            getComments();
+            handleGetComments();
         }
     }, [showComments])
     const ws = useRef(null);
@@ -66,7 +66,8 @@ export default function Post(probs){
         };
     }, []);
     async function handleGetComments(){
-        await getComments();
+        const commentsData = await getComments(post.postID, probs.userToken);
+        setComments(commentsData);
         setShowPostLikes(false);
     }
     async function toggleShowComments(){
@@ -102,9 +103,13 @@ export default function Post(probs){
         }
     }
     async function handleDeletePost(){
-        await deletePost(post.postID, probs.userToken);
-        await probs.getPosts();
-        toggleShowOptions();
+        try{
+            await probs.deletePost(post.postID);
+            toggleShowOptions();
+        }
+        catch(err){
+            console.log(err);
+        }
     }
     async function handleEditPost(){
         toggleShowEdit();
@@ -116,8 +121,13 @@ export default function Post(probs){
             return;
         }
         const removedPhotos = postPhotos.filter((photo) => !editPhotos.includes(photo)).map((photo) => photo.id);
-        await editPost(post.postID, newContent, removedPhotos ,probs.userToken);
-        await probs.getPosts();
+        try{
+            await editPost(post.postID, newContent, removedPhotos ,probs.userToken);
+            await probs.getPosts();
+        }
+        catch(err){
+            console.log(err);
+        }
     }
     async function handleLikePost(){
         await likePost(post.postID, probs.userToken);
@@ -127,37 +137,9 @@ export default function Post(probs){
         await unlikePost(post.postID, probs.userToken);
         await probs.getPosts();
     }
-
-    async function getComments(){
-        try {
-            const response = await axios.get(`http://localhost:4000/posts/${post.postID}/comments`, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${probs.userToken}`
-                },
-            });
-            const commentsData = response.data;
-            // console.log(commentsData)
-            setComments(commentsData);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-    async function Comment(content){
-        try {
-            const newComment = {
-                "content": content
-            };
-            const response = await axios.post(`http://localhost:4000/posts/${post.postID}/comment`, newComment, {
-                headers: {
-                    "Content-Type": "application/json",
-                    "authorization": `Bearer ${probs.userToken}`
-                },
-            });
-            await getComments();
-        } catch (error) {
-            console.log(error);
-        }
+    async function handleAddComment(content){
+        await createComment(content, post.postID, probs.userToken);
+        await handleGetComments();
     }
     async function handleGetPostLikes(){
         if(showPostLikes){
@@ -243,7 +225,7 @@ export default function Post(probs){
                             </ul>
                         }
                     </div>
-                    <div className="post-content text-container">
+                    <div className="post-content text-container" >
                         <p className="text-container" dangerouslySetInnerHTML={{ __html: post.content.replace(/\n/g, '<br />') }} />
                         {editPhotos.length > 0 && (
                             <div className="post-photos">
@@ -290,7 +272,7 @@ export default function Post(probs){
                             }
                         </div>
                         <div className="post-action-detail" onClick={toggleShowComments}>
-                            {comments.length > 0 && <>
+                            {comments && comments.length > 0 && <>
                                 <p>{comments.length}</p>
                                 <p>Comments</p>
                             </>
@@ -325,9 +307,9 @@ export default function Post(probs){
                 showComments? 
                 <div className="post-comments">
                     <CommentList
-                        comments={comments} 
-                        createComment={createComment}
-                        getComments={getComments}
+                        comments={comments || []} 
+                        createComment={handleAddComment}
+                        getComments={handleGetComments}
                         postID={post.postID}
                         userToken={probs.userToken}
                     />
