@@ -1,5 +1,5 @@
 import React, {useEffect, useState, useRef} from "react";
-import { BrowserRouter as NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 import "./header.css";
 import { signOut } from "../../services/authRequests";
 import {searchUsers} from '../../services/userRequests'
