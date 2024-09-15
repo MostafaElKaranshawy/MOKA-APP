@@ -21,7 +21,7 @@ export default function Post(probs){
     const [showPostLikes, setShowPostLikes] = useState(false)
     const [newContent, setNewContent] = useState(post.content);
     const [comments, setComments] = useState([]);
-    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
+    const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
     const [postLikes, setPostLikes] = useState([])
     const [postPhotos, setPostPhotos] = useState(post.photos);
     const [editPhotos, setEditPhotos] = useState(post.photos);
@@ -203,7 +203,7 @@ export default function Post(probs){
     return (
         <div className="post">
             <div className="post-details">
-                <img src={profilePhotoURL} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                <img src={`http://localhost:4000/uploads/${profilePhotoURL}`} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
                 <div className="post-body">
                     <div className="post-header">
                         <div className="post-header-info">
@@ -232,7 +232,7 @@ export default function Post(probs){
                                 {editPhotos.length > 1 && <i className="fa fa-chevron-left left-arrow nav-arrow" onClick={decreaseCurPhoto}></i>}
                                 <div className="post-photo">
                                     {showEdit && <i className="fa-solid fa-circle-xmark remove-photo" onClick={handleRemovePhoto}></i>}
-                                    <img src={`/Backend/${editPhotos[curPhoto].url}`} />
+                                    <img src={`http://localhost:4000/uploads/${editPhotos[curPhoto].url}`} />
                                 </div>
                                 {editPhotos.length > 1 && <i className="fa fa-chevron-right right-arrow nav-arrow" onClick={increaseCurPhoto}></i>}
                                 {editPhotos.length > 1 && <p className="photo-count">{`${curPhoto+1}/${editPhotos.length}`}</p>}
@@ -258,7 +258,7 @@ export default function Post(probs){
                             <div className="post-like-users">
                                 {postLikes.map((like) => (
                                     <div className="post-like-user" key={like.user.userID} onClick={goToUserProfile(like.user.userName)}>
-                                        <img src={like.user.profilePhotoUrl}/>
+                                        <img src={`http://localhost:4000/uploads/${like.user.profilePhotoUrl}`}/>
                                         <p>{like.user.name}</p>
                                     </div>
                                 ))} 

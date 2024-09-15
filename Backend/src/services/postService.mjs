@@ -40,12 +40,12 @@ class PostService {
             throw new Error(err.message);
         }
     }
-    static async getPosts(userID, limit, offset) {
+    static async getPosts(userID, currentUserID ,limit, offset) {
         if(userID == null || limit == null || offset == null){
             throw new Error("Invalid Parameters");
         }
         try {
-            const posts = await Post.getPosts(userID, limit, offset);
+            const posts = await Post.getPosts(userID, currentUserID, limit, offset);
             return posts;
         }
         catch(err){

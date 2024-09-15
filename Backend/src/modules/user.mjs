@@ -39,8 +39,16 @@ export default class User {
                 userName: userName
             }
         });
-        console.log(user);
-        return user;
+        const newUser =  {
+            name : user.name,
+            userName : user.userName,
+            bio : user.bio,
+            email : user.email,
+            userID : user.userID,
+            profilePhotoUrl: `${user.profilePhotoUrl}`
+        }
+        console.log(newUser);
+        return newUser;
     }
     static async editUserProfile(userID, name, bio){
         const user = await UserDefinition.findOne({where: {
@@ -72,7 +80,8 @@ export default class User {
             throw new Error("User not found");
         }
     
-        user.profilePhotoUrl = `/Backend/uploads/${profilePhoto}`; // Assuming you want to store the file path
+        // user.profilePhotoUrl = `/Backend/uploads/${profilePhoto}`; // Assuming you want to store the file path
+        user.profilePhotoUrl = `${profilePhoto}`; // Assuming you want to store the file path
         await user.save();
     
         return user;

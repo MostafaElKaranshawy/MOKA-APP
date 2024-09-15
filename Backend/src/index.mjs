@@ -2,6 +2,12 @@ import express from 'express';
 import cors from 'cors';
 import { orm } from './config/orm.mjs';
 
+
+import path, {dirname} from 'path';
+import { fileURLToPath } from 'url';
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
 const app  = express();
 app.use(express.json());
 app.use(cors());
@@ -13,6 +19,16 @@ import commentRouter from './routers/commentRouter.mjs';
 import likeRouter from './routers/likeRouter.mjs';
 import friendShipRouter from './routers/friendShipRouter.mjs';
 import userRouter from './routers/userRouter.mjs';
+
+app.get('/uploads/:filename', (req, res) => {    
+    const filePath = path.join(__dirname, '../uploads', req.params.filename);
+    console.log(filePath);
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            res.status(404).send('File not found');
+        }
+    });
+})
 
 app.use(authRouter);
 app.use(CheckUser);

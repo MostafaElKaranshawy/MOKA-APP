@@ -2,7 +2,7 @@ import React, {useState, useEffect, useRef} from "react";
 import "./sideMenu.css";
 import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../../services/profileRequests";
 export default function SideMenu(){
-    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
+    const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
     const userToken = document.cookie.split("authToken=")[1];
     const innerWidth = window.innerWidth;
     let sideMenu = (innerWidth > 756? true: false);
@@ -94,8 +94,8 @@ export default function SideMenu(){
                 <div className="side-menu">
                     <div className="profile">
                         <img 
-                            src={profilePhotoURL} onClick={profileVisit}
-                            onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} 
+                            src={`http://localhost:4000/uploads/${profilePhotoURL}`} onClick={profileVisit}
+                            onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}} 
                         />
                         <h2 className="profile-name" onClick={profileVisit}>{user.name}</h2>
                         <p className="profile-username">{`@${user.userName}`}</p>
@@ -116,7 +116,7 @@ export default function SideMenu(){
                             console.log(friendRequest),
                             <div className="nav-menu-profile-friend-request" key={index}>
                                 <div  onClick={()=>{visitProfile(friendRequest.userName)}}>
-                                    <img src={friendRequest.profilePhotoUrl} alt="friend" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}}/>
+                                    <img src={`http://localhost:4000/uploads/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}/>
                                 </div>
                                 <div className="nav-menu-profile-friend-request-body">
                                     <div className="nav-menu-profile-friend-request-info">

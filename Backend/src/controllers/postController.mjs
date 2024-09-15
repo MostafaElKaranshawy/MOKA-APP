@@ -55,6 +55,7 @@ class PostController{
     }
     static async getPosts(req, res){
         try {
+            const currentUserID = req.user.userID;
             const userID = parseInt(req.params.userID);
             const page = parseInt(req.query.page) || 1;
             const limit = parseInt(req.query.limit) || 10;
@@ -62,7 +63,7 @@ class PostController{
             if(userID == null || isNaN(page) || isNaN(limit)){
                 throw new Error("Invalid Parameters");
             }
-            const posts = await PostService.getPosts(userID, limit, offset);
+            const posts = await PostService.getPosts(userID, currentUserID, limit, offset);
             return res.status(200).send(posts);
         }
         catch(err){

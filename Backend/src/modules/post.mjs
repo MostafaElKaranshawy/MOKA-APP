@@ -21,9 +21,8 @@ export default class Post {
         const postID = result.postID;
         if(photos){
             photos.forEach(async (photo) => {
-                const photoUrl = photo.path;
                 await PhotoDefinition.create({
-                    url: photoUrl,
+                    url: photo.filename,
                     postID: postID
                 });
             });
@@ -86,7 +85,7 @@ export default class Post {
         }
         return result;
     }
-    static async getPosts(userID, limit, offset){
+    static async getPosts(userID, currentUserID,limit, offset){
         const user = await UserDefinition.findOne({
             where: {
                 userID: userID
@@ -96,7 +95,13 @@ export default class Post {
             offset: offset || 0,
             limit: limit || 10
         });
-        let userLikes = await user.getPostLikes(
+        const currentUser = await UserDefinition.findOne({
+            where: {
+                userID: currentUserID
+            }
+        });
+
+        let userLikes = await currentUser.getPostLikes(
             {
                 attributes: ['postID']
             }
@@ -108,7 +113,6 @@ export default class Post {
         });
         console.log(postPhotos);
         posts = posts.map((post) => {
-            // console.log(post);
             return {
                 postID: post.postID,
                 authorName: user.name,

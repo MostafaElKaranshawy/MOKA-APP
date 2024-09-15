@@ -43,9 +43,11 @@ export default function Profile() {
     const limit = 5;
     const [error, setError] = useState(null);
     const [mainUserFriendRequests, setMainUserFriendRequests] = useState([]);
-    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
+    const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
     const mainUser = userName === JSON.parse(localStorage.getItem("user")).userName;
     const [friendStatus, setFriendStatus] = useState("");
+    const [friends, setFriends] = useState([]);
+    const [bio, setBio] = useState(' ');
     const toggleShowFriends = () => {
         setShowAllFriends(!showAllFriends);
     };
@@ -64,8 +66,7 @@ export default function Profile() {
         }
         
     }, [userToken, userName]);
-
-    const [bio, setBio] = useState(' ');
+    
 
     useEffect(() => {
         setBio(user.bio || '');
@@ -144,7 +145,6 @@ export default function Profile() {
         }
     }
 
-    const [friends, setFriends] = useState([]);
 
     async function fetchUserProfile() {
         try {
@@ -176,6 +176,7 @@ export default function Profile() {
                 setMainUserFriendRequests(friendRequestsData);
             }
             else{
+                console.log(mainUser);
                 const friendStatusData = await getFriendStatus(userData.userID, userToken, setError);
                 setFriendStatus(friendStatusData);
             }
@@ -272,16 +273,16 @@ export default function Profile() {
                 <div className="profile-header">
                     <div className="profile-photo">
                         <img
-                            src={profilePhotoURL}
+                            src={`http://localhost:4000/uploads/${profilePhotoURL}`}
                             className="profile-photo-preview"
-                            onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
+                            onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}
                         />
                         {photoPreview && (
                             <img 
                                 className="change-profile-photo-preview"
-                                src={photoPreview.src} 
+                                src={`http://localhost:4000/uploads/${photoPreview.src}`} 
                                 alt="preview"
-                                onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}}
+                                onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}
                             />
                         )}
                         {
@@ -360,7 +361,7 @@ export default function Profile() {
                     <div className="profile-friends-list">
                         {filteredFriends.map((friend, index) => (
                             <div className="profile-friend" key={index} onClick={goToUserProfile(friend.userName)}>
-                                <img src={friend.profilePhotoUrl} alt="friend" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}} />
+                                <img src={`http://localhost:4000/uploads/${friend.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
                                 <p className="profile-friend-name">{friend.name}</p>
                             </div>
                         ))}
@@ -377,7 +378,7 @@ export default function Profile() {
                             {mainUserFriendRequests.map((friendRequest, index) => (
                                 <div className="profile-friend-request" key={index}>
                                     <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
-                                        <img src={friendRequest.profilePhotoUrl} alt="friend" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}} />
+                                        <img src={`http://localhost:4000/uploads/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
                                         <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
                                     </div>
                                     <div className="profile-friend-request-options">

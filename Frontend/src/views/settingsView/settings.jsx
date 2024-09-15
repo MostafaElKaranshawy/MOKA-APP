@@ -151,7 +151,7 @@ export default function Settings(){
                 <p className="settings-header">Account Settings</p>
                 <div className="user-info">
                     <form className="user-form" onSubmit={confirmSettings}>
-                        <img src={user.profilePhotoUrl} alt="profile-photo"/>
+                        <img src={`http://localhost:4000/uploads/${user.profilePhotoUrl}`} alt="profile-photo"/>
                         <div className="user-name user-section">
                             <label htmlFor="name">Full name</label>
                             <input type="text" id="name" value={form.name} onChange={

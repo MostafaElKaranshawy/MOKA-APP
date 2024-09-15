@@ -13,7 +13,7 @@ export default function Comments(probs) {
     const [currentFilter, setCurrentFilter] = useState("Most Recent");
     const [filteredCommments, setFilteredComments] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
+    const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };
@@ -81,7 +81,7 @@ export default function Comments(probs) {
     return (
         <div className="comment-list">
             <div className="compose-comment">
-                <img src={profilePhotoURL} alt="profile" className="comment-profile-picture" onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}} />
+                <img src={`http://localhost:4000/uploads/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}} />
                 <div className="compose-body">
                     <textarea
                         ref={textareaRef}

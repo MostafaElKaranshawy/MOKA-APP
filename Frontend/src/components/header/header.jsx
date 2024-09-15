@@ -31,7 +31,7 @@ export default function Header() {
         if(!search) setShowProfileMenu(false);
     }
     let [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
-    const [profilePhotoUrl, setProfilePhotoUrl] = useState("/src/assets/profile-photo-jolder.jpg");
+    const [profilePhotoUrl, setProfilePhotoUrl] = useState("profile-photo-holder.jpg");
     const [query, setQuery] = useState("");
     const [searchResult, setSearchResult] = useState([])
     const handleStorageChange = () => {
@@ -108,7 +108,7 @@ export default function Header() {
                                     const url = `/${user.userName}/profile`;
                                     window.open(url, '_blank');
                                 }}>
-                                    {user.userName && <img src={user.profilePhotoUrl} alt="profile" onError={(e)=>{e.target.src = "/src/assets/profile-photo-holder.jpg";}}/>}
+                                    {user.userName && <img src={`http://localhost:4000/uploads/${user.profilePhotoUrl}`} alt="profile" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}/>}
                                     <p>{user.name}</p>
                                 </div>
                             ))}
@@ -127,7 +127,7 @@ export default function Header() {
                             </NavLink>
                         </ul>
                         <div className="user-profile-item"  onClick={toggleShowProfileMenu}>
-                            <img src={profilePhotoUrl} onError={()=>{setProfilePhotoUrl("/src/assets/profile-photo-holder.jpg");}}/>
+                            <img src={`http://localhost:4000/uploads/${profilePhotoUrl}`} onError={()=>{setProfilePhotoUrl("profile-photo-holder.jpg");}}/>
                             <p>{user.name}</p>
                             {nav && <i className="fa-solid fa-chevron-down drop-down-icon"></i>}
                             {showProfileMenu ?

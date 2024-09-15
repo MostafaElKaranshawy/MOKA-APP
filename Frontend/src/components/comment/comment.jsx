@@ -68,7 +68,7 @@ export default function Comment(probs){
     return (
         <div className="comment">
             <div className="comment-header">
-                <img src={profilePhotoURL} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                <img src={`http://localhost:4000/uploads/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
             </div>
             <div className="comment-body">
                 <div className="comment-user">

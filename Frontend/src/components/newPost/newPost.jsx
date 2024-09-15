@@ -9,7 +9,7 @@ import { addPost } from "../../services/postRequests";
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
     const user = JSON.parse(localStorage.getItem("user"));
-    const [profilePhotoURL, setProfilePhotoURL] = useState('/src/assets/profile-photo-holder.jpg');
+    const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
     function handleChange(event) {
         setContent(event.target.value);
     }
@@ -48,7 +48,7 @@ export default function NewPost(probs) {
             <form onSubmit={handleSubmit} className="new-post-form">
                 <div className="new-post-content">
                     <div className="new-post-data">
-                        <img src={profilePhotoURL} onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}/>
+                        <img src={`http://localhost:4000/uploads/${profilePhotoURL}`} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
                         {/* <p>{user.name}</p> */}
                     </div>
                     <textarea
@@ -96,7 +96,7 @@ export default function NewPost(probs) {
                             src={src}
                             controls
                             style={{ width: "300px", height: "200px", objectFit: "cover", marginTop: "10px", marginRight: "10px" }}
-                            onError={()=>{setProfilePhotoURL("/src/assets/profile-photo-holder.jpg");}}
+                            onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}
                         />
                         <button onClick={() => removeVideo(id)} style={{ display: 'block', marginTop: '5px' }}>
                             Remove
