@@ -1,5 +1,8 @@
 import React, {useState} from "react";
 import "./comment.css";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Comment(probs){
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const comment = probs.comment;
@@ -32,7 +35,12 @@ export default function Comment(probs){
     }
     function editComment(){
         if(newContent.trim() === ""){
-            alert("Comment cannot be empty");
+            toast.error("Comment can't be empty", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
             return;
         }
         console.log(newContent)
@@ -67,6 +75,7 @@ export default function Comment(probs){
     };
     return (
         <div className="comment">
+            
             <div className="comment-header">
                 <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
             </div>

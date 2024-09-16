@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./authMethod.css";
 import { signIn } from "../../services/authRequests";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function SignIn(probs) {
     const [showPassword, setShowPassword] = useState(false);
     const [submitTried, setSubmitTried] = useState(false);
@@ -76,7 +79,12 @@ export default function SignIn(probs) {
             const data = await signIn(form);
             if(!data)return;
 
-            alert("Sign In Successful");
+            toast.success('Signed in successfully!', {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            })
             const token = data.accessToken;
             document.cookie = `authToken=${token}; path=/; secure; samesite=strict;`;
             localStorage.setItem("user", JSON.stringify(data.user));

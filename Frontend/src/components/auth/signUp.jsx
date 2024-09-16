@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./authMethod.css";
 import { signUp } from "../../services/authRequests";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function SignUp(probs) {
     const [showPassword, setShowPassword] = useState(false);
     const [submitTried, setSubmitTried] = useState(false);
@@ -103,7 +106,12 @@ export default function SignUp(probs) {
         let errors = {};
         try {
             await signUp(form);
-            alert("Signed Up Successfully! Please Sign In.");
+            toast.success("Account created successfully", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            })
             probs.setSignIn();
         } catch (error) {
             if(error.response) {
@@ -122,6 +130,7 @@ export default function SignUp(probs) {
 
     return (
         <div className="auth-section">
+            
             <form className="user-form signUp-form" onSubmit={confirmSettings}>
                 <div className="user-name user-section">
                     {/* <label htmlFor="name">Full name</label> */}

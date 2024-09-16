@@ -16,7 +16,7 @@ export default class Notification {
         if(!notification){
             throw new Error("Notification not added");
         }
-        eventEmitter.emit('broadcast', content, toID);
+        eventEmitter.emit('broadcast', "You Have A New Friend Request", toID);
     }
     static async addNotification(fromID, toID, notificationType, content, postID){
         const result = await notificationDefinition.create({
@@ -31,7 +31,11 @@ export default class Notification {
             throw new Error("Notification not added");
         }
         console.log("broadcasting");
-        eventEmitter.emit('broadcast', content, toID);
+        let message;
+        if(notificationType === 'like')message = "You have got a new like on your post";
+        else if(notificationType === 'comment')message = "You have got a new comment on your post";
+        else if(notificationType === 'post')message = "You have a new post";
+        eventEmitter.emit('broadcast', message, toID);
     }
     static async addFriendsNotification(userID, notificationType, content, postID){
         try {

@@ -4,6 +4,8 @@ import { useState, useRef, useEffect } from "react";
 import "./newPost.css";
 import useUploadFiles from "./uploadFiles"; // Combining photo and video hooks
 import { addPost } from "../../services/postRequests";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
@@ -30,12 +32,22 @@ export default function NewPost(probs) {
         try{
             await addPost(content, probs.userToken, fileArray);
             await probs.getPosts();
-            alert("Post Created successfully");
+            toast.success("Post Created", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
             setContent("");
             submitFiles();
         } catch(err) {
             console.log(err);
-            alert("Post Not Created");
+            toast.error("Couldn't create post", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
         }
     }
 
@@ -48,6 +60,7 @@ export default function NewPost(probs) {
 
     return (
         <div className="new-post">
+            
             <form onSubmit={handleSubmit} className="new-post-form">
                 <div className="new-post-content">
                     <div className="new-post-data">

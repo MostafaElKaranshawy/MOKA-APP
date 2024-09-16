@@ -13,8 +13,10 @@ import {
     getComments,
     createComment
 } from '../../services/commentRequests'
-import { getWebSocket } from "../../webSocket";
 import { useParams } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function PostView(){
     const user = JSON.parse(localStorage.getItem("user"));
     if(!document.cookie.split("authToken=")[1]){
@@ -110,7 +112,12 @@ export default function PostView(){
         toggleShowEdit();
         toggleShowOptions();
         if(newContent.trim() === "" && editPhotos.length === 0){
-            alert("Post cannot be empty");
+            toast.error("Post can't be empty", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
             setEditPhotos(post.photos);
             setCurPhoto(0);
             return;
@@ -199,6 +206,7 @@ export default function PostView(){
     }
     return (
         <div className="post-view">
+            
             {post? 
                 <div className="post">
                 <div className="post-details">

@@ -1,6 +1,7 @@
 import axios from 'axios'
 const backendURL = import.meta.env.VITE_BACKEND_URL;
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 async function getUserProfile(userName, userToken, setError){
     try {
         const response = await axios.get(`${backendURL}/${userName}/profile`, {
@@ -45,7 +46,6 @@ async function updateUserInfo(name, bio, userToken, setError) {
             },
         });
         return response.data;
-        alert("Profile Updated");
     } catch (err) {
         // setError(err.message);
         console.error(err);

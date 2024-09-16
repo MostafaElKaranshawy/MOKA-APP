@@ -20,6 +20,9 @@ import {
     changeProfilePhoto
 } from '../../services/userRequests';
 import { getWebSocket } from "../../webSocket";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Profile() {
     const cookies = document.cookie;
     const { userName } = useParams();
@@ -53,7 +56,12 @@ export default function Profile() {
     };
 
     useEffect(() => {
-        if (error) alert(error);
+        if (error) toast.error(error, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            pauseOnHover: true,
+        });
     }, [error]);
 
     const toggleshowEditBio = () => {
@@ -257,6 +265,7 @@ export default function Profile() {
     }
     return (
         <div className="profile-view view ">
+            
             <div className="profile-section">
                 <div className="profile-header">
                     <div className="profile-photo">

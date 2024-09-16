@@ -1,6 +1,9 @@
 import React, {useEffect, useState} from "react";
 import './settings.css';
 import { editUserSettings } from "../../services/userRequests";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 export default function Settings(){
     if(!document.cookie.split("authToken=")[1]){
         console.log("No token found");
@@ -8,7 +11,6 @@ export default function Settings(){
     }
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const userToken = document.cookie.split("authToken=")[1];
-    // console.log(userToken);
     const [showPassword, setShowPassword] = useState(false);
     const [showNewPassword, setShowNewPassword] = useState(false);
     const [formErrors, setFormErrors] = useState({
@@ -119,7 +121,12 @@ export default function Settings(){
         submitButton.disabled = true;
         try {
             const newUserData = await editUserSettings(formData, userToken)
-            alert("Profile Updated Successfully!")
+            toast.success("Settings Updated", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
             console.log(newUserData);
             localStorage.setItem("user", JSON.stringify(newUserData));
             setUser(newUserData)

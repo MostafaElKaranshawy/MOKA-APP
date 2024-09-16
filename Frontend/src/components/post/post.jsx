@@ -11,6 +11,8 @@ import {
     getComments,
     createComment
 } from '../../services/commentRequests'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Post(probs){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -89,7 +91,12 @@ export default function Post(probs){
         toggleShowEdit();
         toggleShowOptions();
         if(newContent.trim() === "" && editPhotos.length === 0){
-            alert("Post cannot be empty");
+            toast.error("Post can't be empty", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                pauseOnHover: true,
+            });
             setEditPhotos(post.photos);
             setCurPhoto(0);
             return;
@@ -175,6 +182,7 @@ export default function Post(probs){
     }
     return (
         <div className="post">
+            
             <div className="post-details">
                 <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
                 <div className="post-body">

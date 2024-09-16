@@ -4,6 +4,8 @@ import "./header.css";
 import { signOut } from "../../services/authRequests";
 import {searchUsers, getNotifications, seeNotification} from '../../services/userRequests'
 import { getWebSocket } from "../../webSocket";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
@@ -18,6 +20,15 @@ export default function Header() {
         const ws = getWebSocket(JSON.parse(localStorage.getItem("user")).userID);
         ws.onmessage = (event) => {
             console.log('Message from server:', event.data);
+            toast(event.data, {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+            });
             handleNotifications();
         }
     }, [])
@@ -166,6 +177,7 @@ export default function Header() {
     }       
     return (
         <header className="header">
+            <ToastContainer className="toast-container"/>
             <div className="logo-search-container">
                 <div className="logo">
                     <i className="fa-solid fa-m"></i>
