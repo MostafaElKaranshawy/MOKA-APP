@@ -4,9 +4,8 @@ import Post from "../post/post";
 import NewPost from "../newPost/newPost";
 import "./mainSection.css";
 import { getPosts, deletePost } from "../../services/postRequests";
-// import ws from "../webSocket";
-export default function MainSection() {
-    // const ws = new WebSocket("ws://localhost:4001");
+
+export default function MainSection(probs) {
     const [user, setUser] = useState({});
     const [userToken, setUserToken] = useState(null);
     const [posts, setPosts] = useState([]);
@@ -15,7 +14,24 @@ export default function MainSection() {
     const [lastPage, setLastPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const limit = 5;
-
+    useEffect(() => {
+        const scrollTracker = probs.mainRef.current;
+        if (!scrollTracker) return; // Ensure scrollTracker is defined
+    
+        const handleScroll = () => { 
+            if (scrollTracker.scrollTop + scrollTracker.clientHeight >= scrollTracker.scrollHeight - 250 && hasMore) {
+                setPage(prevPage => prevPage + 1);
+                setLoading(true);
+            }
+        };
+    
+        scrollTracker.addEventListener('scroll', handleScroll);
+    
+        return () => {
+            scrollTracker.removeEventListener('scroll', handleScroll); // Cleanup listener on unmount
+        };
+    }, [hasMore, probs.mainRef]);
+    
     useEffect(() => {
         const cookies = document.cookie;
         const token = cookies.split("authToken=")[1];
@@ -30,35 +46,7 @@ export default function MainSection() {
             }, 1200)
         }
     }, [userToken]);
-    const ws = useRef(null);
 
-    useEffect(() => {
-        // Create the WebSocket connection once
-        ws.current = new WebSocket("ws://localhost:4001");
-
-        ws.current.onmessage = (event) => {
-            if (userToken) {
-                // console.log('Getting posts');
-                handleGetPosts();
-            }
-            console.log(`Message from server: ${event.data}`);
-        };
-
-        ws.current.onopen = () => {
-            console.log('Connected to WebSocket server');
-        };
-
-        ws.current.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-        };
-
-        // Clean up on component unmount
-        return () => {
-            if (ws.current) {
-                ws.current.close();
-            }
-        };
-    }, []);
     useEffect(() => {
         if (page === 1) return; // Avoid fetching on initial render
         if(!loading)return;
@@ -104,6 +92,7 @@ export default function MainSection() {
             }
             console.log(postsData);
             setLoading(false);
+            setHasMore(true);
         } catch (error) {
             console.log(error);
             setLoading(false);
@@ -133,12 +122,12 @@ export default function MainSection() {
                         />
                     )) : null
                 )}
-                <button className="more-button"onClick={() => {
+                {/* <button className="more-button"onClick={() => {
                     setPage((prev) => prev + 1);
                     setLoading(true);
                 }}>
                     Load More
-                </button>
+                </button> */}
                 <div className="loading">
                     {loading && <Loading/>}
                     {!hasMore && !loading && <p>No More Posts</p>}

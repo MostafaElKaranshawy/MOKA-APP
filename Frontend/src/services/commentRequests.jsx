@@ -1,8 +1,9 @@
-import axios from 'axios'
+import axios from 'axios';
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 async function getComments(postID, userToken){
     try {
-        const response = await axios.get(`http://localhost:4000/posts/${postID}/comments`, {
+        const response = await axios.get(`${backendURL}/posts/${postID}/comments`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -19,7 +20,7 @@ async function createComment(content, postID, userToken){
         const newComment = {
             "content": content
         };
-        const response = await axios.post(`http://localhost:4000/posts/${postID}/comment`, newComment, {
+        const response = await axios.post(`${backendURL}/posts/${postID}/comment`, newComment, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -33,7 +34,7 @@ async function createComment(content, postID, userToken){
 async function deleteComment(commentID, postID, userToken) {
     try {
         console.log(commentID);
-        const response = await axios.delete(`http://localhost:4000/posts/${postID}/comments/${commentID}`, {
+        const response = await axios.delete(`${backendURL}/posts/${postID}/comments/${commentID}`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -50,7 +51,7 @@ async function editComment(commentID, newContent, postID, userToken) {
             "content": newContent
         };
         console.log(commentID);
-        const response = await axios.patch(`http://localhost:4000/posts/${postID}/comments/${commentID}`, body, {
+        const response = await axios.patch(`${backendURL}/posts/${postID}/comments/${commentID}`, body, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -64,7 +65,7 @@ async function editComment(commentID, newContent, postID, userToken) {
 async function likeComment(commentID, postID, userToken) {
     try {
         console.log("commentID: ", commentID);
-        const response = await axios.post(`http://localhost:4000/posts/${postID}/comments/${commentID}/like`, {}, {
+        const response = await axios.post(`${backendURL}/posts/${postID}/comments/${commentID}/like`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -78,7 +79,7 @@ async function likeComment(commentID, postID, userToken) {
 async function unlikeComment(commentID, postID, userToken) {
     try {
         console.log("commentID: ", commentID);
-        const response = await axios.delete(`http://localhost:4000/posts/${postID}/comments/${commentID}/like`, {
+        const response = await axios.delete(`${backendURL}/posts/${postID}/comments/${commentID}/like`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`

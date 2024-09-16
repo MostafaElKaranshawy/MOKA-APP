@@ -5,7 +5,7 @@ const saltRounds = 10;
 class AuthController {
 
     static async signUp(req, res){
-        console.log(req.body);
+        // //console.log(req.body);
         const hashedPassword = await bcrypt.hash(req.body.password, saltRounds);
         const user = {
             name: req.body.name,
@@ -21,17 +21,17 @@ class AuthController {
             res.status(201).send("User Signed Up Successfully!");
         }
         catch(err){
-            console.log(err.message);
+            //console.log(err.message);
             res.status(400).send(err.message);
         }
     }
     static async signIn(req, res) {
-        console.log(req.body);
+        //console.log(req.body);
         let result = null
-        console.log(req.body);
+        //console.log(req.body);
         try{
             result = await AuthService.signIn(req.body.email, req.body.password);
-            console.log(result);
+            //console.log(result);
         }
         catch(err){
             return res.status(500).send(err.message);
@@ -42,7 +42,7 @@ class AuthController {
         try{
             const userID = req.user.userID;
             const token = req.header('Authorization').replace('Bearer ', '');
-            console.log(userID, token);
+            //console.log(userID, token);
             await AuthService.signOut(userID, token);
             res.status(200).send("Logged out");
         }

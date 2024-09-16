@@ -1,6 +1,5 @@
 import CommentDefintion from './definitions/commentDefinition.mjs';
 import CommentLikeDefinition from './definitions/commentLikeDefinition.mjs';
-import commentLikeDefinition from './definitions/commentLikeDefinition.mjs';
 import UserDefinition from './definitions/userDefinition.mjs';
 export default class CommentLike {
     static async addCommentLike(userID, commentID){
@@ -24,8 +23,8 @@ export default class CommentLike {
         if(!like){
             throw new Error("Like not added");
         }
-        comment.likes += 1;
-        await comment.save();
+        comment.increment('likes');
+        await comment.reload();
         like.setComment(comment);
         return created;
     }
@@ -59,8 +58,8 @@ export default class CommentLike {
         if(!result){
             throw new Error("Like not Exist");
         }
-        comment.likes -= 1;
-        await comment.save();
+        comment.decrement('likes');
+        await comment.reload();
         return result;
     }
     static async getCommentLikes(commentID, offset, limit){

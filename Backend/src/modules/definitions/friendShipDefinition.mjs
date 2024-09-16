@@ -20,8 +20,9 @@ const FriendShipDefinition = orm.define('friendShip',
 export default FriendShipDefinition;
 
 FriendShipDefinition.associate = async (models) => {
-    const {user, friendShip} = models;
+    const {user, friendShip, notification} = models;
     friendShip.belongsTo(user, {as: 'Friend1', foreignKey: 'user1ID'});
     friendShip.belongsTo(user, {as: 'Friend2', foreignKey: 'user2ID'});
     friendShip.belongsTo(user, {as: 'Sender', foreignKey: 'senderID'});
+    friendShip.hasMany(notification, {foreignKey: 'friendRequestID', as: 'FriendRequest', onUpdate: 'CASCADE', onDelete: 'CASCADE'});
 }

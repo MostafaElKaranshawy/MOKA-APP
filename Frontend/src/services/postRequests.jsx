@@ -1,7 +1,24 @@
 import axios from "axios";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+async function getPost(postID, userToken) {
+    try {
+        const response = await axios.get(`${backendURL}/post/${postID}`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization" : `Bearer ${userToken}`
+            }
+        });
+        const postData = response.data;
+        return postData;
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 async function getPosts(userToken, page, limit) {
     try {
-        const response = await axios.get(`http://localhost:4000/posts/feed?page=${page}&limit=${limit}`, {
+        const response = await axios.get(`${backendURL}/posts/feed?page=${page}&limit=${limit}`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -20,16 +37,13 @@ async function addPost(content, userToken, files) {
         const formData = new FormData();
         
         Array.from(files).forEach((file) => {
-            formData.append('photos', file); // 'photos' must match the field name in Multer
+            formData.append('media', file); // 'photos' must match the field name in Multer
         });
         formData.append('content', content); // Add the content text
 
         console.log('Files:', files);
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ', ' + pair[1]); // Logs the FormData key-value pairs
-        // }
 
-        const response = await axios.post("http://localhost:4000/post", formData, {
+        const response = await axios.post(`${backendURL}/post`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',  // Correct Content-Type for file uploads
                 "authorization": `Bearer ${userToken}`,  // User token for authentication
@@ -42,7 +56,7 @@ async function addPost(content, userToken, files) {
 }
 async function deletePost(postID, userToken) {
     try {
-        const response = await axios.delete(`http://localhost:4000/posts/${postID}`, {
+        const response = await axios.delete(`${backendURL}/posts/${postID}`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -60,7 +74,7 @@ async function editPost(postID, newContent, removedPhotos ,userToken) {
             "content": newContent,
             removedPhotos : removedPhotos || []
         };
-        const response = await axios.patch(`http://localhost:4000/posts/${postID}`,body, {
+        const response = await axios.patch(`${backendURL}/posts/${postID}`,body, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -73,7 +87,7 @@ async function editPost(postID, newContent, removedPhotos ,userToken) {
 }
 async function likePost(postID, userToken) {
     try {
-        const response = await axios.post(`http://localhost:4000/posts/${postID}/like`, {}, {
+        const response = await axios.post(`${backendURL}/posts/${postID}/like`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -85,7 +99,7 @@ async function likePost(postID, userToken) {
 }
 async function unlikePost(postID, userToken) {
     try {
-        const response = await axios.delete(`http://localhost:4000/posts/${postID}/like`, {
+        const response = await axios.delete(`${backendURL}/posts/${postID}/like`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -97,7 +111,7 @@ async function unlikePost(postID, userToken) {
 }
 async function getPostLikes(postID, userToken) {
     try {
-        const response = await axios.get(`http://localhost:4000/posts/${postID}/likes`, {
+        const response = await axios.get(`${backendURL}/posts/${postID}/likes`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -112,6 +126,7 @@ async function getPostLikes(postID, userToken) {
     }
 }
 export {
+    getPost,
     getPosts,
     addPost,
     deletePost,

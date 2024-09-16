@@ -11,7 +11,7 @@ class commentController{
             }
 
             await commentService.createComment(postID, content, userID);
-            eventEmitter.emit('broadcast', `${req.user.name} added a new Comment`);
+            // eventEmitter.emit('broadcast', `${req.user.name} added a new Comment`);
             return res.status(200).send("Comment created successfully");
         }
         catch(err){
@@ -27,7 +27,7 @@ class commentController{
                 throw new Error("Invalid Parameters");
             }
             await commentService.deleteComment(userID, commentID, postID);
-            eventEmitter.emit('broadcast', `${req.user.name} deleted a Comment`);
+            // eventEmitter.emit('broadcast', `${req.user.name} deleted a Comment`);
             return res.status(200).send("Comment deleted successfully");
         }
         catch(err){
@@ -45,7 +45,7 @@ class commentController{
                 throw new Error("Invalid Parameters");
             }
             await commentService.updateComment(userID, commentID, postID, content);
-            eventEmitter.emit('broadcast', `${req.user.name} updated a Comment`);
+            // eventEmitter.emit('broadcast', `${req.user.name} updated a Comment`);
             return res.status(200).send("Comment updated successfully");
         }
         catch(err){

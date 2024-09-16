@@ -30,6 +30,7 @@ main {
   margin: 0;
   display: flex;
   background-color: #eee;
+  overflow-y: auto;
 }
 @media screen and (max-width: 500px){
     #main{

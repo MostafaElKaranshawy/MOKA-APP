@@ -1,7 +1,9 @@
 import axios from 'axios'
+const backendURL = import.meta.env.VITE_BACKEND_URL;
+
 async function getUserProfile(userName, userToken, setError){
     try {
-        const response = await axios.get(`http://localhost:4000/${userName}/profile`, {
+        const response = await axios.get(`${backendURL}/${userName}/profile`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -16,7 +18,7 @@ async function getUserProfile(userName, userToken, setError){
 }
 async function getUserFriends(userName, userToken, setError) {
     try {
-        const response = await axios.get(`http://localhost:4000/${userName}/friends`, {
+        const response = await axios.get(`${backendURL}/${userName}/friends`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -36,7 +38,7 @@ async function updateUserInfo(name, bio, userToken, setError) {
             name: name,
             bio: bio
         }
-        const response = await axios.patch("http://localhost:4000/user/profile", newInfo, {
+        const response = await axios.patch(`${backendURL}/user/profile`, newInfo, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -51,7 +53,7 @@ async function updateUserInfo(name, bio, userToken, setError) {
 }
 async function getFriendRequests(userToken, setError) {
     try {
-        const response = await axios.get(`http://localhost:4000/friends/requests`, {
+        const response = await axios.get(`${backendURL}/friends/requests`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -68,7 +70,7 @@ async function getFriendRequests(userToken, setError) {
 
 async function sendFriendRequest(userID, userToken, setError) {
     try {
-        const response = await axios.post(`http://localhost:4000/friends/requests/${userID}`, {}, {
+        const response = await axios.post(`${backendURL}/friends/requests/${userID}`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -82,7 +84,7 @@ async function sendFriendRequest(userID, userToken, setError) {
 }
 async function removeFriendRequest(senderID, userToken, setError){
     try {
-        const response = await axios.delete(`http://localhost:4000/friends/requests/${senderID}`, {
+        const response = await axios.delete(`${backendURL}/friends/requests/${senderID}`, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -96,7 +98,7 @@ async function removeFriendRequest(senderID, userToken, setError){
 }
 async function acceptFriendRequest(senderID, userToken, setError){
     try {
-        const response = await axios.patch(`http://localhost:4000/friends/requests/${senderID}`, {}, {
+        const response = await axios.patch(`${backendURL}/friends/requests/${senderID}`, {}, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -110,7 +112,7 @@ async function acceptFriendRequest(senderID, userToken, setError){
 }
 async function getFriendStatus(friendID, userToken, setError){
     try {
-        const response = await axios.get(`http://localhost:4000/friends/status/${friendID}`, {
+        const response = await axios.get(`${backendURL}/friends/status/${friendID}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${userToken}`
@@ -126,7 +128,7 @@ async function getFriendStatus(friendID, userToken, setError){
 }
 async function removeFriend(friendID, userToken, setError){
     try {
-        const response = await axios.delete(`http://localhost:4000/friends/${friendID}`, {
+        const response = await axios.delete(`${backendURL}/friends/${friendID}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${userToken}`
@@ -141,7 +143,7 @@ async function removeFriend(friendID, userToken, setError){
 }
 async function getUserPosts(userID, userToken, setError, page, limit){
     try {
-        const response = await axios.get(`http://localhost:4000/${userID}/posts?page=${page}&limit=${limit}`, {
+        const response = await axios.get(`${backendURL}/${userID}/posts?page=${page}&limit=${limit}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${userToken}`

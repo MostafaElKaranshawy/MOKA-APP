@@ -2,10 +2,10 @@ import FriendShipService from "../services/friendShipService.mjs";
 import {eventEmitter} from '../config/wss.mjs';
 class FriendShipController {
     static async sendFriendRequest(req, res){
-        console.log("sendFriendRequest")
+        //console.log("sendFriendRequest")
         const friendID = parseInt(req.params.friendID);
         const userID = req.user.userID;
-        console.log(friendID);
+        //console.log(friendID);
         if(isNaN(friendID) || !friendID || !userID){
             return res.status(400).send("Invalid friendID");
         }
@@ -14,7 +14,6 @@ class FriendShipController {
         }
         try{
             await FriendShipService.sendFriendRequest(userID, friendID);
-            eventEmitter.emit('broadcast', `${req.user.name} sent a new Friend Request`);
             return res.status(200).send("Friend Request Sent");
         }
         catch(err){
@@ -32,7 +31,7 @@ class FriendShipController {
         }
         try{
             await FriendShipService.acceptFriendRequest(userID, friendID);
-            eventEmitter.emit('broadcast', `${req.user.name} accepted a Friend Request`);
+            // eventEmitter.emit('broadcast', `${req.user.name} accepted a Friend Request`);
             return res.status(200).send("Friend Request Accepted");
         }
         catch(err){
@@ -50,7 +49,7 @@ class FriendShipController {
         }
         try{
             await FriendShipService.removeFriendRequest(userID, friendID);
-            eventEmitter.emit('broadcast', `${req.user.name} removed a Friend Request`);
+            // eventEmitter.emit('broadcast', `${req.user.name} removed a Friend Request`);
             return res.status(200).send("Friend Removed");
         }
         catch(err){
@@ -89,7 +88,7 @@ class FriendShipController {
         }
         try{
             await FriendShipService.removeFriend(userID, friendID);
-            eventEmitter.emit('broadcast', `${req.user.name} removed a Friend`);
+            // eventEmitter.emit('broadcast', `${req.user.name} removed a Friend`);
             return res.status(200).send("Friend Removed");
         }
         catch(err){

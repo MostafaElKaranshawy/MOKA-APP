@@ -7,6 +7,8 @@ import Home from "./views/homeView/Home";
 import Profile from "./views/profileView/Profile";
 import Header from "./components/header/header";
 import Settings from './views/settingsView/settings';
+import PostView from './views/postView/postView';
+
 function App(){
   
   return (
@@ -19,6 +21,7 @@ function App(){
           <Route path="/home" element={<Home />} />
           <Route path="/:userName/profile" element={<Profile/>} />
           <Route path="/settings" element={<Settings/>} />
+          <Route path="/post/:postID" element={<PostView/>} />
         </Routes>
       </main>
     </div>

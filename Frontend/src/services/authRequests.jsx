@@ -1,8 +1,9 @@
 import axios from "axios";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 async function signUp(formData) {
     try {
-        const response = await axios.post("http://localhost:4000/auth/signUp", formData, {
+        const response = await axios.post(`${backendURL}/auth/signUp`, formData, {
             headers: {
                 "Content-Type": "application/json"
             },
@@ -15,7 +16,7 @@ async function signUp(formData) {
 
 async function signIn(formData) {
     try {
-        const response = await axios.post("http://localhost:4000/auth/signIn", formData, {
+        const response = await axios.post(`${backendURL}/auth/signIn`, formData, {
             headers: {
                 "Content-Type": "application/json",
             },
@@ -35,7 +36,7 @@ async function signIn(formData) {
 async function signOut(token) {
     try {
         console.log(token);
-        const response = await axios.delete("http://localhost:4000/auth/signout",{
+        const response = await axios.delete(`${backendURL}/auth/signout`,{
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`

@@ -1,8 +1,9 @@
 import axios from "axios";
+const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 async function changeProfilePhoto(formData, userToken) {
     try {
-        const response = await axios.post(`http://localhost:4000/user/profilePhoto`, formData , {
+        const response = await axios.post(`${backendURL}/user/profilePhoto`, formData , {
             headers: {
                 "authorization": `Bearer ${userToken}`
             },
@@ -19,7 +20,7 @@ async function editUserSettings(formData, userToken) {
     let submitButton = document.getElementsByClassName('save-changes-button');
     submitButton.disabled = true;
     try {
-        const response = await axios.patch(`http://localhost:4000/user/settings`, formData, {
+        const response = await axios.patch(`${backendURL}/user/settings`, formData, {
             headers: {
                 "Content-Type": "application/json",
                 "authorization": `Bearer ${userToken}`
@@ -36,7 +37,7 @@ async function editUserSettings(formData, userToken) {
 }
 async function searchUsers(query, token){
     try {
-        const response = await axios.get(`http://localhost:4000/users/search?search=${query}`, {
+        const response = await axios.get(`${backendURL}/users/search?search=${query}`, {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": `Bearer ${token}`
@@ -48,8 +49,24 @@ async function searchUsers(query, token){
         console.error(error);
     }
 }
+async function getNotifications(userID, token){
+    try {
+        const response = await axios.get(`${backendURL}/user/notifications`, {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+        const data = response.data;
+        return data;
+    }
+    catch(err){
+        console.error(err);
+    }
+}
 export {
     changeProfilePhoto,
     editUserSettings,
-    searchUsers
+    searchUsers,
+    getNotifications
 }

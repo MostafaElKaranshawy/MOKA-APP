@@ -47,7 +47,7 @@ export default class User {
             userID : user.userID,
             profilePhotoUrl: `${user.profilePhotoUrl}`
         }
-        console.log(newUser);
+        //console.log(newUser);
         return newUser;
     }
     static async editUserProfile(userID, name, bio){
@@ -59,7 +59,7 @@ export default class User {
         const newUserInfo = await user.update({name: name, bio: bio}, {where: {
             userID: userID
         }});
-        console.log(newUserInfo);
+        //console.log(newUserInfo);
         return newUserInfo;
     }
     static async searchUsers(search){
@@ -70,7 +70,7 @@ export default class User {
             }
         });
         users = users.map(user =>user.dataValues);
-        console.log(users);
+        //console.log(users);
         return users;
     }
     static async uploadProfilePhoto(userID, profilePhoto) {
@@ -113,7 +113,7 @@ export default class User {
         if(userInfo.password){
             const hashedPassword = user.password;
             const match = await bcrypt.compare(userInfo.password, hashedPassword);
-            console.log(match);
+            //console.log(match);
             if (!match) {
                 throw new Error("Password is Incorrect");
             }

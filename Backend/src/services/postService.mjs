@@ -64,6 +64,18 @@ class PostService {
             throw new Error(err.message);
         }
     }
+    static async getPost(postID, userID) {
+        if(postID == null){
+            throw new Error("Invalid Parameters");
+        }
+        try {
+            const post = await Post.getPost(postID, userID);
+            return post;
+        }
+        catch(err){
+            throw new Error(err.message);
+        }
+    }
 }
 
 export default PostService;

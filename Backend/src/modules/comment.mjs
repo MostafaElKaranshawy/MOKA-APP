@@ -1,6 +1,7 @@
 import CommentDefinition from './definitions/commentDefinition.mjs';
 import PostDefinition from './definitions/postDefinition.mjs';
 import UserDefinition from './definitions/userDefinition.mjs';
+import Notification from './notification.mjs';
 import { format } from 'date-fns';
 export default class Comment{
     static async createComment(postID, content, userID){
@@ -19,6 +20,7 @@ export default class Comment{
         }
         post.comments += 1;
         await post.save();
+        await Notification.addNotification(userID, post.userID, 'comment', 'commented on your post', postID);
         return result;
     }
     static async deleteComment(userID, postID, commentID){

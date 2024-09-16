@@ -1,5 +1,5 @@
 import User from '../modules/user.mjs';
-
+import Notification from '../modules/notification.mjs';
 export default class UserService{
     static async editUserProfile(userID, name, bio){
         try{
@@ -36,6 +36,14 @@ export default class UserService{
     static async editUserSettings(userInfo){
         try{
             return await User.editUserSettings(userInfo);
+        }
+        catch(err){
+            throw new Error(err);
+        }
+    }
+    static async getNotifications(userID){
+        try{
+            return await Notification.getNotifications(userID);
         }
         catch(err){
             throw new Error(err);

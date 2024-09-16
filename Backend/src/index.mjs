@@ -20,9 +20,19 @@ import likeRouter from './routers/likeRouter.mjs';
 import friendShipRouter from './routers/friendShipRouter.mjs';
 import userRouter from './routers/userRouter.mjs';
 
-app.get('/uploads/:filename', (req, res) => {    
-    const filePath = path.join(__dirname, '../uploads', req.params.filename);
-    console.log(filePath);
+app.get('/uploads/photos/:filename', (req, res) => {    
+    const filePath = path.join(__dirname, '../uploads/photos', req.params.filename);
+    // //console.log(filePath);
+    res.sendFile(filePath, (err) => {
+        if (err) {
+            res.status(404).send('File not found');
+        }
+    });
+})
+
+app.get('/uploads/videos/:filename', (req, res) => {    
+    const filePath = path.join(__dirname, '../uploads/videos', req.params.filename);
+    //console.log(filePath);
     res.sendFile(filePath, (err) => {
         if (err) {
             res.status(404).send('File not found');
@@ -51,11 +61,11 @@ const server = http.createServer(app)
 import {setWss} from './config/wss.mjs';
 setWss(server);
 server.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
+    //console.log(`Server is running on port ${PORT}`);
 });
 
 // Create WebSocket server
 
 orm.sync().then(() => {
-    console.log('Database synchronized');
+    //console.log('Database synchronized');
 });

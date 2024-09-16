@@ -1,8 +1,8 @@
 import PostDefinition from './definitions/postDefinition.mjs'
 import UserDefinition from './definitions/userDefinition.mjs'
 import FriendShipDefinition from './definitions/friendShipDefinition.mjs'
-import PhotoDefinition from './definitions/photoDefinition.mjs'
-import { format } from 'date-fns';
+import MediaDefinition from './definitions/mediaDefinition.mjs'
+import Notification from './notification.mjs'
 import {Op} from 'sequelize';
 export default class Post {
     static async createPost(userID, content, photos){
@@ -17,16 +17,18 @@ export default class Post {
         if(!result){
             throw new Error("Post not added");
         }
-        console.log(photos)
+        //console.log(photos)
         const postID = result.postID;
         if(photos){
             photos.forEach(async (photo) => {
-                await PhotoDefinition.create({
+                await MediaDefinition.create({
                     url: photo.filename,
-                    postID: postID
+                    postID: postID,
+                    type: photo.mimetype
                 });
             });
         }
+        await Notification.addFriendsNotification(userID, 'post', 'added a new post', postID);
         return result;
     }
     static async deletePost(userID, postID){
@@ -73,7 +75,7 @@ export default class Post {
         });
         if(removedPhotos){
             removedPhotos.forEach(async (photoID) => {
-                await PhotoDefinition.destroy({
+                await MediaDefinition.destroy({
                     where: {
                         id: photoID
                     }
@@ -106,12 +108,12 @@ export default class Post {
                 attributes: ['postID']
             }
         );
-        let postPhotos = await PhotoDefinition.findAll({
+        let postPhotos = await MediaDefinition.findAll({
             where: {
                 postID: posts.map((post) => post.postID)
             }
         });
-        console.log(postPhotos);
+        //console.log(postPhotos);
         posts = posts.map((post) => {
             return {
                 postID: post.postID,
@@ -172,14 +174,14 @@ export default class Post {
             offset: offset,
             order: [['createdAt', 'DESC']], // Sort posts by most recent
         });
-        // console.log(postsFeed[0].user);
+        // //console.log(postsFeed[0].user);
         // Assuming you have a userLikes array that contains the likes
-        let postPhotos = await PhotoDefinition.findAll({
+        let postPhotos = await MediaDefinition.findAll({
             where: {
                 postID: postsFeed.map((post) => post.postID)
             }
         });
-        console.log(postPhotos);
+        //console.log(postPhotos);
         const formattedPostsFeed = postsFeed.map(post => {
             return {
                 postID: post.postID,
@@ -195,7 +197,48 @@ export default class Post {
                 photos: postPhotos.filter(photo => photo.postID === post.postID)
             };
         });
-        // console.log(formattedPostsFeed);
+        // //console.log(formattedPostsFeed);
         return formattedPostsFeed;
+    }
+    static async getPost(postID, currentUserID){
+        const post = await PostDefinition.findOne({
+            where: {
+                postID: postID
+            },
+            include: [
+                {
+                    model: UserDefinition, // Assuming you have a User model associated with the Post model
+                    attributes: ['name', 'userName', 'userID', 'profilePhotoUrl'], // Replace 'name' with the actual field for the user's name
+                },
+            ],
+        });
+        if(!post){
+            throw new Error("Post not found");
+        }
+        const postLikes = await post.getPostLikes(
+            {
+                attributes: ['userID']
+            }
+        );
+        //console.log(postLikes);
+        const postPhotos = await MediaDefinition.findAll({
+            where: {
+                postID: post.postID
+            }
+        });
+        const postData =  {
+            postID: post.postID,
+            authorName: post.user.name,
+            userName : post.user.userName,
+            content: post.content,
+            time : new Date(post.createdAt),
+            profilePhotoUrl : post.user.profilePhotoUrl,
+            userID: post.userID,
+            liked: postLikes.find((like) => like.userID === currentUserID) ? true : false,
+            likes: post.likes,
+            comments: post.comments,
+            photos: postPhotos
+        };
+        return postData;
     }
 }

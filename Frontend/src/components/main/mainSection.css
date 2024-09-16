@@ -3,6 +3,8 @@
     height: 100%;
     border-radius: 10px;
     width: 100%;
+    max-width: 800px;
+    overflow-y: auto;
 }
 
 .main-section h2{

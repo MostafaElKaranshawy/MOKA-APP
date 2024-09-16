@@ -81,7 +81,7 @@ export default function Comments(probs) {
     return (
         <div className="comment-list">
             <div className="compose-comment">
-                <img src={`http://localhost:4000/uploads/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}} />
+                <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}} />
                 <div className="compose-body">
                     <textarea
                         ref={textareaRef}

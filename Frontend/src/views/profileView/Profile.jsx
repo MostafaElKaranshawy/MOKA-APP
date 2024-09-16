@@ -19,8 +19,8 @@ import {
 import { 
     changeProfilePhoto
 } from '../../services/userRequests';
+import { getWebSocket } from "../../webSocket";
 export default function Profile() {
-    // const ws = new WebSocket("ws://localhost:4001");
     const cookies = document.cookie;
     const { userName } = useParams();
     if(!document.cookie.split("authToken=")[1]){
@@ -72,34 +72,21 @@ export default function Profile() {
         setBio(user.bio || '');
     }, [user]);
 
-    const ws = useRef(null);
+    // const ws = useRef(null);
 
     useEffect(() => {
         // Create the WebSocket connection once
-        ws.current = new WebSocket("ws://localhost:4001");
+        const ws = getWebSocket(user.userID);
 
-        ws.current.onmessage = (event) => {
+        ws.onmessage = (event) => {
             if (userToken && userName) {
                 fetchUserProfile();
             }
             console.log(`Message from server: ${event.data}`);
         };
-
-        ws.current.onopen = () => {
-            console.log('Connected to WebSocket server');
-        };
-
-        ws.current.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-        };
-
-        // Clean up on component unmount
         return () => {
-            if (ws.current) {
-                ws.current.close();
-            }
         };
-    }, []);
+    }, [user]);
     useEffect(() => {
         if (page === 1) return; // Avoid fetching on initial render
         if(!loading)return;
@@ -140,6 +127,7 @@ export default function Profile() {
             setshowEditBio(false);
             const updatedUser = await updateUserInfo(user.name, bio, userToken, setError);
             setUser(updatedUser);
+            localStorage.setItem("user", JSON.stringify(updatedUser));
         } catch (err) {
             setError(err.message);
         }
@@ -273,14 +261,14 @@ export default function Profile() {
                 <div className="profile-header">
                     <div className="profile-photo">
                         <img
-                            src={`http://localhost:4000/uploads/${profilePhotoURL}`}
+                            src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`}
                             className="profile-photo-preview"
                             onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}
                         />
                         {photoPreview && (
                             <img 
                                 className="change-profile-photo-preview"
-                                src={`http://localhost:4000/uploads/${photoPreview.src}`} 
+                                src={`${photoPreview.src}`} 
                                 alt="preview"
                                 onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}
                             />
@@ -361,7 +349,7 @@ export default function Profile() {
                     <div className="profile-friends-list">
                         {filteredFriends.map((friend, index) => (
                             <div className="profile-friend" key={index} onClick={goToUserProfile(friend.userName)}>
-                                <img src={`http://localhost:4000/uploads/${friend.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
+                                <img src={`${import.meta.env.VITE_PHOTO_URL}/${friend.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
                                 <p className="profile-friend-name">{friend.name}</p>
                             </div>
                         ))}
@@ -378,7 +366,7 @@ export default function Profile() {
                             {mainUserFriendRequests.map((friendRequest, index) => (
                                 <div className="profile-friend-request" key={index}>
                                     <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
-                                        <img src={`http://localhost:4000/uploads/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
+                                        <img src={`${import.meta.env.VITE_PHOTO_URL}/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
                                         <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
                                     </div>
                                     <div className="profile-friend-request-options">

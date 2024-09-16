@@ -19,10 +19,10 @@ export default class UserController{
     }
     static async getUserProfile(req, res){
         const userName = req.params.userName;
-        console.log(userName)
+        //console.log(userName)
         try{
             const user = await UserService.getUserProfile(userName);
-            console.log(user)
+            //console.log(user)
             res.status(200).send(user);
         }
         catch(err){
@@ -31,7 +31,7 @@ export default class UserController{
     }
     static async searchUsers(req, res){
         const search = req.query.search;
-        console.log(search);
+        //console.log(search);
         try{
             const users = await UserService.searchUsers(search);
             res.status(200).send(users);
@@ -43,7 +43,7 @@ export default class UserController{
     static async uploadProfilePhoto(req, res) {
         const userID = req.user.userID;
         const profilePhoto = req.file;
-        console.log(profilePhoto);
+        //console.log(profilePhoto);
         if (!profilePhoto) {
             return res.status(400).send("No file uploaded");
         }
@@ -67,6 +67,16 @@ export default class UserController{
         try{
             const user = await UserService.editUserSettings(userInfo);
             return res.status(200).send(user);
+        }
+        catch(err){
+            res.status(404).send(err.message);
+        }
+    }
+    static async getNotifications(req, res){
+        const userID = req.user.userID;
+        try{
+            const notifications = await UserService.getNotifications(userID);
+            return res.status(200).send(notifications);
         }
         catch(err){
             res.status(404).send(err.message);

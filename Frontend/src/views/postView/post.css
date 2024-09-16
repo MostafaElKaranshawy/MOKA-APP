@@ -1,8 +1,20 @@
-.post{
+.post-view{
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #e8e8e8;
+    min-height: calc(100vh - 53px);
+}
+.post-view .post{
     display: flex;
     flex-direction: column;
     margin: 10px 0;
     width: 100%;
+    max-width: 600px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -244,8 +256,7 @@
     background-color: white;
     color: red;
 }
-.post-photo img,
-.post-photo video{
+.post-photo img{
     width: 100%;
     /* max-width: 400px; */
     /* max-height: 400px; */

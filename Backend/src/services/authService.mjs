@@ -5,7 +5,7 @@ import SessionService from "./sessionService.mjs";
 class AuthService {
     static async signUp(user) {
         try {
-            console.log(user);
+            //console.log(user);
             const checker = await User.checkEmailAndUserName(user.email, user.userName);               
             if(!checker){
                 const created = await User.createUser(user.name, user.userName, user.email, user.password, user.bio, user.profilePhotoUrl);
@@ -20,7 +20,7 @@ class AuthService {
         const user = await User.getUserByEmail(email);
         if(!user)throw new Error("Email not found");
         const hashedPassword = user.password;
-        console.log(user);
+        //console.log(user);
         const match = await bcrypt.compare(password, hashedPassword);
 
         if (!match) {

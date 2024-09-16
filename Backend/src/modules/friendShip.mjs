@@ -1,8 +1,10 @@
 import FriendShipDefinition from './definitions/friendShipDefinition.mjs';
 import UserDefinition from './definitions/userDefinition.mjs';
+import Notification from './notification.mjs';
 import { Op } from '../config/orm.mjs';
 export default class FriendShip {
     static async sendFriendRequest(userID, friendID){
+        let created = false;
         let friendship = await FriendShipDefinition.findOne({
             where: {
                 [Op.or]: [
@@ -27,9 +29,9 @@ export default class FriendShip {
             if(!friendship){
                 throw new Error("Friend Request not sent");
             }
-            return;
+            created = true;
         }
-        console.log(created)
+        //console.log("hello")
         if(!created){
             if(friendship.status == 1){
                 throw new Error("You Are Alraedy Friends");
@@ -45,7 +47,9 @@ export default class FriendShip {
         if(!friendship){
             throw new Error("Friend Request not sent");
         }
-        console.log("FRIEND DONEEE")
+        //console.log("FRIEND DONEEE")
+        //console.log(friendship.friendshipID);
+        await Notification.addFriendRequestNotification(userID, friendID, 'has sent you a friend request',friendship.friendshipID);
     }
     static async acceptFriendRequest(userID, friendID){
         const user = await UserDefinition.findOne({
@@ -82,6 +86,7 @@ export default class FriendShip {
         if(!res){
             throw new Error("Friend Request not accepted");
         }
+        await Notification.addFriendRequestNotification(userID, friendID, 'has accepted your friend request',friendship.friendshipID);
     }
     static async removeFriendRequest(userID, friendID){
         const user = await UserDefinition.findOne({
@@ -133,7 +138,7 @@ export default class FriendShip {
                 },
             ],
         });
-        console.log(friendsIDs);
+        //console.log(friendsIDs);
         if(friendsIDs == null)
             throw new Error("No friends found");
         const friendRequests = friendsIDs.map((friend) => {
@@ -245,7 +250,7 @@ export default class FriendShip {
             friendStatus = "Friend Request Received";
             // return "Friend Request Received";
         }
-        console.log(friendStatus);
+        //console.log(friendStatus);
         return friendStatus;
     }
 }

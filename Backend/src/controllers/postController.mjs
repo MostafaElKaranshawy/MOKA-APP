@@ -3,17 +3,14 @@ import {eventEmitter} from '../config/wss.mjs';
 class PostController{
     static async addPost(req, res){
         try{
-            // console.log("req headers", req.headers)
-            const photos = req.files; // Array of photo files
+            const photos = req.files;
             const userID = req.user.userID;
             const content = req.body.content;
             
-            // console.log(content)
             if(userID == null || content == null){
                 throw new Error("Invalid Parameters");
             }
             await PostService.createPost(userID, content, photos);
-            eventEmitter.emit('broadcast', `${req.user.name} created a new Post`);
             return res.status(200).send("Post Created Successfully");
         }
         catch(err){
@@ -28,7 +25,7 @@ class PostController{
                 throw new Error("Invalid Parameters");
             }
             await PostService.deletePost(userID, postID);
-            eventEmitter.emit('broadcast', `${req.user.name} deleted a Post`);
+            // eventEmitter.emit('broadcast', `${req.user.name} deleted a Post`);
             return res.status(200).send("Post Deleted Successfully");
         }
         catch(err){
@@ -46,7 +43,7 @@ class PostController{
                 throw new Error("Invalid Parameters");
             }
             await PostService.updatePost(userID, postID, content, removedPhotos);
-            eventEmitter.emit('broadcast', `${req.user.name} updated a Post`);
+            // eventEmitter.emit('broadcast', `${req.user.name} updated a Post`);
             return res.status(200).send("Post Updated Successfully");
         }
         catch(err){
@@ -87,7 +84,20 @@ class PostController{
             return res.status(400).send(err.message);
         }
     }
-    
+    static async getPost(req, res){
+        try {
+            const userID = req.user.userID;
+            const postID = parseInt(req.params.postID);
+            if(postID == null || isNaN(postID)){
+                throw new Error("Invalid Parameters");
+            }
+            const post = await PostService.getPost(postID, userID);
+            return res.status(200).send(post);
+        }
+        catch(err){
+            return res.status(400).send(err.message);
+        }
+    }
 }
 
 export default PostController;

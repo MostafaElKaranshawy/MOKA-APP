@@ -1,6 +1,7 @@
 import PostLikeDefinition from './definitions/postLikeDefinition.mjs';
 import PostDefinition from './definitions/postDefinition.mjs';
 import UserDefinition from './definitions/userDefinition.mjs';
+import Notification from './notification.mjs'
 export default class PostLike {
     static async addPostLike(postID, userID){
         const post = await PostDefinition.findOne({
@@ -8,15 +9,15 @@ export default class PostLike {
                 postID: postID
             }
         });
-        // result is 0 if exist, 1 if not exist
         const result = await post.createPostLike({
             userID: userID
         });
         if(!result){
             throw new Error("Like already exists");
         }
-        post.likes += 1;
-        await post.save();
+        post.increment('likes');
+        await post.reload();
+        await Notification.addNotification(userID, post.userID, 'like', 'liked your post', postID);
         return result;
     }
     static async removePostLike(userID, postID){
@@ -27,8 +28,6 @@ export default class PostLike {
                     postID: postID
                 }
             });
-            // console.log("LIKE");
-            // console.log(like)
             if(!like){
                 throw new Error("Like not Exist");
             }
@@ -41,8 +40,8 @@ export default class PostLike {
                     postID: postID
                 }
             });
-            console.log("RESULT");
-            console.log(result)
+            //console.log("RESULT");
+            //console.log(result)
             if(!result){
                 throw new Error("Like not Exist");
             }
@@ -51,16 +50,13 @@ export default class PostLike {
                     postID: postID
                 }
             });
-            // console.log("POST");
-            // console.log(post);
-            post.likes -= 1;
-            await post.save();
-            // console.log("POST");
-            // console.log(post);
+            
+            post.decrement('likes');
+            await post.reload();
             return result;
         }
         catch(err){
-            console.log(err)
+            //console.log(err)
             throw new Error(err.message);
         }
     }
@@ -80,7 +76,7 @@ export default class PostLike {
                     attributes: ['userID', 'name', 'email', 'userName', 'profilePhotoUrl'] // specify the attributes you want to retrieve
                 }
             });
-            console.log(likes)
+            //console.log(likes)
             return likes;
         }
         catch(err){

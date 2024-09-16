@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect} from "react";
 import "./sideMenu.css";
 import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../../services/profileRequests";
 export default function SideMenu(){
@@ -19,36 +19,6 @@ export default function SideMenu(){
             setProfilePhotoURL(user.profilePhotoUrl);
         }
     }, [userToken]);
-
-    const ws = useRef(null);
-
-    useEffect(() => {
-        // Create the WebSocket connection once
-        ws.current = new WebSocket("ws://localhost:4001");
-
-        ws.current.onmessage = (event) => {
-            if (userToken && user) {
-                handleUser();
-            }
-            console.log(`Message from server: ${event.data}`);
-        };
-
-        ws.current.onopen = () => {
-            console.log('Connected to WebSocket server');
-        };
-
-        ws.current.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-        };
-
-        // Clean up on component unmount
-        return () => {
-            if (ws.current) {
-                ws.current.close();
-            }
-        };
-    }, []);
-
     const handleUser = async () => {
         const userFriends = await getUserFriends(user.userName, userToken);
         setFriends(userFriends);
@@ -67,11 +37,9 @@ export default function SideMenu(){
         window.location.href = `/${userName}/profile`;
     }
     function timeAgo(date) {
-        // console.log(date);
         date = new Date(date)
         const now = new Date();
         const secondsPast = Math.floor((now - date) / 1000);
-        // console.log(date + " " + now);
         if (secondsPast < 60) {
             return `${secondsPast} seconds ago`;
         }
@@ -94,7 +62,7 @@ export default function SideMenu(){
                 <div className="side-menu">
                     <div className="profile">
                         <img 
-                            src={`http://localhost:4000/uploads/${profilePhotoURL}`} onClick={profileVisit}
+                            src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} onClick={profileVisit}
                             onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}} 
                         />
                         <h2 className="profile-name" onClick={profileVisit}>{user.name}</h2>
@@ -116,7 +84,7 @@ export default function SideMenu(){
                             console.log(friendRequest),
                             <div className="nav-menu-profile-friend-request" key={index}>
                                 <div  onClick={()=>{visitProfile(friendRequest.userName)}}>
-                                    <img src={`http://localhost:4000/uploads/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}/>
+                                    <img src={`${import.meta.env.VITE_PHOTO_URL}/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}/>
                                 </div>
                                 <div className="nav-menu-profile-friend-request-body">
                                     <div className="nav-menu-profile-friend-request-info">

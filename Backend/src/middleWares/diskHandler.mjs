@@ -4,8 +4,17 @@ import path from 'path';
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        // console.log(file)
-        cb(null, 'uploads/'); // Ensure this directory exists
+        const photoTypes = /jpeg|jpg|png/;
+        const videoTypes = /mp4|mov|avi|mkv/;
+        
+        // Choose the destination folder based on the file type
+        if (photoTypes.test(file.mimetype)) {
+            cb(null, 'uploads/photos'); // Store photos in /uploads/photos
+        } else if (videoTypes.test(file.mimetype)) {
+            cb(null, 'uploads/videos'); // Store videos in /uploads/videos
+        } else {
+            cb(new Error('Invalid file type'), false); // Invalid file type
+        }
     },
     filename: (req, file, cb) => {
         const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -13,9 +22,9 @@ const storage = multer.diskStorage({
     }
 });
 
-// File filter to ensure only images are uploaded
+// File filter to ensure only images and videos are uploaded
 const fileFilter = (req, file, cb) => {
-    const allowedTypes = /jpeg|jpg|png/;
+    const allowedTypes = /jpeg|jpg|png|mp4|mov|avi|mkv/; // Added video file types
     const extname = allowedTypes.test(path.extname(file.originalname).toLowerCase());
     const mimetype = allowedTypes.test(file.mimetype);
 
@@ -30,7 +39,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
     storage: storage,
     fileFilter: fileFilter,
-    limits: { fileSize: 1024 * 1024 * 5 } // Limit file size to 5MB
+    limits: { fileSize: 1024 * 1024 * 50 } // Limit file size to 50MB for videos
 });
 
 export default upload;

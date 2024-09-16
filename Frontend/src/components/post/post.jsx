@@ -11,6 +11,7 @@ import {
     getComments,
     createComment
 } from '../../services/commentRequests'
+
 export default function Post(probs){
     const user = JSON.parse(localStorage.getItem("user"));
     const post = probs.post;
@@ -37,34 +38,7 @@ export default function Post(probs){
             handleGetComments();
         }
     }, [showComments])
-    const ws = useRef(null);
 
-    useEffect(() => {
-        // Create the WebSocket connection once
-        ws.current = new WebSocket("ws://localhost:4001");
-
-        ws.current.onmessage = (event) => {
-            if (probs.userToken && user) {
-                handleGetComments();
-            }
-            console.log(`Message from server: ${event.data}`);
-        };
-
-        ws.current.onopen = () => {
-            console.log('Connected to WebSocket server');
-        };
-
-        ws.current.onclose = () => {
-            console.log('Disconnected from WebSocket server');
-        };
-
-        // Clean up on component unmount
-        return () => {
-            if (ws.current) {
-                ws.current.close();
-            }
-        };
-    }, []);
     async function handleGetComments(){
         const commentsData = await getComments(post.postID, probs.userToken);
         setComments(commentsData);
@@ -195,7 +169,6 @@ export default function Post(probs){
         console.log("remove photo");
         const newPhotos = editPhotos.filter((photo, index) => index !== curPhoto);
         setEditPhotos(newPhotos);
-        // setPostPhotos(newPhotos);
         if(curPhoto >= newPhotos.length){
             setCurPhoto(curPhoto-1);
         }
@@ -203,7 +176,7 @@ export default function Post(probs){
     return (
         <div className="post">
             <div className="post-details">
-                <img src={`http://localhost:4000/uploads/${profilePhotoURL}`} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
+                <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
                 <div className="post-body">
                     <div className="post-header">
                         <div className="post-header-info">
@@ -232,7 +205,13 @@ export default function Post(probs){
                                 {editPhotos.length > 1 && <i className="fa fa-chevron-left left-arrow nav-arrow" onClick={decreaseCurPhoto}></i>}
                                 <div className="post-photo">
                                     {showEdit && <i className="fa-solid fa-circle-xmark remove-photo" onClick={handleRemovePhoto}></i>}
-                                    <img src={`http://localhost:4000/uploads/${editPhotos[curPhoto].url}`} />
+                                    {editPhotos[curPhoto].type.includes('image') ? (
+                                        <img src={`${import.meta.env.VITE_PHOTO_URL}/${editPhotos[curPhoto].url}`} />
+                                    ) : (
+                                        <video controls>
+                                            <source src={`${import.meta.env.VITE_VIDEO_URL}/${editPhotos[curPhoto].url}`} />
+                                        </video>
+                                    )}
                                 </div>
                                 {editPhotos.length > 1 && <i className="fa fa-chevron-right right-arrow nav-arrow" onClick={increaseCurPhoto}></i>}
                                 {editPhotos.length > 1 && <p className="photo-count">{`${curPhoto+1}/${editPhotos.length}`}</p>}
@@ -258,7 +237,7 @@ export default function Post(probs){
                             <div className="post-like-users">
                                 {postLikes.map((like) => (
                                     <div className="post-like-user" key={like.user.userID} onClick={goToUserProfile(like.user.userName)}>
-                                        <img src={`http://localhost:4000/uploads/${like.user.profilePhotoUrl}`}/>
+                                        <img src={`${import.meta.env.VITE_PHOTO_URL}/${like.user.profilePhotoUrl}`}/>
                                         <p>{like.user.name}</p>
                                     </div>
                                 ))} 
