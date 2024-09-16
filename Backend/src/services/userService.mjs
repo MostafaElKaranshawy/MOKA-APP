@@ -49,4 +49,12 @@ export default class UserService{
             throw new Error(err);
         }
     }
+    static async seeNotification(notificationID){
+        try{
+            return await Notification.seeNotification(notificationID);
+        }
+        catch(err){
+            throw new Error(err);
+        }
+    }
 }

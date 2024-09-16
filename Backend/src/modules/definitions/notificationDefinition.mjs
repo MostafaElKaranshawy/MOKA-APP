@@ -34,5 +34,5 @@ notificationDefinition.associate = async (models) => {
     notification.belongsTo(user, {as: 'userfrom', foreignKey : 'fromID', onDelete: 'CASCADE'});
     notification.belongsTo(user, {as: 'userto', foreignKey : 'toID', onDelete: 'CASCADE'});
     notification.belongsTo(post, {foreignKey : 'postID'});
-    notification.belongsTo(friendShip, {foreignKey : 'friendRequestID', onUpdate: 'CASCADE', onDelete: 'CASCADE'});
+    notification.belongsTo(friendShip, {as:'notification',foreignKey : 'friendRequestID', onUpdate: 'CASCADE', onDelete: 'CASCADE'});
 }

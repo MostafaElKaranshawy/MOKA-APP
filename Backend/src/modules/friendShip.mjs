@@ -47,9 +47,13 @@ export default class FriendShip {
         if(!friendship){
             throw new Error("Friend Request not sent");
         }
-        //console.log("FRIEND DONEEE")
-        //console.log(friendship.friendshipID);
-        await Notification.addFriendRequestNotification(userID, friendID, 'has sent you a friend request',friendship.friendshipID);
+        try{
+            await Notification.addFriendRequestNotification(userID, friendID, 'has sent you a friend request',friendship);
+        }
+        catch(err){
+            console.log(err);
+            throw new Error("Friend Request not sent");
+        }
     }
     static async acceptFriendRequest(userID, friendID){
         const user = await UserDefinition.findOne({

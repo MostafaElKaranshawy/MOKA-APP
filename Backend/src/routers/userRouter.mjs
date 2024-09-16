@@ -12,5 +12,5 @@ userRouter.post('/user/profilePhoto', upload.single('profilePhoto'), UserControl
 
 userRouter.patch('/user/profile',UserController.editUserProfile);
 userRouter.patch('/user/settings',UserController.editUserSettings);
-
+userRouter.patch('/user/notification/:notificationID/seen',UserController.seeNotification);
 export default userRouter;

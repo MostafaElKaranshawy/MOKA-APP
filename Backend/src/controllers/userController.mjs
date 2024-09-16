@@ -82,4 +82,15 @@ export default class UserController{
             res.status(404).send(err.message);
         }
     }
+    static async seeNotification(req, res){
+        const notificationID = parseInt(req.params.notificationID);
+        console.log("notification ID: " + notificationID)
+        try{
+            await UserService.seeNotification(notificationID);
+            return res.status(200).send("Notification seen");
+        }
+        catch(err){
+            res.status(404).send(err.message);
+        }
+    }
 }

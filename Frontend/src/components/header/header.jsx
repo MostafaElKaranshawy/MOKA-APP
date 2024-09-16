@@ -2,12 +2,12 @@ import React, {useEffect, useState, useRef} from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 import "./header.css";
 import { signOut } from "../../services/authRequests";
-import {searchUsers, getNotifications} from '../../services/userRequests'
+import {searchUsers, getNotifications, seeNotification} from '../../services/userRequests'
 import { getWebSocket } from "../../webSocket";
 
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
-    let nav = (window.innerWidth > 500? true: false)
+    let nav = (window.innerWidth > 700? true: false)
     const [search, setsearch] = useState(true);
     const [showProfileMenu, setShowProfileMenu] = useState(false);
     const authWindow = (window.location.href == "http://localhost:5173/" ? true : false);
@@ -38,6 +38,12 @@ export default function Header() {
         }
     }, [showProfileMenu])
     function toggleSearch() {
+        if(search) {
+            document.querySelector(".search-icon").classList.remove("active-search");
+        }
+        else{
+            document.querySelector(".search-icon").classList.add("active-search");
+        }
         setsearch((prev) => !prev);
         if(!search) setShowProfileMenu(false);
     }
@@ -57,7 +63,7 @@ export default function Header() {
     }, [user])
     const handleNotifications = async () => {
         try {
-            let data = await getNotifications(user.userID, token);
+            let data = await getNotifications(token);
             data.sort((a, b) => new Date(b.time) - new Date(a.time));
             let notificationsData = data.map((notification) => {
                 notification.time = timeAgo(notification.time);
@@ -105,6 +111,37 @@ export default function Header() {
             setSearchResult(data);
         } catch (error) {
             console.error(error);
+        }
+    }
+    const handleNotificationClick = async (notification) => {
+        if(!notification)return;
+        console.log(token)
+        if(notification.type === "friendRequest") {
+            const url = `/${notification.from.userName}/profile`;
+            window.open(url, '_blank');
+            await handleFriendRequesNotification(notification.notificationID);
+        }
+        else {
+            const url = `/post/${notification.postID}`;
+            window.open(url, '_blank');
+            await handleSeeNotification(notification.notificationID);
+        }
+    }
+    const handleFriendRequesNotification = async(notificationID)=> {
+        try {
+            await seeNotification(notificationID, token);
+            await handleNotifications();
+        } catch (error) {
+            console.error(error)
+        }
+    }
+    const handleSeeNotification = async(notificationID)=> {
+        try {
+            await seeNotification(notificationID, token);
+            await handleNotifications();
+            
+        } catch (error) {
+            console.error(error)
         }
     }
     function timeAgo(date) {
@@ -182,12 +219,17 @@ export default function Header() {
                             </NavLink>
                             <div className="menu-item notificationIcon" onClick={toggleShowNotifications}>
                                 <i className="fa-solid fa-bell"></i>
-                                
+                                {
+                                    notifications.filter((notification) => notification.seen === false).length > 0 &&
+                                    <span className="notification-count">
+                                        {notifications.filter((notification) => notification.seen === false).length}
+                                    </span>
+                                }
                             </div>
                         </ul>
                         {showNotifications && (<div className="notifications">
                             {notifications.length > 0? notifications.map((notification) => (
-                                <div className="notification" key={notification.notificationID}>
+                                <div className={notification.seen?`notification`: `notification not-seen`} key={notification.notificationID} onClick={()=>{handleNotificationClick(notification)}}>
                                     <img src={`${import.meta.env.VITE_PHOTO_URL}/${notification.from.profilePhotoUrl}`} onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}/>
                                     <div className="notification-data">
                                         <p className="notification-content">

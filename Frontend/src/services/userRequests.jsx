@@ -49,7 +49,7 @@ async function searchUsers(query, token){
         console.error(error);
     }
 }
-async function getNotifications(userID, token){
+async function getNotifications(token){
     try {
         const response = await axios.get(`${backendURL}/user/notifications`, {
             headers: {
@@ -64,9 +64,25 @@ async function getNotifications(userID, token){
         console.error(err);
     }
 }
+async function seeNotification(notificationID, token){
+    try {
+        console.log(notificationID)
+        console.log(token)
+        await axios.patch(`${backendURL}/user/notification/${notificationID}/seen`, {},{
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }
+        });
+    }
+    catch(err){
+        console.error(err);
+    }
+}
 export {
     changeProfilePhoto,
     editUserSettings,
     searchUsers,
-    getNotifications
+    getNotifications,
+    seeNotification
 }

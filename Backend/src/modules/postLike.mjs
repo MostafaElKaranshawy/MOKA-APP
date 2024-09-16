@@ -17,7 +17,7 @@ export default class PostLike {
         }
         post.increment('likes');
         await post.reload();
-        await Notification.addNotification(userID, post.userID, 'like', 'liked your post', postID);
+        if(userID != post.userID)await Notification.addNotification(userID, post.userID, 'like', 'liked your post', postID);
         return result;
     }
     static async removePostLike(userID, postID){
@@ -40,8 +40,6 @@ export default class PostLike {
                     postID: postID
                 }
             });
-            //console.log("RESULT");
-            //console.log(result)
             if(!result){
                 throw new Error("Like not Exist");
             }
@@ -56,7 +54,6 @@ export default class PostLike {
             return result;
         }
         catch(err){
-            //console.log(err)
             throw new Error(err.message);
         }
     }

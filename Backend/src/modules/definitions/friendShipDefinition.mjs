@@ -24,5 +24,5 @@ FriendShipDefinition.associate = async (models) => {
     friendShip.belongsTo(user, {as: 'Friend1', foreignKey: 'user1ID'});
     friendShip.belongsTo(user, {as: 'Friend2', foreignKey: 'user2ID'});
     friendShip.belongsTo(user, {as: 'Sender', foreignKey: 'senderID'});
-    friendShip.hasMany(notification, {foreignKey: 'friendRequestID', as: 'FriendRequest', onUpdate: 'CASCADE', onDelete: 'CASCADE'});
+    friendShip.hasMany(notification, {as: 'friendRequest',foreignKey: 'friendRequestID', as: 'FriendRequest', onUpdate: 'CASCADE', onDelete: 'CASCADE'});
 }

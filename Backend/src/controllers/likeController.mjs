@@ -9,7 +9,6 @@ class likeController {
         }
         try{
             await likeService.addPostLike(userID, postID);
-            // eventEmitter.emit('broadcast', `${req.user.name} liked a Post`);
             return res.status(200).send("like added successfully");
         }
         catch(err){
@@ -24,7 +23,6 @@ class likeController {
         }
         try{
             await likeService.addCommentLike(userID, commentID);
-            // eventEmitter.emit('broadcast', `${req.user.name} liked a Comment`);
             return res.status(200).send("like added successfully");
         }
         catch(err){
@@ -40,7 +38,6 @@ class likeController {
 
         try{
             await likeService.removePostLike(userID, postID);
-            // eventEmitter.emit('broadcast', `${req.user.name} unliked a Post`);
             return res.status(200).send("like removed successfully");
         }
         catch(err){
@@ -55,7 +52,7 @@ class likeController {
         }
         try{
             await likeService.removeCommentLike(userID, commentID);
-            // eventEmitter.emit('broadcast', `${req.user.name} unliked a Comment`);
+
             return res.status(200).send("like removed successfully");
         }
         catch(err){

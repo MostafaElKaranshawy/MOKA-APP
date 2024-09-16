@@ -4,16 +4,16 @@ import FriendShipDefinition from "./definitions/friendShipDefinition.mjs";
 import UserDefinition from "./definitions/userDefinition.mjs";
 import {Op} from 'sequelize';
 export default class Notification {
-    static async addFriendRequestNotification(fromID, toID, content ,friendRequestID){
-        const result = await notificationDefinition.create({
+    static async addFriendRequestNotification(fromID, toID, content ,friendRequest){
+        const notification = await notificationDefinition.create({
             fromID: fromID,
             toID: toID,
             type: 'friendRequest',
             content: content,
             seen: false,
-            friendRequestID: friendRequestID
+            friendRequestID: friendRequest.friendShipID
         });
-        if(!result){
+        if(!notification){
             throw new Error("Notification not added");
         }
         eventEmitter.emit('broadcast', content, toID);
@@ -30,7 +30,8 @@ export default class Notification {
         if(!result){
             throw new Error("Notification not added");
         }
-        eventEmitter.emit('broadcast', content, userID);
+        console.log("broadcasting");
+        eventEmitter.emit('broadcast', content, toID);
     }
     static async addFriendsNotification(userID, notificationType, content, postID){
         try {
@@ -83,7 +84,7 @@ export default class Notification {
     static async seeNotification(notificationID){
         const notification = await notificationDefinition.findOne({
             where: {
-                notificationID: notificationID
+                id: notificationID
             }
         });
         if(!notification){
