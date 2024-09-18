@@ -2,12 +2,6 @@ import express from 'express';
 import cors from 'cors';
 import { orm } from './config/orm.mjs';
 
-
-import path, {dirname} from 'path';
-import { fileURLToPath } from 'url';
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
 const app  = express();
 app.use(express.json());
 app.use(cors());
@@ -19,28 +13,10 @@ import commentRouter from './routers/commentRouter.mjs';
 import likeRouter from './routers/likeRouter.mjs';
 import friendShipRouter from './routers/friendShipRouter.mjs';
 import userRouter from './routers/userRouter.mjs';
-
-app.get('/uploads/photos/:filename', (req, res) => {    
-    const filePath = path.join(__dirname, '../uploads/photos', req.params.filename);
-    // //console.log(filePath);
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            res.status(404).send('File not found');
-        }
-    });
-})
-
-app.get('/uploads/videos/:filename', (req, res) => {    
-    const filePath = path.join(__dirname, '../uploads/videos', req.params.filename);
-    //console.log(filePath);
-    res.sendFile(filePath, (err) => {
-        if (err) {
-            res.status(404).send('File not found');
-        }
-    });
-})
+import mediaRouter from './routers/mediaRouter.mjs';
 
 app.use(authRouter);
+app.use(mediaRouter);
 app.use(CheckUser);
 app.use(postRouter);
 app.use(commentRouter);

@@ -4,8 +4,9 @@ import "./header.css";
 import { signOut } from "../../services/authRequests";
 import {searchUsers, getNotifications, seeNotification} from '../../services/userRequests'
 import { getWebSocket } from "../../webSocket";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ConfirmationBox from "../confirmation/confirmationBox";
 
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
@@ -15,6 +16,8 @@ export default function Header() {
     const authWindow = (window.location.href == "http://localhost:5173/" ? true : false);
     const [notifications, setNotifications] = useState([]); 
     const [showNotifications, setShowNotifications] = useState(false);
+    const [showConfirmation, setShowConfirmation] = useState(false);
+    const [searchQuery, setSearchQuery] = useState("");
     useEffect(() => {
         if(authWindow)return
         const ws = getWebSocket(JSON.parse(localStorage.getItem("user")).userID);
@@ -48,6 +51,9 @@ export default function Header() {
             document.querySelector(".drop-down-icon").style.transform = "rotate(0deg)";
         }
     }, [showProfileMenu])
+    useEffect(() => {
+        handleSearch();
+    },[searchQuery])
     function toggleSearch() {
         if(search) {
             document.querySelector(".search-icon").classList.remove("active-search");
@@ -60,7 +66,6 @@ export default function Header() {
     }
     let [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [profilePhotoUrl, setProfilePhotoUrl] = useState("profile-photo-holder.jpg");
-    const [query, setQuery] = useState("");
     const [searchResult, setSearchResult] = useState([])
     const handleStorageChange = () => {
         setUser(JSON.parse(localStorage.getItem("user")));
@@ -97,7 +102,6 @@ export default function Header() {
         }
     }
     const handleSearch = async () => {
-        if (query.trim() === "") return;
         await handleSearchUsers();
     };
     async function handleLogOut() {
@@ -113,8 +117,12 @@ export default function Header() {
         }
     }
     async function handleSearchUsers() {
+        if(searchQuery.trim() === "") {
+            setSearchResult([]);
+            return;
+        }
         try {
-            const data = await searchUsers(query, token);
+            const data = await searchUsers(searchQuery, token);
             if(data.length == 0) {
                 setSearchResult([{name : "No Results", userID: 0}]);
                 return;
@@ -129,12 +137,12 @@ export default function Header() {
         console.log(token)
         if(notification.type === "friendRequest") {
             const url = `/${notification.from.userName}/profile`;
-            window.open(url, '_blank');
+            window.open(url, '_self');
             await handleFriendRequesNotification(notification.notificationID);
         }
         else {
             const url = `/post/${notification.postID}`;
-            window.open(url, '_blank');
+            window.open(url, '_self');
             await handleSeeNotification(notification.notificationID);
         }
     }
@@ -154,6 +162,9 @@ export default function Header() {
         } catch (error) {
             console.error(error)
         }
+    }
+    const handleCancelConfirmation = ()=>{
+        setShowConfirmation(false);
     }
     function timeAgo(date) {
         date = new Date(date)
@@ -177,7 +188,7 @@ export default function Header() {
     }       
     return (
         <header className="header">
-            <ToastContainer className="toast-container"/>
+            {showConfirmation && <ConfirmationBox content={`Are You Sure To Log Out?`} cancel={handleCancelConfirmation} confirm={handleLogOut} />}
             <div className="logo-search-container">
                 <div className="logo">
                     <i className="fa-solid fa-m"></i>
@@ -192,23 +203,24 @@ export default function Header() {
                         {
                             search && 
                             <input
-                                type="search"
-                                value={query}
-                                onChange={(e) => {
-                                    setQuery(e.target.value)
-                                    setSearchResult([]);
-                                }}
-                                placeholder="Find friends"
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        handleSearch(); // Search on Enter key press
-                                    }
-                                }}
+                            type="search"
+                            value={searchQuery}
+                            onInput={(e) => {
+                                setSearchQuery(e.target.value);
+                            }}
+                            placeholder="Find friends"
                             />
+                        }
+                        {
+                            searchQuery && <i className="fa-solid fa-times clear-search-icon" onClick={()=>{
+                                setSearchQuery("");
+                                setSearchResult([]);
+                            }}></i>
                         }
                         <div className="search-result">
                             {searchResult && searchResult.map((user) => (
                                 <div className="search-item" key={user.userID} onClick={()=>{
+                                    if(user.userID === 0)return;
                                     const url = `/${user.userName}/profile`;
                                     window.open(url, '_blank');
                                 }}>
@@ -240,7 +252,7 @@ export default function Header() {
                             </div>
                         </ul>
                         {showNotifications && (<div className="notifications">
-                            {notifications.length > 0? notifications.map((notification) => (
+                            {notifications.length > 0 && notifications.map((notification) => (
                                 <div className={notification.seen?`notification`: `notification not-seen`} key={notification.notificationID} onClick={()=>{handleNotificationClick(notification)}}>
                                     <img src={`${import.meta.env.VITE_PHOTO_URL}/${notification.from.profilePhotoUrl}`} onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}/>
                                     <div className="notification-data">
@@ -252,10 +264,11 @@ export default function Header() {
                                         </p>
                                     </div>
                                 </div>
-                            )) : <div className="notifications">
+                            ))}
+                        </div>)}
+                        {showNotifications && notifications.length == 0 && <div className="no-notifications">
                                 <p>No Notifications</p>
                                 </div>}
-                        </div>)}
                         <div className="user-profile-item"  onClick={toggleShowProfileMenu}>
                             <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoUrl}`} onError={()=>{setProfilePhotoUrl("profile-photo-holder.jpg");}}/>
                             <p>{user.name}</p>
@@ -270,7 +283,7 @@ export default function Header() {
                                         <i className="fa-solid fa-gear"></i>
                                         <p>Settings</p>
                                     </NavLink>
-                                    <div className="profile-menu-item" onClick={handleLogOut}>
+                                    <div className="profile-menu-item" onClick={()=>setShowConfirmation(true)}>
                                         <i className="fa-solid fa-sign-out"></i>
                                         <p>Log Out</p>
                                     </div> 

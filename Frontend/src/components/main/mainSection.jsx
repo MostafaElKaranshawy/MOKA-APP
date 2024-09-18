@@ -14,15 +14,19 @@ export default function MainSection(probs) {
     const [lastPage, setLastPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
     const limit = 5;
+    const timeOutRef = useRef(null);
     useEffect(() => {
         const scrollTracker = probs.mainRef.current;
         if (!scrollTracker) return; // Ensure scrollTracker is defined
     
-        const handleScroll = () => { 
-            if (scrollTracker.scrollTop + scrollTracker.clientHeight >= scrollTracker.scrollHeight - 250 && hasMore) {
-                setPage(prevPage => prevPage + 1);
-                setLoading(true);
-            }
+        const handleScroll = () => {
+            if(timeOutRef.current)clearTimeout(timeOutRef.current);
+            timeOutRef.current = setTimeout(() => {
+                if (scrollTracker.scrollTop + scrollTracker.clientHeight >= scrollTracker.scrollHeight - 250 && hasMore) {
+                    setPage(prevPage => prevPage + 1);
+                    setLoading(true);
+                }
+            }, 100);
         };
     
         scrollTracker.addEventListener('scroll', handleScroll);
@@ -120,6 +124,7 @@ export default function MainSection(probs) {
                             deletePost={handleDeletePost}
                             userToken={userToken}
                         />
+                        
                     )) : null
                 )}
                 {/* <button className="more-button"onClick={() => {

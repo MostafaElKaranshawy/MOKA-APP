@@ -3,7 +3,7 @@ import './settings.css';
 import { editUserSettings } from "../../services/userRequests";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
+import Header from "../../components/header/header";
 export default function Settings(){
     if(!document.cookie.split("authToken=")[1]){
         console.log("No token found");
@@ -154,7 +154,8 @@ export default function Settings(){
     }
     return (
         <div className="settings view">
-            <div className="settings-body">
+            <Header/>
+            <div className="settings-body body">
                 <p className="settings-header">Account Settings</p>
                 <div className="user-info">
                     <form className="user-form" onSubmit={confirmSettings}>

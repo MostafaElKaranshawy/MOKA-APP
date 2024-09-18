@@ -1,0 +1,67 @@
+.container{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    backdrop-filter: blur(2px);
+}
+.confirmation-box{
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+    background-color: #fffefe;
+    color: white;
+    box-shadow: 0 0 20px 4px #cfcfcf82;
+}
+.confirmation-box .content{
+    margin: 0;
+    width: calc(100% - 40px);
+    color: black;
+    padding: 10px;
+    min-height: 50px;
+    border-bottom: 0.5px solid rgb(184, 184, 184);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+}
+.confirmation-box .footer {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content:center;
+    gap: 20px;
+    padding: 10px 0;
+}
+.confirmation-box .footer div{
+    padding: 5px 10px;
+    font-size: 12px;
+    cursor: pointer;
+    border-radius: 10px;
+}
+.confirmation-box .footer .cancel{
+    background-color:rgb(255, 70, 70);
+    color: white;
+    transition: all 0.3s;
+}
+
+.confirmation-box .footer .cancel:hover{
+    background-color: red;
+}
+.confirmation-box .footer .confirm{
+    background-color:rgb(70, 104, 255);
+    color: white;
+    transition: all 0.3s;
+}
+
+.confirmation-box .footer .confirm:hover{
+    background-color: rgb(31, 72, 254);
+}

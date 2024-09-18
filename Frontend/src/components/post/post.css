@@ -190,6 +190,12 @@
 .post-photos:hover .photo-count{
     bottom: 0;
 }
+.post-photos:hover .video-custom::-webkit-media-controls-panel {
+    position: absolute;
+    width: 100%;
+    bottom: 30px;
+    /* background-color: rgba(0, 0, 0, 0.5); */
+}
 .post-photos .nav-arrow{
     position: absolute;
     font-size: 20px;

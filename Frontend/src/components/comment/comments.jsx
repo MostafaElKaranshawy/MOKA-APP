@@ -89,6 +89,14 @@ export default function Comments(probs) {
                         onChange={handleChange}
                         placeholder="Write a comment..."
                         className="compose-comment-content"
+                        onInput={(e)=>{
+                            if(e.target.value == ''){
+                                e.target.style.height = '30px'
+                                return
+                            }
+                            e.target.style.height = 'auto';
+                            e.target.style.height = `${e.target.scrollHeight}px`;
+                        }}
                     />
                     <button onClick={addComment}>Post</button>
                 </div>

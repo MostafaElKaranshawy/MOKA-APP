@@ -76,7 +76,6 @@ async function sendFriendRequest(userID, userToken, setError) {
                 "authorization": `Bearer ${userToken}`
             },
         });
-        alert("Friend Request Sent");
     } catch (err) {
         // setError(err.message);
         console.error(err);

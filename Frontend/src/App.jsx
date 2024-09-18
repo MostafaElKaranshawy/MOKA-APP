@@ -8,13 +8,13 @@ import Profile from "./views/profileView/Profile";
 import Header from "./components/header/header";
 import Settings from './views/settingsView/settings';
 import PostView from './views/postView/postView';
-
+import { ToastContainer } from 'react-toastify';
 function App(){
   
   return (
     <Router id="app">
     <div>
-      <Header /> {/* Header will appear at the top of all views */}
+      {/* <Header /> // Header will appear at the top of all views */}
       <main>
         <Routes>
           <Route path="/" element={<Auth />} />
@@ -25,6 +25,7 @@ function App(){
         </Routes>
       </main>
     </div>
+    <ToastContainer className="toast-container"/>
   </Router>
   )
 }

@@ -11,8 +11,9 @@ import {
     getComments,
     createComment
 } from '../../services/commentRequests'
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ConfirmationBox from "../confirmation/confirmationBox";
 
 export default function Post(probs){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -40,7 +41,6 @@ export default function Post(probs){
             handleGetComments();
         }
     }, [showComments])
-
     async function handleGetComments(){
         const commentsData = await getComments(post.postID, probs.userToken);
         setComments(commentsData);
@@ -134,11 +134,9 @@ export default function Post(probs){
         console.log(likeUsers);
     }
     function timeAgo(date) {
-        // console.log(date);
         date = new Date(date)
         const now = new Date();
         const secondsPast = Math.floor((now - date) / 1000);
-        // console.log(date + " " + now);
         if (secondsPast < 60) {
             return `${secondsPast} seconds ago`;
         }
@@ -182,7 +180,7 @@ export default function Post(probs){
     }
     return (
         <div className="post">
-            
+            {/* <ConfirmationBox/> */}
             <div className="post-details">
                 <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
                 <div className="post-body">
@@ -216,7 +214,7 @@ export default function Post(probs){
                                     {editPhotos[curPhoto].type.includes('image') ? (
                                         <img src={`${import.meta.env.VITE_PHOTO_URL}/${editPhotos[curPhoto].url}`} />
                                     ) : (
-                                        <video controls>
+                                        <video controls className="" onMouseEnter={(e) => {editPhotos.length > 1?e.target.classList.add("video-custom"):e.target.classList.remove("video-custom")}}>
                                             <source src={`${import.meta.env.VITE_VIDEO_URL}/${editPhotos[curPhoto].url}`} />
                                         </video>
                                     )}

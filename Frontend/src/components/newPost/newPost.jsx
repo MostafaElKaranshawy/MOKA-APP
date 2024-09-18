@@ -4,7 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import "./newPost.css";
 import useUploadFiles from "./uploadFiles"; // Combining photo and video hooks
 import { addPost } from "../../services/postRequests";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default function NewPost(probs) {
@@ -54,6 +54,10 @@ export default function NewPost(probs) {
     const textareaRef = useRef(null);
     useEffect(() => {
         const textarea = textareaRef.current;
+        if(content == ''){
+            textarea.style.height = '30px';
+            return;
+        }
         textarea.style.height = 'auto';
         textarea.style.height = `${textarea.scrollHeight}px`;
     }, [content]);
@@ -77,7 +81,9 @@ export default function NewPost(probs) {
                     ></textarea>
                 </div>
                 <div className="post-attachments">
-                    <div className="add-image post-attachment">
+                    <div className="add-image post-attachment" onClick={()=>{
+                        document.querySelector('.file-input').click();
+                    }}>
                         <i className="fa-solid fa-image upload-icon" />
                         <p>Photo/Video</p>
                         <input 
@@ -92,7 +98,7 @@ export default function NewPost(probs) {
                 </div>
                 <div className="previews">
                     {filePreviews.map(({ id, src, type }, index) => (
-                        <div key={id} className={`${type}-container`}>
+                        <div key={id} className={`media-container`}>
                             {type === 'photo' ? (
                                 <img
                                     src={src}
@@ -106,9 +112,8 @@ export default function NewPost(probs) {
                                     style={{ width: "300px", height: "200px", objectFit: "cover", marginTop: "10px", marginRight: "10px" }}
                                 />
                             )}
-                            <button onClick={() => removeFile(id)} style={{ display: 'block', marginTop: '5px' }}>
-                                Remove
-                            </button>
+                            <i onClick={() => removeFile(id)} className="fa-solid fa-circle-xmark">
+                            </i>
                         </div>
                     ))}
                 </div>  

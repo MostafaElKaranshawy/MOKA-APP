@@ -4,7 +4,7 @@ import path from 'path';
 // Configure multer storage
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
-        const photoTypes = /jpeg|jpg|png/;
+        const photoTypes = /jpeg|jpg|png|avif/;
         const videoTypes = /mp4|mov|avi|mkv/;
         
         // Choose the destination folder based on the file type

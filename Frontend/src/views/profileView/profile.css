@@ -2,16 +2,23 @@
     background-color: #f0f2f5;
     font-family: Arial, sans-serif;
     width: 100%;
-    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    overflow-y: auto;
 }
 
 .profile-section {
     width: 100%;
+    max-width: 700px;
     background: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
 }
-
+.profile-view .posts{
+    max-width: 700px;
+}
 .profile-header {
     display: flex;
     flex-direction: column;
@@ -157,7 +164,31 @@
     gap: 10px;
     margin-top: 15px;
 }
-
+.friends-option{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #eaeaea;
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 20px #00000050;
+    cursor: pointer;
+    transition: 0.3s;
+}
+.friends-option:hover{
+    background-color: #e2e1e1;
+    box-shadow: 0px 0px 20px #00000091;
+}
+.friends-option p{
+    font-weight: bold;
+    font-size: 15px;
+    margin: 0;
+}
+.friends-option i{
+    color: black;
+    font-size: 15px;
+}
 .add-friend, .remove-friend, .accept-request, .remove-request, .cancel-request {
     padding: 8px 16px;
     background-color: #1877f2;
@@ -166,6 +197,7 @@
     cursor: pointer;
     font-weight: 500;
     transition: 0.2s;
+    font-size: 15px;
 }
 .accept-request {
     background-color: #4cd964;

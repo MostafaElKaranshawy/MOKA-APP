@@ -15,13 +15,15 @@ import {
     removeFriend,
     getUserPosts
 } from "../../services/profileRequests";
-
+import { deletePost } from "../../services/postRequests";
 import { 
     changeProfilePhoto
 } from '../../services/userRequests';
 import { getWebSocket } from "../../webSocket";
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import ConfirmationBox from "../../components/confirmation/confirmationBox";
+import Header from "../../components/header/header";
 
 export default function Profile() {
     const cookies = document.cookie;
@@ -51,9 +53,11 @@ export default function Profile() {
     const [friendStatus, setFriendStatus] = useState("");
     const [friends, setFriends] = useState([]);
     const [bio, setBio] = useState(' ');
+    const profileBody = useRef(null);
     const toggleShowFriends = () => {
         setShowAllFriends(!showAllFriends);
     };
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
     useEffect(() => {
         if (error) toast.error(error, {
@@ -100,7 +104,23 @@ export default function Profile() {
         if(!loading)return;
         handlePaginations();
     }, [page]);
-
+    useEffect(() => {
+        const scrollTracker = profileBody.current;
+        if (!scrollTracker) return; // Ensure scrollTracker is defined
+    
+        const handleScroll = () => { 
+            if (scrollTracker.scrollTop + scrollTracker.clientHeight >= scrollTracker.scrollHeight - 250 && hasMore) {
+                setPage(prevPage => prevPage + 1);
+                setLoading(true);
+            }
+        };
+    
+        scrollTracker.addEventListener('scroll', handleScroll);
+    
+        return () => {
+            scrollTracker.removeEventListener('scroll', handleScroll); // Cleanup listener on unmount
+        };
+    }, [hasMore, profileBody]);
     // Function to handle pagination and data fetching
     async function handlePaginations() {
         try {
@@ -187,6 +207,7 @@ export default function Profile() {
         await sendFriendRequest(user.userID, userToken, setError);
         const friendStatusData = await getFriendStatus(user.userID, userToken, setError);
         setFriendStatus(friendStatusData);
+        toast.success(`Friend Request Sent`);
     }
 
     async function handleRemoveFriendRequest(userID) {
@@ -217,6 +238,7 @@ export default function Profile() {
     }
 
     async function handleRemoveFriend() {
+        setShowConfirmation(false);
         await removeFriend(user.userID, userToken, setError);
         const friendsData = await getUserFriends(userName, userToken, setError);
         setFriends(friendsData);
@@ -231,6 +253,7 @@ export default function Profile() {
     const handleGetPosts = async () => {
         const userPosts = await getUserPosts(user.userID, userToken, setError, page, limit);
         setPosts(userPosts);
+        console.log(userPosts);
     }
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [photoPreview, setPhotoPreview] = useState(null);
@@ -263,158 +286,178 @@ export default function Profile() {
         setProfilePhoto(null);
         setPhotoPreview(null);
     }
+    const cancelConfirmation = ()=>{
+        setShowConfirmation(false);
+    }
+    async function handleDeletePost(postID){
+        try{ 
+            await deletePost(postID, userToken);
+            await handleGetPosts();
+        }
+        catch(err){
+            console.log(err);
+        }
+    }
     return (
         <div className="profile-view view ">
-            
-            <div className="profile-section">
-                <div className="profile-header">
-                    <div className="profile-photo">
-                        <img
-                            src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`}
-                            className="profile-photo-preview"
-                            onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}
-                        />
-                        {photoPreview && (
-                            <img 
-                                className="change-profile-photo-preview"
-                                src={`${photoPreview.src}`} 
-                                alt="preview"
-                                onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}
+            <Header/>
+            <div className="body" ref={profileBody}>
+                {showConfirmation && <ConfirmationBox content={`Are you sure to remove ${user.name} from your friends?`} cancel={cancelConfirmation} confirm={handleRemoveFriend}/>}
+                <div className="profile-section">
+                    <div className="profile-header">
+                        <div className="profile-photo">
+                            <img
+                                src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`}
+                                className="profile-photo-preview"
+                                onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}
                             />
-                        )}
-                        {
-                            mainUser && (
-                                <div className="change-profile-photo" onClick={()=>{
-                                    document.querySelector(".change-profile-photo input").click();
-                                }}>
-                                    <i className="fa-solid fa-image upload-icon"  />
-                                    <input type="file" accept="image/*" onChange={handleFileChange} name="profilePhoto"/>
-                                </div>
-                            )
-                        }
-                    </div>
-                    {profilePhoto && (
-                        <div className="change-profile-photo-options">
-                            <div className="save" onClick={handleUpload}>Save</div>
-                            <div className="cancel" onClick={cancelUpload}>Cancel</div>
+                            {photoPreview && (
+                                <img 
+                                    className="change-profile-photo-preview"
+                                    src={`${photoPreview.src}`} 
+                                    alt="preview"
+                                    onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}}
+                                />
+                            )}
+                            {
+                                mainUser && (
+                                    <div className="change-profile-photo" onClick={()=>{
+                                        document.querySelector(".change-profile-photo input").click();
+                                    }}>
+                                        <i className="fa-solid fa-image upload-icon"  />
+                                        <input type="file" accept="image/*" onChange={handleFileChange} name="profilePhoto"/>
+                                    </div>
+                                )
+                            }
                         </div>
-                    )}
-                    <p className="profile-name">
-                        {user.name}
-                    </p>
-                    <div className="profile-bio">
-                        <p className="text-container" dangerouslySetInnerHTML={{ __html: user.bio?user.bio.replace(/\n/g, '<br />'): '' }} />
-                        {mainUser && <i className="fa fa-pencil bio-edit-icon" onClick={toggleshowEditBio}></i>}
-                        {showEditBio &&
-                            <div className="edit-bio-text">
-                                <textarea name="bio" className="bio-box" value={bio} onChange={editBio}></textarea>
-                                <div className="edit-bio-options">
-                                    <div className="cancel edit-option" onClick={() => {
-                                        setshowEditBio(false);
-                                        setBio(user.bio || '');
-                                    }}>Cancel</div>
-                                    <div className="save edit-option" onClick={saveBio}>Save</div>
-                                </div>
+                        {profilePhoto && (
+                            <div className="change-profile-photo-options">
+                                <div className="save" onClick={handleUpload}>Save</div>
+                                <div className="cancel" onClick={cancelUpload}>Cancel</div>
                             </div>
-                        }
-                    </div>
-                    <div className="profileOptions">
-                        {!mainUser && (
-                            <>
-                                {friendStatus == "Not Friends" && (
-                                    <div className="add-friend" onClick={handleAddFriend}>
-                                        Add Friend
-                                    </div>
-                                )}
-
-                                {friendStatus == "Friends" && (
-                                    <div className="remove-friend" onClick={handleRemoveFriend}>
-                                        Remove Friend
-                                    </div>
-                                )}
-
-                                {friendStatus == "Friend Request Received" && (
-                                    <>
-                                        <div className="accept-request" onClick={()=>{handleAcceptFriendRequest(user.userID)}}>
-                                            Accept Request
-                                        </div>
-                                        <div className="remove-request" onClick={()=>{handleRemoveFriendRequest(user.userID)}}>
-                                            Remove Request
-                                        </div>
-                                    </>
-                                )}
-
-                                {friendStatus == "Friend Request Sent" && (
-                                    <div className="cancel-request" onClick={()=>{handleRemoveFriendRequest(user.userID)}}>
-                                        Cancel Request
-                                    </div>
-                                )}
-                            </>
                         )}
-                    </div>
-                </div>
-                <div className="profile-friends">
-                    <p className="profile-friends-title">Friends</p>
-                    <div className="profile-friends-list">
-                        {filteredFriends.map((friend, index) => (
-                            <div className="profile-friend" key={index} onClick={goToUserProfile(friend.userName)}>
-                                <img src={`${import.meta.env.VITE_PHOTO_URL}/${friend.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
-                                <p className="profile-friend-name">{friend.name}</p>
-                            </div>
-                        ))}
-                    </div>
-                    <p className="show-all-friends" onClick={toggleShowFriends}>
-                        Show {showAllFriends ? "fewer" : "all"} friends
-                    </p>
-                </div>
-                {
-                    mainUser && 
-                    <div className="profile-friend-requests">
-                        <p className="profile-friend-requests-title">Friend Requests</p>
-                        <div className="profile-friend-requests-list">
-                            {mainUserFriendRequests.map((friendRequest, index) => (
-                                <div className="profile-friend-request" key={index}>
-                                    <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
-                                        <img src={`${import.meta.env.VITE_PHOTO_URL}/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
-                                        <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
+                        <p className="profile-name">
+                            {user.name}
+                        </p>
+                        <div className="profile-bio">
+                            <p className="text-container" dangerouslySetInnerHTML={{ __html: user.bio?user.bio.replace(/\n/g, '<br />'): '' }} />
+                            {mainUser && <i className="fa fa-pencil bio-edit-icon" onClick={toggleshowEditBio}></i>}
+                            {showEditBio &&
+                                <div className="edit-bio-text">
+                                    <textarea name="bio" className="bio-box" value={bio} onChange={editBio}></textarea>
+                                    <div className="edit-bio-options">
+                                        <div className="cancel edit-option" onClick={() => {
+                                            setshowEditBio(false);
+                                            setBio(user.bio || '');
+                                        }}>Cancel</div>
+                                        <div className="save edit-option" onClick={saveBio}>Save</div>
                                     </div>
-                                    <div className="profile-friend-request-options">
-                                        <div className="accept" onClick={() => handleAcceptFriendRequest(friendRequest.userID)}>
-                                            Accept
+                                </div>
+                            }
+                        </div>
+                        <div className="profileOptions">
+                            {!mainUser && (
+                                <>
+                                    {friendStatus == "Not Friends" && (
+                                        <div className="add-friend" onClick={handleAddFriend}>
+                                            Add Friend
                                         </div>
-                                        <div className="reject" onClick={() => handleRemoveFriendRequest(friendRequest.userID)}>
-                                            Reject
+                                    )}
+
+                                    {friendStatus == "Friends" && (
+                                        <div className="friends-option" onClick={()=>{setShowConfirmation(true)}}>
+                                            <p>Friends</p>
+                                            <i className="fa fa-solid fa-user"></i>
                                         </div>
-                                    </div>
+                                        /* <div className="remove-friend" onClick={handleRemoveFriend}>
+                                            Remove Friend
+                                        </div> */
+                                    )}
+
+                                    {friendStatus == "Friend Request Received" && (
+                                        <>
+                                            <div className="accept-request" onClick={()=>{handleAcceptFriendRequest(user.userID)}}>
+                                                Accept Request
+                                            </div>
+                                            <div className="remove-request" onClick={()=>{handleRemoveFriendRequest(user.userID)}}>
+                                                Remove Request
+                                            </div>
+                                        </>
+                                    )}
+
+                                    {friendStatus == "Friend Request Sent" && (
+                                        <div className="cancel-request" onClick={()=>{handleRemoveFriendRequest(user.userID)}}>
+                                            Cancel Request
+                                        </div>
+                                    )}
+                                </>
+                            )}
+                        </div>
+                    </div>
+                    <div className="profile-friends">
+                        <p className="profile-friends-title">Friends</p>
+                        <div className="profile-friends-list">
+                            {filteredFriends.map((friend, index) => (
+                                <div className="profile-friend" key={index} onClick={goToUserProfile(friend.userName)}>
+                                    <img src={`${import.meta.env.VITE_PHOTO_URL}/${friend.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
+                                    <p className="profile-friend-name">{friend.name}</p>
                                 </div>
                             ))}
                         </div>
+                        <p className="show-all-friends" onClick={toggleShowFriends}>
+                            Show {showAllFriends ? "fewer" : "all"} friends
+                        </p>
                     </div>
-                }
-            </div>
-            <div className="posts">
-                <p className="profile-posts-header">Posts</p>
-                {
-                    posts.length ? posts.map((post) => (
-                        <Post 
-                        key={post.postID} 
-                        post={post} 
-                        getPosts={handleGetPosts}
-                        userToken={userToken}
-                        />
-                    )) : null
-                }
-            </div>
-            <button className="more-button"onClick={() => {
-                    setPage((prev) => prev + 1);
-                    setLoading(true);
+                    {
+                        mainUser && 
+                        <div className="profile-friend-requests">
+                            <p className="profile-friend-requests-title">Friend Requests</p>
+                            <div className="profile-friend-requests-list">
+                                {mainUserFriendRequests.map((friendRequest, index) => (
+                                    <div className="profile-friend-request" key={index}>
+                                        <div className="friend-request-user-info" onClick={goToUserProfile(friendRequest.userName)}>
+                                            <img src={`${import.meta.env.VITE_PHOTO_URL}/${friendRequest.profilePhotoUrl}`} alt="friend" onError={(e)=>{e.target.src = "profile-photo-holder.jpg";}} />
+                                            <p className="profile-friend-request-name" onClick={()=>(goToUserProfile(friendRequest.userName))}>{friendRequest.name}</p>
+                                        </div>
+                                        <div className="profile-friend-request-options">
+                                            <div className="accept" onClick={() => handleAcceptFriendRequest(friendRequest.userID)}>
+                                                Accept
+                                            </div>
+                                            <div className="reject" onClick={() => handleRemoveFriendRequest(friendRequest.userID)}>
+                                                Reject
+                                            </div>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                    }
+                </div>
+                <div className="posts">
+                    <p className="profile-posts-header">Posts</p>
+                    {
+                        posts.length ? posts.map((post) => (
+                            <Post 
+                            key={post.postID} 
+                            post={post} 
+                            getPosts={handleGetPosts}
+                            deletePost={handleDeletePost}
+                            userToken={userToken}
+                            />
+                        )) : null
+                    }
+                </div>
+                {/* <button className="more-button"onClick={() => {
+                        setPage((prev) => prev + 1);
+                        setLoading(true);
                 }}>
                     Load More
-                </button>
+                </button> */}
                 <div className="loading">
                     {loading && <Loading/>}
                     {!hasMore && !loading && <p>No More Posts</p>}
                 </div>
+            </div>
         </div>
     );
 }

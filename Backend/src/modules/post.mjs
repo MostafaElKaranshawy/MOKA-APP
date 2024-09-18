@@ -95,7 +95,8 @@ export default class Post {
         });
         let posts = await user.getPosts({
             offset: offset || 0,
-            limit: limit || 10
+            limit: limit || 10,
+            order: [['createdAt', 'DESC']],
         });
         const currentUser = await UserDefinition.findOne({
             where: {
