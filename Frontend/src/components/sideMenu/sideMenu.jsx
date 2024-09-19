@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import "./sideMenu.css";
 import { getUserFriends, getFriendRequests, removeFriendRequest, acceptFriendRequest } from "../../services/profileRequests";
+import {DarkMode} from '../../darkModeContext';
 export default function SideMenu(){
     const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
     const userToken = document.cookie.split("authToken=")[1];
@@ -13,6 +14,7 @@ export default function SideMenu(){
     const user = JSON.parse(localStorage.getItem('user'));
     const [friends, setFriends] = useState([]);
     const [friendRequests, setFriendRequests] = useState([]);
+    const {darkMode} = useContext(DarkMode);
     useEffect(() => {
         if (user && userToken) {
             handleUser();
@@ -59,7 +61,7 @@ export default function SideMenu(){
     return (
         <>{    
             sideMenu && (
-                <div className="side-menu">
+                <div className={`side-menu ${darkMode && "dark-mode"}`}>
                     <div className="profile">
                         <img 
                             src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} onClick={profileVisit}

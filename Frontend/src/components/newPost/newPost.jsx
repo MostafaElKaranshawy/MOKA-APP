@@ -1,11 +1,12 @@
 import React from "react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 
 import "./newPost.css";
 import useUploadFiles from "./uploadFiles"; // Combining photo and video hooks
 import { addPost } from "../../services/postRequests";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DarkMode } from "../../darkModeContext";
 
 export default function NewPost(probs) {
     const [content, setContent] = useState("");
@@ -23,7 +24,7 @@ export default function NewPost(probs) {
     }, []);
 
     const { uploadFiles, filePreviews, fileArray, removeFile, submitFiles } = useUploadFiles(); // Combining photos and videos
-
+    const { darkMode } = useContext(DarkMode);
     async function handleSubmit(event) {
         event.preventDefault();
         
@@ -63,7 +64,7 @@ export default function NewPost(probs) {
     }, [content]);
 
     return (
-        <div className="new-post">
+        <div className={`new-post ${darkMode && "dark-mode"}`}>
             
             <form onSubmit={handleSubmit} className="new-post-form">
                 <div className="new-post-content">

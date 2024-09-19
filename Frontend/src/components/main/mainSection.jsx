@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import Loading from "../loading/loading";
 import Post from "../post/post";
 import NewPost from "../newPost/newPost";
 import "./mainSection.css";
 import { getPosts, deletePost } from "../../services/postRequests";
-
+import { DarkMode } from "../../darkModeContext";
 export default function MainSection(probs) {
     const [user, setUser] = useState({});
     const [userToken, setUserToken] = useState(null);
@@ -13,6 +13,7 @@ export default function MainSection(probs) {
     const [loading, setLoading] = useState(true);
     const [lastPage, setLastPage] = useState(1);
     const [hasMore, setHasMore] = useState(true);
+    const {darkMode} = useContext(DarkMode);
     const limit = 5;
     const timeOutRef = useRef(null);
     useEffect(() => {
@@ -112,7 +113,7 @@ export default function MainSection(probs) {
         }
     }
     return (
-        <div className="main-section">
+        <div className={`main-section ${darkMode && 'dark-mode'}`}>
             <NewPost getPosts={handleGetPosts} userToken={userToken}/>
             <div className="posts">
                 {(
@@ -127,15 +128,9 @@ export default function MainSection(probs) {
                         
                     )) : null
                 )}
-                {/* <button className="more-button"onClick={() => {
-                    setPage((prev) => prev + 1);
-                    setLoading(true);
-                }}>
-                    Load More
-                </button> */}
                 <div className="loading">
                     {loading && <Loading/>}
-                    {!hasMore && !loading && <p>No More Posts</p>}
+                    {!hasMore && !loading && <p className="no-more-posts">No More Posts</p>}
                 </div>
             </div>
         </div>

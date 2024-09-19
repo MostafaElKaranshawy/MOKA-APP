@@ -11,7 +11,7 @@
 
 .profile-section {
     width: 100%;
-    max-width: 700px;
+    max-width: 720px;
     background: white;
     box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
     margin-bottom: 20px;
@@ -136,6 +136,7 @@
     resize: none;
     box-shadow: 0 0 6px 0px #a2a2a2;
     color: #333;
+    font-size: 15px;
 }
 
 .edit-bio-options {
@@ -351,4 +352,55 @@
         width: 90px;
         height: 90px;
     }
+}
+
+/* DARK MODE CSS */
+
+.body.dark-mode .profile-section {
+    background-color: #464646;
+    color: #fff;
+}
+.body.dark-mode .profile-header {
+    border-bottom: 1px solid #333;
+}
+.body.dark-mode .profile-photo {
+    border: 1px solid #333;
+}
+.body.dark-mode .profile-name {
+    color: #fff;
+}
+.body.dark-mode .profile-bio {
+    color: #ccc;
+}
+.body.dark-mode .bio-box {
+    background: #333;
+    color: #fff;
+}
+.body.dark-mode .friends-option{
+    background: #333;
+    color: #fff;
+}
+.body.dark-mode .profile-friends, .body.dark-mode .profile-friend-requests {
+    background-color: inherit;
+    color: #fff;
+}
+.body.dark-mode .profile-friends-title, .body.dark-mode .profile-friend-requests-title {
+    color: #fff;
+}
+.body.dark-mode .profile-friend, .body.dark-mode .profile-friend-request {
+    background-color: inherit;
+    color: #fff;
+}
+.body.dark-mode .profile-friend img, .body.dark-mode .profile-friend-request img {
+    border: 1px solid #333;
+}
+.body.dark-mode .profile-friend-name, .body.dark-mode .profile-friend-request-name {
+    color: #fff;
+}
+.body.dark-mode .show-all-friends {
+    color: #1877f2;
+}
+.body.dark-mode .posts{
+    background-color: #464646;
+    color: #fff;
 }

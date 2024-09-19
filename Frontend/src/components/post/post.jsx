@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from "react";
+import React, {useState, useEffect, useContext} from "react";
 import "./post.css";
 import CommentList from "../comment/comments";
 import {
@@ -13,7 +13,7 @@ import {
 } from '../../services/commentRequests'
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import ConfirmationBox from "../confirmation/confirmationBox";
+import { DarkMode } from "../../darkModeContext";
 
 export default function Post(probs){
     const user = JSON.parse(localStorage.getItem("user"));
@@ -30,6 +30,7 @@ export default function Post(probs){
     const [postPhotos, setPostPhotos] = useState(post.photos);
     const [editPhotos, setEditPhotos] = useState(post.photos);
     const [curPhoto, setCurPhoto] = useState(0);
+    const {darkMode} = useContext(DarkMode);
     useEffect(() => {
         if(probs.userToken && post){
             setProfilePhotoURL(post.profilePhotoUrl);
@@ -179,8 +180,7 @@ export default function Post(probs){
         }
     }
     return (
-        <div className="post">
-            {/* <ConfirmationBox/> */}
+        <div className={`post ${darkMode && 'dark-mode'}`}>
             <div className="post-details">
                 <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} className="post-profile-photo" onClick={goToUserProfile(post.userName)} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
                 <div className="post-body">

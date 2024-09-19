@@ -196,3 +196,57 @@
 .nav-menu-profile-friend-request-options div{
     width: 50%;
 }
+
+/* DARK MODE CSS */
+
+.side-menu.dark-mode{
+    background-color: #333;
+    color: white;
+}
+.side-menu.dark-mode .profile img{
+    border: 1px solid white;
+}
+.side-menu.dark-mode .profile h2{
+    color: white;
+}
+.side-menu.dark-mode .profile-username{
+    color: rgb(176 176 176);
+}
+.side-menu.dark-mode .profile-bio{
+    color: rgb(176 176 176);
+
+}
+.sidebar-sections.dark-mode{
+    border-top: 0.5px solid #a3a3a3;
+    border-bottom: 0.5px solid #a3a3a3;
+}
+.sidebar-section.dark-mode p:first-child{
+    color: rgb(117, 117, 117);
+}
+.sidebar-section.dark-mode p:last-child{
+    color: rgb(107, 107, 107);
+}
+.side-menu.dark-mode .profile-friend-request{
+    box-shadow: 0 0 5px 2px #b6b6b6;
+    border-radius: 20px;
+}
+.side-menu.dark-mode .profile-friend-request img{
+    width: 75px;
+    height: 75px;
+}
+.side-menu.dark-mode .nav-menu-profile-friend-request{
+    background-color: #222222;
+    color: white;
+}
+.side-menu.dark-mode .nav-menu-profile-friend-request img{
+    border: 1px solid white;
+}
+.side-menu.dark-mode .nav-menu-profile-friend-request-name-time{
+    color: white;
+}
+.side-menu.dark-mode .nav-menu-profile-friend-request-time{
+    color: grey;
+}
+.side-menu.dark-mode .nav-menu-profile-friend-request-name{
+    color: white;
+}

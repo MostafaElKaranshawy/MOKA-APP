@@ -39,7 +39,7 @@
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    background-color: white;
+    background-color: inherit;
     border-radius: 10px 10px 0 0;
     position: relative;
     margin-bottom: 20px;
@@ -48,7 +48,7 @@
     display: flex;
     width: calc(100% - 40px);
     align-items: center;
-    background-color: white;
+    background-color: inherit;
     position: relative;
     font-size: 15px;
 }
@@ -112,7 +112,7 @@
     top: 0px;
     right: 20px;
     cursor: pointer;
-    width: 150px;
+    /* width: 150px; */
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -149,7 +149,7 @@
     word-break: break-word !important;
     padding: 0;
     font-size: 15px;
-    background-color: white;
+    background-color: inherit;
     font-weight: 500;
 }
 .post-content p{
@@ -165,7 +165,7 @@
     width: 100%;
     position: relative;
     cursor: pointer;
-    /* height: 300px; */
+    height: 400px;
     align-items: center;
     justify-content: center;
 }
@@ -174,12 +174,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    max-height: 400px;
 }
 .post-photos .photo-count{
     position: absolute;
     bottom: -40px;
     width: 100%;
-    background-color: #333;
+    background-color: rgba(0, 0, 0, 0.9);
     color: white;
     transition: 0.5s;
     display: flex;
@@ -253,7 +254,7 @@
 .post-photo img,
 .post-photo video{
     width: 100%;
-    /* max-width: 400px; */
+    max-width: 600px;
     /* max-height: 400px; */
 }
 .edit-post{
@@ -403,7 +404,7 @@
     transform: translateY(1px);
     border-radius: 50%;
     padding: 5px;
-    background-color: #fff;
+    /* background-color: #fff; */
     position: absolute;
     right: 0;
 }
@@ -423,4 +424,35 @@
     .post .text-container{
         font-size: 12px;
     }
+}
+
+
+/* DARK MODE CSS */
+
+.post.dark-mode .post-details{
+    background-color: #333;
+    color: white;
+}
+.post.dark-mode .post-action{
+    background-color: #465b75;
+    color: white;
+}
+.post.dark-mode .post-action:hover{
+    background-color: #5e7f9d;
+}
+.post.dark-mode .post-action i{
+    color: white;
+}
+.post.dark-mode .post-options{
+    background-color: #515151;
+    color: white;
+    border: #465b75 1px solid;
+}
+.post.dark-mode .post-option{
+    background-color: inherit;
+    color: white;
+}
+.post.dark-mode .post-option:hover{
+    background-color: #333;
+    color: white;
 }

@@ -189,3 +189,26 @@
 .media-container i:hover{
     color: #ff1a1a;
 }
+
+/* DARK MODE CSS */
+
+.new-post.dark-mode{
+    background-color: #333;
+    color: white;
+}
+.new-post.dark-mode .new-post-form textarea{
+    background-color: #464545;
+    color: white;
+}
+.new-post-form .post-attachments .post-attachment{
+    background-color: #488ffa;
+}
+.new-post-form .post-attachments .post-attachment:hover{
+    background-color: #0056b3;
+}
+.new-post-form .new-post-button{
+    background-color: #488ffa;
+}
+.new-post-form .new-post-button:hover{
+    background-color: #0056b3;
+}

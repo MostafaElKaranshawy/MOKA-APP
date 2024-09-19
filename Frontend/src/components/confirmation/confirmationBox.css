@@ -65,3 +65,11 @@
 .confirmation-box .footer .confirm:hover{
     background-color: rgb(31, 72, 254);
 }
+.confirmation-box.dark-mode{
+    background-color: #333;
+    color: white;
+    box-shadow: 0 0 20px 4px #30303082;
+}
+.confirmation-box.dark-mode .content{
+    color: white;
+}

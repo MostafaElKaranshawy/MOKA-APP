@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import "./comment.css";
 import Comment from "./comment";
+import { DarkMode } from "../../darkModeContext";
 import {
     deleteComment,
     editComment,
@@ -14,6 +15,7 @@ export default function Comments(probs) {
     const [filteredCommments, setFilteredComments] = useState([]);
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
     const [profilePhotoURL, setProfilePhotoURL] = useState('profile-photo-holder.jpg');
+    const {darkMode} = useContext(DarkMode);
     const toggleDropdown = () => {
         setIsDropdownOpen(prev => !prev);
     };
@@ -79,7 +81,7 @@ export default function Comments(probs) {
         await probs.getComments();
     }
     return (
-        <div className="comment-list">
+        <div className={`comment-list ${darkMode && "dark-mode"}`}>
             <div className="compose-comment">
                 <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}} />
                 <div className="compose-body">

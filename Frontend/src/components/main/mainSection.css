@@ -47,3 +47,11 @@
     margin: 20px 0;
     background-color: #007bff;
 }
+.no-more-posts{
+    color: black;
+    font-size: 15px;
+}
+.dark-mode.main-section .no-more-posts{
+    color: white;
+    font-size: 15px;
+}

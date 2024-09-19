@@ -15,27 +15,27 @@ export default function SignIn(probs) {
         email: "",
         password: "",
     });
-    useEffect(() => {
-        if (!submitTried) return;
-        let emailInput = document.getElementById("email");
-        let passwordInput = document.getElementById("password");
-        emailInput.style.boxShadow = "0px 1px 7px 0px #7fa1c0";
-        passwordInput.style.boxShadow = "0px 1px 7px 0px #7fa1c0";
-        let errors = {};
-        if (!form.email) {
-            errors.email = "Email mustn't be empty";
-            emailInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
-        }
-        if (form.password.length < 8 || form.password.length > 20) {
-            errors.password = "Password must be between 8 and 20 characters long";
-            passwordInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
-        }
-        if (!form.email.includes("@") || !form.email.includes(".")) {
-            errors.email = "Email must be valid";
-            emailInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
-        }
-        setFormErrors(errors);
-    },[form])
+    // useEffect(() => {
+    //     if (!submitTried) return;
+    //     let emailInput = document.getElementById("email");
+    //     let passwordInput = document.getElementById("password");
+    //     emailInput.style.boxShadow = "0px 1px 7px 0px #7fa1c0";
+    //     passwordInput.style.boxShadow = "0px 1px 7px 0px #7fa1c0";
+    //     let errors = {};
+    //     if (!form.email) {
+    //         errors.email = "Email mustn't be empty";
+    //         emailInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
+    //     }
+    //     if (form.password.length < 8 || form.password.length > 20) {
+    //         errors.password = "Password must be between 8 and 20 characters long";
+    //         passwordInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
+    //     }
+    //     if (!form.email.includes("@") || !form.email.includes(".")) {
+    //         errors.email = "Email must be valid";
+    //         emailInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
+    //     }
+    //     setFormErrors(errors);
+    // },[form])
     const toggleShowPassword = () => {
         setShowPassword(!showPassword);
     };
@@ -133,7 +133,7 @@ export default function SignIn(probs) {
                 <button className="save-changes-button" type="submit">
                     Sign In
                 </button>
-                <p onClick={probs.setSignUp}>Don't have an account?</p>
+                <p onClick={probs.setSignUp} className="switch-p">Don't have an account?</p>
             </form>
         </div>
     );

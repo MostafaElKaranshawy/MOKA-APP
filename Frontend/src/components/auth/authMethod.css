@@ -77,6 +77,14 @@
     box-shadow: 0px 14px 20px 9px rgba(0, 0, 0, 0.1);
     border-radius: 0px !important;
 }
+.switch-p{
+    color: #4b4a4a;
+    cursor: pointer;
+    font-size: 15px;
+}
+.switch-p:hover{
+    text-decoration: underline;
+}
 @media screen and (max-width: 600px){
     .auth-section{
         width: 100%;

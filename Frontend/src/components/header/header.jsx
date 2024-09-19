@@ -1,4 +1,4 @@
-import React, {useEffect, useState, useRef} from "react";
+import React, {useEffect, useState, useRef, useContext} from "react";
 import { BrowserRouter as Router, Routes, Route, Link, NavLink } from 'react-router-dom';
 import "./header.css";
 import { signOut } from "../../services/authRequests";
@@ -7,7 +7,7 @@ import { getWebSocket } from "../../webSocket";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationBox from "../confirmation/confirmationBox";
-
+import {DarkMode} from '../../darkModeContext';
 export default function Header() {
     const token = document.cookie.split("authToken=")[1];
     let nav = (window.innerWidth > 700? true: false)
@@ -18,6 +18,7 @@ export default function Header() {
     const [showNotifications, setShowNotifications] = useState(false);
     const [showConfirmation, setShowConfirmation] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const {darkMode, setDarkMode} = useContext(DarkMode);
     useEffect(() => {
         if(authWindow)return
         const ws = getWebSocket(JSON.parse(localStorage.getItem("user")).userID);
@@ -55,6 +56,7 @@ export default function Header() {
         handleSearch();
     },[searchQuery])
     function toggleSearch() {
+        setSearchQuery("");
         if(search) {
             document.querySelector(".search-icon").classList.remove("active-search");
         }
@@ -86,7 +88,7 @@ export default function Header() {
                 return notification;
             });
             setNotifications(notificationsData);
-            console.log(data);
+            // console.log(data);
         } catch (error) {
             console.error(error);
         }
@@ -185,9 +187,24 @@ export default function Header() {
             const daysPast = Math.floor(secondsPast / 86400);
             return `${daysPast} d`;
         }
-    }       
+    }    
+    useEffect(() => {
+    }, [darkMode])
+    
+    const handleDarkMode = () => {
+        setDarkMode((prev) => !prev);
+        console.log(darkMode)
+        if(darkMode) {
+            document.querySelector(".mode-button").classList.remove("dark-mode");
+            document.querySelector(".mode-button-inner").classList.remove("dark-mode");
+        }
+        else{
+            document.querySelector(".mode-button").classList.add("dark-mode");
+            document.querySelector(".mode-button-inner").classList.add("dark-mode");
+        }
+    }
     return (
-        <header className="header">
+        <header className={darkMode? `header dark-mode` : `header`}>
             {showConfirmation && <ConfirmationBox content={`Are You Sure To Log Out?`} cancel={handleCancelConfirmation} confirm={handleLogOut} />}
             <div className="logo-search-container">
                 <div className="logo">
@@ -199,24 +216,25 @@ export default function Header() {
                 {
                     !authWindow &&
                     <div className="search-bar">
-                        {!nav && <i className="fa-solid fa-search search-icon menu-item" onClick={toggleSearch}></i>}
-                        {
-                            search && 
-                            <input
-                            type="search"
-                            value={searchQuery}
-                            onInput={(e) => {
-                                setSearchQuery(e.target.value);
-                            }}
-                            placeholder="Find friends"
-                            />
-                        }
-                        {
-                            searchQuery && <i className="fa-solid fa-times clear-search-icon" onClick={()=>{
-                                setSearchQuery("");
-                                setSearchResult([]);
-                            }}></i>
-                        }
+                        <div className="search-container">
+                            {!nav && <i className="fa-solid fa-search search-icon menu-item" onClick={toggleSearch}></i>}
+                            {
+                                search && 
+                                <input
+                                type="search"
+                                value={searchQuery}
+                                onInput={(e) => {
+                                    setSearchQuery(e.target.value);
+                                }}
+                                placeholder="Find friends"
+                                />
+                            }
+                            {
+                                searchQuery && nav && <i className="fa-solid fa-times clear-search-icon" onClick={()=>{
+                                    setSearchQuery("");
+                                    setSearchResult([]);
+                                }}></i>
+                            }
                         <div className="search-result">
                             {searchResult && searchResult.map((user) => (
                                 <div className="search-item" key={user.userID} onClick={()=>{
@@ -228,6 +246,7 @@ export default function Header() {
                                     <p>{user.name}</p>
                                 </div>
                             ))}
+                        </div>
                         </div>
                     </div>
                 }
@@ -283,6 +302,13 @@ export default function Header() {
                                         <i className="fa-solid fa-gear"></i>
                                         <p>Settings</p>
                                     </NavLink>
+                                    <div className="profile-menu-item switch-mode" onClick={toggleShowProfileMenu}>
+                                        {darkMode?<i className="fa-solid fa-moon"></i>:<i className="fa-solid fa-sun"></i>}
+                                        <p>Mode</p>
+                                        <div className="mode-button" onClick={handleDarkMode}>
+                                            <div className="mode-button-inner"></div>
+                                        </div>
+                                    </div>
                                     <div className="profile-menu-item" onClick={()=>setShowConfirmation(true)}>
                                         <i className="fa-solid fa-sign-out"></i>
                                         <p>Log Out</p>

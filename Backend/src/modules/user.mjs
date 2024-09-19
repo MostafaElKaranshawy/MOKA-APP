@@ -55,7 +55,7 @@ export default class User {
             userID: userID
         }}) 
         if(!name)name = user.name;
-        if(!bio)bio = user.bio;
+        // if(!bio)bio = user.bio;
         const newUserInfo = await user.update({name: name, bio: bio}, {where: {
             userID: userID
         }});

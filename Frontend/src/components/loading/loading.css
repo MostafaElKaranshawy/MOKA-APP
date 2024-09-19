@@ -7,14 +7,14 @@
 .loading-component{
     width: 100%;
     display: flex;
-    margin:20px;
+    margin:30px;
     justify-content: center;
     justify-content: center;
 }
 .loading-component div{
-    width: 20px;
-    height: 20px;
-    background-color:#4b00ff;
+    width: 15px;
+    height: 15px;
+    background-color:#3f99ff;
     border-radius:50%;
     border:solid transparent;
     margin:10px;
@@ -24,7 +24,9 @@
     /* animation-timing-function:linear; */
     animation-direction: alternate;
 }
-
+.loading-component.dark-mode div{
+    background-color:#3000a0;
+}
 .loading-component .two{
     animation-delay:0.3s ;
 }
@@ -33,7 +35,7 @@
 }
 @keyframes up{
     to{
-        transform: translatey(-50px);
+        transform: translatey(-30px);
         opacity: .2;
     }
 

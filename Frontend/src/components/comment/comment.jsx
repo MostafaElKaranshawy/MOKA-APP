@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, {useState, useContext} from "react";
 import "./comment.css";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { DarkMode } from "../../darkModeContext";
 
 export default function Comment(probs){
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
@@ -11,6 +12,7 @@ export default function Comment(probs){
     const [showEdit, setShowEdit] = useState(false);
     const [newContent, setNewContent] = useState(comment.content);
     const [profilePhotoURL, setProfilePhotoURL] = useState(comment.profilePhotoURL);
+    const {darkMode} = useContext(DarkMode);
     function toggleLike() {
         setLike((pre) => !pre);
     }
@@ -74,8 +76,7 @@ export default function Comment(probs){
         window.open(url, '_blank');
     };
     return (
-        <div className="comment">
-            
+        <div className={`comment ${darkMode && 'dark-mode'}`}>
             <div className="comment-header">
                 <img src={`${import.meta.env.VITE_PHOTO_URL}/${profilePhotoURL}`} alt="profile" className="comment-profile-picture" onClick={goToUserProfile} onError={()=>{setProfilePhotoURL("profile-photo-holder.jpg");}}/>
             </div>

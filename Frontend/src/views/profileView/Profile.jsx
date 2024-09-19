@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef} from "react";
+import React, { useEffect, useState, useRef, useContext} from "react";
 import Post from "../../components/post/post";
 import Loading from "../../components/loading/loading";
 import "./profile.css";
@@ -24,7 +24,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ConfirmationBox from "../../components/confirmation/confirmationBox";
 import Header from "../../components/header/header";
-
+import {DarkMode} from '../../darkModeContext';
 export default function Profile() {
     const cookies = document.cookie;
     const { userName } = useParams();
@@ -58,7 +58,7 @@ export default function Profile() {
         setShowAllFriends(!showAllFriends);
     };
     const [showConfirmation, setShowConfirmation] = useState(false);
-
+    const {darkMode} = useContext(DarkMode);
     useEffect(() => {
         if (error) toast.error(error, {
             position: "top-center",
@@ -104,15 +104,19 @@ export default function Profile() {
         if(!loading)return;
         handlePaginations();
     }, [page]);
+    const timeOutRef = useRef(null);
     useEffect(() => {
         const scrollTracker = profileBody.current;
         if (!scrollTracker) return; // Ensure scrollTracker is defined
     
-        const handleScroll = () => { 
-            if (scrollTracker.scrollTop + scrollTracker.clientHeight >= scrollTracker.scrollHeight - 250 && hasMore) {
-                setPage(prevPage => prevPage + 1);
-                setLoading(true);
-            }
+        const handleScroll = () => {
+            if(timeOutRef.current)clearTimeout(timeOutRef.current);
+            timeOutRef.current = setTimeout(() => {
+                if (scrollTracker.scrollTop + scrollTracker.clientHeight >= scrollTracker.scrollHeight - 250 && hasMore) {
+                    setPage(prevPage => prevPage + 1);
+                    setLoading(true);
+                }
+            }, 100);
         };
     
         scrollTracker.addEventListener('scroll', handleScroll);
@@ -152,6 +156,7 @@ export default function Profile() {
 
     async function saveBio() {
         try {
+            console.log(bio);
             setshowEditBio(false);
             const updatedUser = await updateUserInfo(user.name, bio, userToken, setError);
             setUser(updatedUser);
@@ -251,9 +256,23 @@ export default function Profile() {
     };
 
     const handleGetPosts = async () => {
-        const userPosts = await getUserPosts(user.userID, userToken, setError, page, limit);
-        setPosts(userPosts);
-        console.log(userPosts);
+        try{
+            let userPosts;
+            if(page == 1){
+                userPosts = await getUserPosts(user.userID, userToken, setError, page, limit);
+                setPosts(userPosts);
+            }
+            else{
+                userPosts = await getUserPosts(user.userID, userToken, setError, 1, limit*page);
+                console.log(userPosts);
+                setPosts(userPosts);
+            }
+            setLoading(false);
+            setHasMore(true);
+        }
+        catch(err){
+            setLoading(false);
+        }
     }
     const [profilePhoto, setProfilePhoto] = useState(null);
     const [photoPreview, setPhotoPreview] = useState(null);
@@ -299,9 +318,9 @@ export default function Profile() {
         }
     }
     return (
-        <div className="profile-view view ">
+        <div className="profile-view view">
             <Header/>
-            <div className="body" ref={profileBody}>
+            <div className={`body ${darkMode && "dark-mode"}`} ref={profileBody}>
                 {showConfirmation && <ConfirmationBox content={`Are you sure to remove ${user.name} from your friends?`} cancel={cancelConfirmation} confirm={handleRemoveFriend}/>}
                 <div className="profile-section">
                     <div className="profile-header">

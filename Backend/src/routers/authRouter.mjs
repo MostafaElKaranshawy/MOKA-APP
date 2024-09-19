@@ -16,9 +16,9 @@ authRouter.post(
 
 authRouter.post(
     '/auth/signIn',
-    AuthValidator.emailValidation,
-    AuthValidator.passwordValidation,
-    AuthValidator.validate,
+    // AuthValidator.emailValidation,
+    // AuthValidator.passwordValidation,
+    // AuthValidator.validate,
     AuthController.signIn
 );
 authRouter.delete('/auth/signout', checkUser,AuthController.signOut);

@@ -55,6 +55,10 @@ main {
   justify-content: flex-start;
   flex-direction: column;
 }
+.body.dark-mode{
+  background-color: #403f3f;
+  color: #fff;
+}
 .body::-webkit-scrollbar-thumb {
   background-color: #94c8ff;
   cursor: pointer;
@@ -130,4 +134,11 @@ textarea::-webkit-scrollbar-thumb {
 
 textarea::-webkit-scrollbar-thumb:hover {
   background: #004b9b; /* Color of the scrollbar thumb on hover */
+}
+
+/* DARK MODE */
+
+#main.dark-mode{
+  background-color: #464646;
+  color: #fff;
 }

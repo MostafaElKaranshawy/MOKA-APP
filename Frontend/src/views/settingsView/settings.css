@@ -124,3 +124,33 @@
     color: red;
     padding: 5px 10px;
 }
+
+/* DARK MODE CSS */
+
+.dark-mode .settigns-body{
+    background: #1f1f1f;
+}
+.dark-mode .settigns-header{
+    background: #2b2b2b;
+    color: white;
+}
+.dark-mode .user-form{
+    background: #2b2b2b;
+    color: white;
+    box-shadow: #343434 0 0 11px 0;
+}
+.dark-mode .user-section{
+    background: #2b2b2b;
+    color: white;
+}
+.dark-mode .user-section input{
+    background: #434343;
+    color: white;
+    box-shadow: 0px 0px 0px 0px transparent;
+}
+.dark-mode .user-section input::placeholder{
+    color: white;
+}
+.dark-mode .user-section input:focus{
+    box-shadow: 0px 1px 11px 0px #1f8ff0;
+}

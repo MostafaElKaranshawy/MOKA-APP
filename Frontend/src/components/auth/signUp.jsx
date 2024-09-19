@@ -187,6 +187,7 @@ export default function SignUp(probs) {
                 <button className="save-changes-button" type="submit">
                     Sign Up
                 </button>
+                <p className="switch-p" onClick={probs.setSignIn}>Already have an account?</p>
             </form>
         </div>
     );
