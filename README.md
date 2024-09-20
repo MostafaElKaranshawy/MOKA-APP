@@ -16,6 +16,7 @@
   - Autherization
   - Authentication
   - Pagination
+  - Using Docker Images.
 
 - **Frontend**
   - React js
