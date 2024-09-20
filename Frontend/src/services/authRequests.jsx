@@ -10,7 +10,7 @@ async function signUp(formData) {
         });
         const data = response.data;
     } catch (error) {
-        throw new Error(error)
+        throw new Error(`${error.response.data}`)
     }
 }
 

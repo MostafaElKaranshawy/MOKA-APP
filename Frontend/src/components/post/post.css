@@ -110,9 +110,9 @@
 .post-options{
     position: absolute;
     top: 0px;
-    right: 20px;
+    right: 0px;
     cursor: pointer;
-    /* width: 150px; */
+    width: 150px;
     list-style: none;
     display: flex;
     flex-direction: column;
@@ -128,7 +128,7 @@
     cursor: pointer;
     transition: 0.3s;
     background-color: rgb(216, 237, 255);
-    width: 100%;
+    width: calc(100% - 20px);
     /* backdrop-filter: blur(10px); */
 }
 .post-option:hover{
@@ -323,6 +323,7 @@
     z-index: 10;
     padding: 0;
     z-index: 100;
+    background-color: rgb(216, 237, 255);
 }
 .post-like-user{
     display: flex;
@@ -331,9 +332,9 @@
     font-size: 12px;
     cursor: pointer;
     transition: 0.3s;
-    background-color: rgb(216, 237, 255);
-    width: 100%;
+    width: calc(100% - 10px);
     margin: 0;
+    background-color: inherit;
 }
 .post-like-user:hover{
     background-color: rgb(201, 230, 255);
@@ -453,6 +454,15 @@
     color: white;
 }
 .post.dark-mode .post-option:hover{
+    background-color: #333;
+    color: white;
+}
+.post.dark-mode .post-like-users{
+    background-color: #515151;
+    color: white;
+    border: #465b75 1px solid;
+}
+.post.dark-mode .post-like-user:hover{
     background-color: #333;
     color: white;
 }

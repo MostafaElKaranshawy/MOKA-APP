@@ -128,10 +128,10 @@
     .auth-method{
         margin-top: 20px;
     }
-    .auth-logo{
+    /* .auth-logo{
         position: absolute;
         top: 100px ;
-    }
+    } */
     
 }
 @media screen and (max-width: 500px){

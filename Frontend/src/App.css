@@ -73,9 +73,9 @@ main {
   background-color: #56a8ff;
 }
 @media screen and (max-width: 500px){
-    #main{
-        padding: 0;
-    }
+  #main{
+    padding: 0;
+  }
 }
 
 @keyframes logo-spin {
@@ -136,9 +136,31 @@ textarea::-webkit-scrollbar-thumb:hover {
   background: #004b9b; /* Color of the scrollbar thumb on hover */
 }
 
+.toast-container .Toastify__toast-body {
+  font-size: 12px;
+  color: #0060c7;
+}
+.Toastify__progress-bar-theme--light{
+  background: #007bff !important;
+  color: white;
+}
+
 /* DARK MODE */
 
 #main.dark-mode{
   background-color: #464646;
   color: #fff;
+}
+#main.dark-mode::-webkit-scrollbar-thumb {
+  background-color: #333;
+  cursor: pointer;
+}
+#main.dark-mode::-webkit-scrollbar {
+  width: 5px;
+}
+#main.dark-mode::-webkit-scrollbar-track {
+  background-color: #464646;
+}
+#main.dark-mode::-webkit-scrollbar-thumb:hover {
+  background-color: black;
 }

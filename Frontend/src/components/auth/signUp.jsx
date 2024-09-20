@@ -114,12 +114,12 @@ export default function SignUp(probs) {
             })
             probs.setSignIn();
         } catch (error) {
-            if(error.response) {
-                if(error.response.data === "Email already exists") {
+            if(error) {
+                if(error.message === "Email already exists") {
                     errors.email = "Email already exists";
                     emailInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
                 }
-                if(error.response.data === "Username already exists") {
+                if(error.message === "Username already exists") {
                     errors.userName = "Username already exists";
                     userNameInput.style.boxShadow = "0px 1px 7px 0px #ffadad";
                 }

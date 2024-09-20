@@ -424,7 +424,7 @@ export default function Profile() {
                             ))}
                         </div>
                         <p className="show-all-friends" onClick={toggleShowFriends}>
-                            Show {showAllFriends ? "fewer" : "all"} friends
+                            {filteredFriends.length>0?`Show ${showAllFriends ? "fewer" : "all"} friends`: `No friends to show`}
                         </p>
                     </div>
                     {

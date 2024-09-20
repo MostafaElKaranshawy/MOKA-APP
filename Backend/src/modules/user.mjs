@@ -17,6 +17,7 @@ export default class User {
         const user = await UserDefinition.findOne({where: {
             [Op.or]: [{email: email}, {userName: userName}]
         }});
+        console.log(user);
         if(user == null)return false;
         if(email === user.email) throw new Error("Email already exists");
         if(userName === user.userName) throw new Error("Username already exists");

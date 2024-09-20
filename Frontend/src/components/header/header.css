@@ -1,11 +1,4 @@
-.toast-container .Toastify__toast-body {
-    font-size: 12px;
-    color: #0060c7;
-}
-.Toastify__progress-bar-theme--light{
-    background: #007bff !important;
-    color: white;
-}
+
 .header{
     display: flex;
     justify-content: space-between;
@@ -651,5 +644,8 @@
 }
 .header.dark-mode .nav-menu .menu-item.active-search i{
     color: white;
+}
+.header.dark-mode .nav-menu .menu-item:hover i{
+    color: black;
 }
 
